@@ -9,12 +9,19 @@ export class Bullet extends Mesh{
     }
 
     private velocity = new Vector3();
+    private readonly maxSpeed = new Vector3(3, 3, 3);
+    private readonly minSpeed = this.maxSpeed.multiplyScalar(-1);
 
-    addVelocity(planets: [Planet]){
-        // todo
+    addVelocity(vector: Vector3){
+        this.velocity = this.velocity.add(vector);
+        // this.velocity.clamp(this.minSpeed, this.maxSpeed);
     }
 
     calcCollisions(planets: [Planet]){
         // todo
+    }
+
+    tick(){
+        this.position.add(this.velocity);
     }
 }

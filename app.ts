@@ -1,33 +1,16 @@
-import * as THREE from 'three';
-
-// declare module OrbitControls{};
-
-// import * as OrbitControls from 'three-orbit-controls'
-
-// declare var OrbitControls: any;
-
 import { Planet } from './ts/Planet';
 import { OrbitControls } from 'three-orbitcontrols-ts';
 import { Bullet } from './ts/Bullet';
-import { AxisHelper } from 'three';
+import { AxisHelper, Color, Vector3, WebGLRenderer, Scene, PerspectiveCamera, Object3D } from 'three';
 import { ElementGetter } from './ts/ElementGetter';
 
 class App{
     constructor(){
-        // console.log(OrbitControls);
-        // this.brick = new Brick(100, new THREE.Color("rgb(0,0,255)"));
-        // this.scene.add(this.brick);
         const controls = new OrbitControls(this.camera, this.renderer.domElement);
         
-        let planet = new Planet(40, new THREE.MeshBasicMaterial({
-            color: 0xff0000,
-        }));
-        let planet2 = new Planet(20, new THREE.MeshBasicMaterial({
-            color: 0xf0df33,
-        }));
-        let planet3 = new Planet(20, new THREE.MeshBasicMaterial({
-            color: 0x0832ff,
-        }));
+        let planet = new Planet(40);
+        let planet2 = new Planet(20, new Color('rgb(0, 255, 0)'));
+        let planet3 = new Planet(50, new Color('rgb(0, 0, 255)'));
         this.scene.add(planet2);
         this.scene.add(planet3);
         this.scene.add(planet);
@@ -35,27 +18,33 @@ class App{
         planet2.position.set(90, 10, 10);
         planet3.position.z = 100;
 
-        let bullet = new Bullet();
-        bullet.position.set(0,-100, -50);
-        this.scene.add(bullet);
+        this.bullet = new Bullet();
+        this.bullet.position.set(0,-100, -50);
+        this.scene.add(this.bullet);
 
-        console.log(bullet)
+        this.scene.add(this.axis);
 
-        let axis = new AxisHelper(100);
-        this.scene.add(axis)
-
-        this.camera.position.set(200,200,200);
+        this.camera.position.set(200, 200, 200);
         this.renderer.setSize(innerWidth, innerHeight);
-        this.renderer.setClearColor(new THREE.Color("rgb(255,255,255)"));
-        this.camera.lookAt(<THREE.Vector3>{x:0,y:0,z:0});
+        this.renderer.setClearColor(new Color('rgb(255,255,255)'));
+        this.camera.lookAt(<Vector3>{x:0,y:0,z:0});
 
         this.render();
+
+        let vec1 = new Vector3(100, 50, 60);
+        let vec2 = new Vector3(10, 90, 50);
+
+        console.log(new Vector3().subVectors(vec1, vec2).normalize())
+        console.log(new Vector3().subVectors(vec1, vec2))
+        // console.log(sub)
     }
 
-    private readonly renderer = new THREE.WebGLRenderer({antialias:true, canvas:<HTMLCanvasElement>document.getElementById("mainCanvas")});
-    private readonly scene = new THREE.Scene();
-    private readonly camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 10000);
+    private readonly axis = new AxisHelper(100);   
+    private readonly renderer = new WebGLRenderer({antialias:true, canvas:<HTMLCanvasElement>document.getElementById('mainCanvas')});
+    private readonly scene = new Scene();
+    private readonly camera = new PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 10000);
     private readonly eGetter = new ElementGetter(this.scene);
+    private bullet: Bullet;
     // Example mesh
 
     private adjustCanvasSize(){
@@ -63,12 +52,19 @@ class App{
         this.camera.aspect = innerWidth/innerHeight;
         this.camera.updateProjectionMatrix();
     }
+
     private render(){
         this.renderer.render(this.scene, this.camera);
-        requestAnimationFrame(()=>{this.render()});
+        requestAnimationFrame(this.render.bind(this));
         this.adjustCanvasSize();
 
-        console.log(this.eGetter.getPlanets());
+        this.eGetter.getPlanets().forEach((planet: Planet)=>{
+            // console.log(planet.calcGravity(this.bullet))
+            console.log(planet.calcGravity(this.bullet))
+            this.bullet.addVelocity(planet.calcGravity(this.bullet));
+        });
+
+        this.bullet.tick();
     }
 }
 
