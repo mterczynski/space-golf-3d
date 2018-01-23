@@ -6,10 +6,10 @@
     
 <h4>or</h4>
 
-    npm install
+    npm i
     
     
-<h3>Run project</h3>
+<h3>Run webpack-dev-server</h3>
 
     npm start
     
