@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/three": "^0.84.22",
     "three": "^0.87.1",
+    "three-orbitcontrols-ts": "^0.1.2",
     "ts-loader": "^2.3.7",
     "typescript": "^2.6.2"
   },
