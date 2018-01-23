@@ -1,4 +1,4 @@
-# typescript-webpack-threejs-template
+# gravitee
 
 <h3>Install dependencies:</h3>
 
