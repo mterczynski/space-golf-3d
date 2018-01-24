@@ -5,23 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Webpack_threejs</title>
-    <style>
-        *{
-            margin:0;
-            padding:0;
-        }
-        body{
-            overflow: hidden;
-        }
-        #mainCanvas{
-            position: absolute;
-            height: 100%;
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>   
     <canvas id="mainCanvas"></canvas>
+    <div class="infoTab">
+        <pre class="infoTab__text" id="infoTab__text">
+        </pre>
+    </div>
     <script src="bundle.js"></script>  
 </body>
 </html>

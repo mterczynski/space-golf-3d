@@ -3,6 +3,8 @@ import { OrbitControls } from 'three-orbitcontrols-ts';
 import { Bullet } from './ts/Bullet';
 import { AxisHelper, Color, Vector3, WebGLRenderer, Scene, PerspectiveCamera, Object3D } from 'three';
 import { ElementGetter } from './ts/ElementGetter';
+import { Net } from './ts/Net';
+import { InfoTab } from './ts/InfoTab';
 
 class App{
     constructor(){
@@ -24,9 +26,11 @@ class App{
 
         this.scene.add(this.axis);
 
+        this.scene.add(new Net());
+
         this.camera.position.set(200, 200, 200);
         this.renderer.setSize(innerWidth, innerHeight);
-        this.renderer.setClearColor(new Color('rgb(255,255,255)'));
+        this.renderer.setClearColor(new Color('rgb(0,0,0)'));
         this.camera.lookAt(new Vector3());
 
         this.render();
@@ -59,12 +63,12 @@ class App{
         this.adjustCanvasSize();
 
         this.eGetter.getPlanets().forEach((planet: Planet)=>{
-            // console.log(planet.calcGravity(this.bullet))
-            console.log(planet.calcGravity(this.bullet))
             this.bullet.addVelocity(planet.calcGravity(this.bullet));
         });
 
         this.bullet.tick();
+
+        InfoTab.updateText(this.bullet);
     }
 }
 

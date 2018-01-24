@@ -1,0 +1,29 @@
+*{
+    margin:0;
+    padding:0;
+    font-family: Calibri;
+}
+body{
+    overflow: hidden;
+}
+#mainCanvas{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.infoTab{
+    position: absolute;
+    left:0;
+    bottom: 0;
+    color: yellow;
+    border-right: 1px solid rgba(255,255,0, 0.5);
+    border-top: 1px solid rgba(255,255,0, 0.5);
+}
+.infoTab__text{
+    padding: 10px;
+    display: block;
+    position: relative;
+    left:0;
+    bottom: 0;
+}
