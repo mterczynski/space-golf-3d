@@ -18,22 +18,16 @@ export class Planet extends Mesh {
         return this.size/Math.pow(10, 3.5);
     }
     get name(){
-        return "Planet";
+        return 'Planet';
     }
 
-    set name(newName){
-        console.warn('Name is readonly');
-        // throw new Error('name is readonly');
+    set name(_){
+        console.warn('name is readonly');
     }  
 
     calcGravity(bullet: Bullet): Vector3{
         if(bullet.position.distanceTo(this.position) < this.size * 10){
             return new Vector3().subVectors(this.position, bullet.position).normalize().multiplyScalar(this.gravity);
-            // return new Vector3(
-            //     this.gravity / -(this.position.x - bullet.position.x),
-            //     this.gravity / -(this.position.y - bullet.position.y), 
-            //     this.gravity / -(this.position.z - bullet.position.z)
-            // );
         } else {
             return new Vector3();
         }

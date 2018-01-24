@@ -4,19 +4,17 @@ import { Planet } from "./Planet";
 export class Bullet extends Mesh{
     constructor(){
         super(new SphereGeometry(Bullet.size, 32, 32), new MeshBasicMaterial({
-            color: 0x000000,
+            color: 'rgb(0,0,0)',
         }));
     }
 
-    public static readonly _name = "Bullet"
     private static readonly size = 5;
     private velocity = new Vector3();
-    private readonly maxSpeed = new Vector3(3, 3, 3);
-    private readonly minSpeed = this.maxSpeed.multiplyScalar(-1);
+    get name(){ return 'Bullet' }
+    set name(_){ console.warn('name is readonly') }
 
     addVelocity(vector: Vector3){
         this.velocity = this.velocity.add(vector);
-        // this.velocity.clamp(this.minSpeed, this.maxSpeed);
     }
 
     isColliding(planet: Planet){

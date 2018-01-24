@@ -47,7 +47,6 @@ class App{
     private bullet: Bullet;
     // Example mesh
 
-    
     private adjustCanvasSize(){
         this.renderer.setSize(innerWidth, innerHeight);
         this.camera.aspect = innerWidth/innerHeight;
