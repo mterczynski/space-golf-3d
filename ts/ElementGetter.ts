@@ -21,8 +21,8 @@ export class ElementGetter{
         }
     }
     
-    getPlanets(): Object3D[]{
-        return this.scene.children.filter((el)=>{
+    getPlanets(): Planet[]{
+        return <Planet[]> this.scene.children.filter((el)=>{
             return el instanceof Planet;
         });
     }

@@ -1,28 +1,41 @@
-import { Mesh, BackSide, SphereGeometry, MeshBasicMaterial, BufferGeometry } from 'three';
+import { Mesh, BackSide, SphereGeometry, MeshBasicMaterial, BufferGeometry, Color, Vector3 } from 'three';
+import { Bullet } from './Bullet';
 
 export class Planet extends Mesh {
-    
-    constructor(private size:number, material:THREE.MeshBasicMaterial){
-        super(new SphereGeometry(size, 32, 32), material);
 
-        this.add(new Mesh(<BufferGeometry>this.geometry.clone().scale(1.05, 1.05, 1.05), this.shadowMat));
+    constructor(public readonly size:number, color = new Color('rgb(255,0,0)')){
+        super(new SphereGeometry(size, 32, 32), new MeshBasicMaterial({color}));
+        const shadowMesh = new Mesh(new SphereGeometry(size + 1, 32, 32), this.shadowMat);
+        this.add(shadowMesh);
     }
-
-    private shadowMat = new MeshBasicMaterial({
-        color: 0x000000,
-        side: BackSide
-    });    
-
-    private shadowGeo = this.geometry.clone();
-    public static readonly _name = "Planet";
-
     
+    private readonly shadowMat = new MeshBasicMaterial({
+        color: 'rgb(0,0,0)',
+        side: BackSide
+    });
 
     get gravity(){
-        return this.size/100;
+        return this.size/Math.pow(10, 3.5);
+    }
+    get name(){
+        return "Planet";
     }
 
-    get name(){
-        return Player._name;
+    set name(newName){
+        console.warn('Name is readonly');
+        // throw new Error('name is readonly');
+    }  
+
+    calcGravity(bullet: Bullet): Vector3{
+        if(bullet.position.distanceTo(this.position) < this.size * 10){
+            return new Vector3().subVectors(this.position, bullet.position).normalize().multiplyScalar(this.gravity);
+            // return new Vector3(
+            //     this.gravity / -(this.position.x - bullet.position.x),
+            //     this.gravity / -(this.position.y - bullet.position.y), 
+            //     this.gravity / -(this.position.z - bullet.position.z)
+            // );
+        } else {
+            return new Vector3();
+        }
     }
 }
