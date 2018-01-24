@@ -10,10 +10,9 @@ export class Skybox extends Mesh{
             new MeshBasicMaterial({side: BackSide, map: ImageUtils.loadTexture('/assets/skybox/sky3.png') }),
             new MeshBasicMaterial({side: BackSide, map: ImageUtils.loadTexture('/assets/skybox/sky5.png') })
         ]; 
-        // const combinedMaterial = new MeshFaceMaterial(materials);
         const size = Math.pow(10,5);
         const geo = new BoxGeometry(size, size, size);
-
+        
         super(geo, materials);
     }
 }

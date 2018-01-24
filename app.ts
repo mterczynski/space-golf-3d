@@ -1,7 +1,7 @@
 import { Planet } from './ts/Planet';
 import { OrbitControls } from 'three-orbitcontrols-ts';
 import { Bullet } from './ts/Bullet';
-import { AxisHelper, Color, Vector3, WebGLRenderer, Scene, PerspectiveCamera, Object3D } from 'three';
+import { AxisHelper, Color, Vector3, WebGLRenderer, Scene, PerspectiveCamera, Object3D, Light, PointLight } from 'three';
 import { ElementGetter } from './ts/ElementGetter';
 import { Net } from './ts/Net';
 import { InfoTab } from './ts/InfoTab';
@@ -27,23 +27,23 @@ class App{
 
         this.scene.add(this.axis);
 
-        this.scene.add(new Net());
+        // this.scene.add(new Net());
 
         this.camera.position.set(200, 200, 200);
         this.renderer.setSize(innerWidth, innerHeight);
         this.renderer.setClearColor(new Color('rgb(0,0,0)'));
         this.camera.lookAt(new Vector3());
 
-        this.render();
-
         let vec1 = new Vector3(100, 50, 60);
         let vec2 = new Vector3(10, 90, 50);
 
-        console.log(new Vector3().subVectors(vec1, vec2).normalize())
-        console.log(new Vector3().subVectors(vec1, vec2))
-        // console.log(sub)
-
         this.scene.add(new Skybox());
+        let light = new PointLight();
+        // light.add(new Planet(50, new Color('rgb(255,0,0)')));
+        light.position.set(0,100,5000)
+        this.scene.add(light)
+
+        this.render();
     }
 
     private readonly axis = new AxisHelper(100);   
