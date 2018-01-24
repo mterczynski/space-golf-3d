@@ -5,6 +5,7 @@ import { AxisHelper, Color, Vector3, WebGLRenderer, Scene, PerspectiveCamera, Ob
 import { ElementGetter } from './ts/ElementGetter';
 import { Net } from './ts/Net';
 import { InfoTab } from './ts/InfoTab';
+import { Skybox } from './ts/Skybox';
 
 class App{
     constructor(){
@@ -41,12 +42,14 @@ class App{
         console.log(new Vector3().subVectors(vec1, vec2).normalize())
         console.log(new Vector3().subVectors(vec1, vec2))
         // console.log(sub)
+
+        this.scene.add(new Skybox());
     }
 
     private readonly axis = new AxisHelper(100);   
     private readonly renderer = new WebGLRenderer({antialias:true, canvas:<HTMLCanvasElement>document.getElementById('mainCanvas')});
     private readonly scene = new Scene();
-    private readonly camera = new PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 10000);
+    private readonly camera = new PerspectiveCamera(45, innerWidth/innerHeight, 0.1, Math.pow(10,6));
     private readonly eGetter = new ElementGetter(this.scene);
     private bullet: Bullet;
     // Example mesh

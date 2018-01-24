@@ -4,12 +4,12 @@ import { Planet } from "./Planet";
 export class Bullet extends Mesh{
     constructor(){
         super(new SphereGeometry(Bullet.size, 32, 32), new MeshBasicMaterial({
-            color: 'rgb(0,0,0)',
+            color: 'rgb(0,250,250)',
         }));
         this.add(this.arrowHelper);
     }
 
-    private static readonly size = 5;
+    private static readonly size = 3;
     private _velocity = new Vector3();
     private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
 
