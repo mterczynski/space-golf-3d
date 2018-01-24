@@ -13,16 +13,21 @@ class App{
         
         let planet = new Planet(40);
         let planet2 = new Planet(20, new Color('rgb(0, 255, 0)'));
-        let planet3 = new Planet(50, new Color('rgb(0, 0, 255)'));
-        this.scene.add(planet2);
-        this.scene.add(planet3);
+        let planet3 = new Planet(100, new Color('rgb(0, 0, 255)'));
+        let planet4 = new Planet(10, new Color('rgb(255, 255, 255)'));
+
         this.scene.add(planet);
+        // this.scene.add(planet2);
+        // this.scene.add(planet3);
+        // this.scene.add(planet4);
+
+        planet4.position.set(100, 100, 100);
 
         planet2.position.set(90, 10, 10);
-        planet3.position.z = 100;
+        planet3.position.z = 500;
 
         this.bullet = new Bullet();
-        this.bullet.position.set(0,-100, -50);
+        this.bullet.position.set(0,-100, -70);
         this.scene.add(this.bullet);
 
         this.scene.add(this.axis);
@@ -70,6 +75,14 @@ class App{
         });
 
         this.bullet.tick();
+
+        this.eGetter.getLines().forEach((line)=>{
+            this.scene.remove(line);
+        });
+
+        console.log(this.scene.children.length)
+
+        this.scene.add(this.bullet.getLine());
 
         InfoTab.updateText(this.bullet);
     }

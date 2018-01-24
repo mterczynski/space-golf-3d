@@ -1,4 +1,4 @@
-import { Mesh, SphereGeometry, MeshBasicMaterial, Vector3, ArrowHelper } from "three";
+import { Mesh, SphereGeometry, MeshBasicMaterial, Vector3, ArrowHelper, LineBasicMaterial, Geometry, Line } from "three";
 import { Planet } from "./Planet";
 
 export class Bullet extends Mesh{
@@ -10,14 +10,27 @@ export class Bullet extends Mesh{
     }
 
     private static readonly size = 3;
-    private _velocity = new Vector3();
+    private _velocity = new Vector3(-0.5, 0.5, 0);
     private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
+    private pathVerticies: Vector3[] = [];
 
     get name(){ return 'Bullet' }
     set name(_){ console.warn('name is readonly') }
 
     get velocity(){
         return this._velocity.clone();
+    }
+
+    getLine(){
+        var lineMaterial = new LineBasicMaterial({
+            color: 0xff0000
+        });
+
+        var geometry = new Geometry();
+
+        geometry.vertices = this.pathVerticies;
+
+        return new Line( geometry, lineMaterial );
     }
 
     private updateArrowHelper(){
@@ -43,5 +56,6 @@ export class Bullet extends Mesh{
     tick(){
         this.position.add(this._velocity);
         this.updateArrowHelper();
+        this.pathVerticies.push(this.position.clone());
     }
 }

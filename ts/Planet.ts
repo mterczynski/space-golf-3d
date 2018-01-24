@@ -13,23 +13,24 @@ export class Planet extends Mesh {
         color: 'rgb(0,0,0)',
         side: BackSide
     });
+    public readonly density = 5;
 
-    get gravity(){
-        return this.size/Math.pow(10, 3.5);
+    get acceleration(){
+        return Math.pow(this.size, 3) / Math.pow(10, 3);
+    }
+    get mass(){
+        return this.density * 4/3 * Math.PI * Math.pow(this.size, 3);
     }
     get name(){
         return 'Planet';
     }
-
     set name(_){
         console.warn('name is readonly');
     }  
 
     calcGravity(bullet: Bullet): Vector3{
-        if(bullet.position.distanceTo(this.position) < this.size * 10){
-            return new Vector3().subVectors(this.position, bullet.position).normalize().multiplyScalar(this.gravity);
-        } else {
-            return new Vector3();
-        }
+        let distance = bullet.position.distanceTo(this.position);
+        let scalar = this.acceleration / Math.pow(distance,2);
+        return new Vector3().subVectors(this.position, bullet.position).normalize().multiplyScalar(scalar);
     }
 }

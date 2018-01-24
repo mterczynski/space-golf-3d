@@ -1,4 +1,4 @@
-import { Scene, Object3D } from "three";
+import { Scene, Object3D, Line } from "three";
 import { Planet } from "./Planet";
 
 export class ElementGetter{
@@ -24,6 +24,12 @@ export class ElementGetter{
     getPlanets(): Planet[]{
         return <Planet[]> this.scene.children.filter((el)=>{
             return el instanceof Planet;
+        });
+    }
+
+    getLines(): Line[]{
+        return <Line[]> this.scene.children.filter((el)=>{
+            return el instanceof Line;
         });
     }
 
