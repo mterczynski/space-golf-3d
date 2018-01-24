@@ -9,13 +9,14 @@ export class ElementGetter{
 
     private scene: Scene;
 
-    deepSearch(element: Object3D, filteredObjects: Object3D[]) {
+    deepSearch(element: Object3D, filteredObjects: Object3D[] = []) {
         if(element.name == name){
             filteredObjects.push(element);
         }
+        // Todo: test
         if(element.children){
             element.children.forEach((subElement)=>{
-                this.deepSearch(subElement, filteredObjects);
+                return this.deepSearch(subElement, filteredObjects);
             });  
         }
     }
@@ -28,10 +29,7 @@ export class ElementGetter{
 
     getObjectsByName(name: string, recursive=true){
         if(recursive){
-            const filteredObjects: Object3D[] = [];
-            
-            this.deepSearch(this.scene, filteredObjects);
-            return filteredObjects;
+            return this.deepSearch(this.scene);
         }
         else{
             return this.scene.children.filter((el)=>{

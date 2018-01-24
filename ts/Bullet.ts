@@ -8,6 +8,7 @@ export class Bullet extends Mesh{
         }));
     }
 
+    public static readonly _name = "Bullet"
     private velocity = new Vector3();
 
     addVelocity(planets: [Planet]){
