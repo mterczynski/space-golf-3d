@@ -1,5 +1,5 @@
 import { Mesh, BackSide, SphereGeometry, MeshBasicMaterial, BufferGeometry, Color, Vector3, ImageUtils, MeshPhongMaterial } from 'three';
-import { Bullet } from './Bullet';
+import { Ball } from './Ball';
 
 export class Planet extends Mesh {
 
@@ -28,9 +28,9 @@ export class Planet extends Mesh {
         console.warn('name is readonly');
     }  
 
-    calcGravity(bullet: Bullet): Vector3{
-        let distance = bullet.position.distanceTo(this.position);
+    calcGravity(ball: Ball): Vector3{
+        let distance = ball.position.distanceTo(this.position);
         let scalar = this.acceleration / Math.pow(distance,2);
-        return new Vector3().subVectors(this.position, bullet.position).normalize().multiplyScalar(scalar);
+        return new Vector3().subVectors(this.position, ball.position).normalize().multiplyScalar(scalar);
     }
 }

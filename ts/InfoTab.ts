@@ -1,19 +1,19 @@
-import { Bullet } from "./Bullet";
+import { Ball } from "./Ball";
 
 export abstract class InfoTab{
-    static updateText(bullet: Bullet){
+    static updateText(ball: Ball){
         document.getElementById('infoTab__text')!.innerHTML = 
-        `Bullet: {
+        `Ball: {
             position:{
-                x: ${bullet.position.x.toFixed(0)},
-                y: ${bullet.position.y.toFixed(0)},
-                z: ${bullet.position.z.toFixed(0)}
+                x: ${ball.position.x.toFixed(0)},
+                y: ${ball.position.y.toFixed(0)},
+                z: ${ball.position.z.toFixed(0)}
             }
             velocity:{
-                length: ${bullet.velocity.length().toFixed(2)},
-                x: ${bullet.velocity.x.toFixed(2)},
-                y: ${bullet.velocity.y.toFixed(2)},
-                z: ${bullet.velocity.z.toFixed(2)}
+                length: ${ball.velocity.length().toFixed(2)},
+                x: ${ball.velocity.x.toFixed(2)},
+                y: ${ball.velocity.y.toFixed(2)},
+                z: ${ball.velocity.z.toFixed(2)}
             } 
         }`;
     }

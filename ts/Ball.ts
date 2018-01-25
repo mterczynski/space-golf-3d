@@ -1,9 +1,9 @@
 import { Mesh, SphereGeometry, MeshBasicMaterial, Vector3, ArrowHelper, LineBasicMaterial, Geometry, Line } from "three";
 import { Planet } from "./Planet";
 
-export class Bullet extends Mesh{
+export class Ball extends Mesh{
     constructor(){
-        super(new SphereGeometry(Bullet.size, 32, 32), new MeshBasicMaterial({
+        super(new SphereGeometry(Ball.size, 32, 32), new MeshBasicMaterial({
             color: 'rgb(0,250,250)',
         }));
         this.add(this.arrowHelper);
@@ -14,7 +14,7 @@ export class Bullet extends Mesh{
     private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
     private pathVerticies: Vector3[] = [];
 
-    get name(){ return 'Bullet' }
+    get name(){ return 'Ball' }
     set name(_){ console.warn('name is readonly') }
 
     get velocity(){
@@ -41,7 +41,7 @@ export class Bullet extends Mesh{
         this._velocity = this._velocity.add(vector);
     }
     isColliding(planet: Planet){
-        if(this.position.distanceTo(planet.position) <= Bullet.size + planet.size){
+        if(this.position.distanceTo(planet.position) <= Ball.size + planet.size){
             console.log('collision')
             return true;
         } else {

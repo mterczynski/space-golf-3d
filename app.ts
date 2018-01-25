@@ -1,6 +1,6 @@
 import { Planet } from './ts/Planet';
 import { OrbitControls } from 'three-orbitcontrols-ts';
-import { Bullet } from './ts/Bullet';
+import { Ball } from './ts/Ball';
 import { AxisHelper, Color, Vector3, WebGLRenderer, Scene, PerspectiveCamera, Object3D, Light, PointLight } from 'three';
 import { ElementGetter } from './ts/ElementGetter';
 import { Net } from './ts/Net';
@@ -26,9 +26,9 @@ class App{
         planet2.position.set(90, 10, 10);
         planet3.position.z = 500;
 
-        this.bullet = new Bullet();
-        this.bullet.position.set(0,-100, -70);
-        this.scene.add(this.bullet);
+        this.ball = new Ball();
+        this.ball.position.set(0,-100, -70);
+        this.scene.add(this.ball);
 
         this.scene.add(this.axis);
 
@@ -56,7 +56,7 @@ class App{
     private readonly scene = new Scene();
     private readonly camera = new PerspectiveCamera(45, innerWidth/innerHeight, 0.1, Math.pow(10,6));
     private readonly eGetter = new ElementGetter(this.scene);
-    private bullet: Bullet;
+    private ball: Ball;
     // Example mesh
 
     private adjustCanvasSize(){
@@ -71,10 +71,10 @@ class App{
         this.adjustCanvasSize();
 
         this.eGetter.getPlanets().forEach((planet: Planet)=>{
-            this.bullet.addVelocity(planet.calcGravity(this.bullet));
+            this.ball.addVelocity(planet.calcGravity(this.ball));
         });
 
-        this.bullet.tick();
+        this.ball.tick();
 
         this.eGetter.getLines().forEach((line)=>{
             this.scene.remove(line);
@@ -82,9 +82,9 @@ class App{
 
         console.log(this.scene.children.length)
 
-        this.scene.add(this.bullet.getLine());
+        this.scene.add(this.ball.getLine());
 
-        InfoTab.updateText(this.bullet);
+        InfoTab.updateText(this.ball);
     }
 }
 
