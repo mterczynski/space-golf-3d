@@ -10,10 +10,10 @@ export abstract class InfoTab{
                 z: ${ball.position.z.toFixed(0)}
             }
             velocity:{
-                length: ${ball.velocity.length().toFixed(2)},
-                x: ${ball.velocity.x.toFixed(2)},
-                y: ${ball.velocity.y.toFixed(2)},
-                z: ${ball.velocity.z.toFixed(2)}
+                length: ${ball.getVelocity().length().toFixed(2)},
+                x: ${ball.getVelocity().x.toFixed(2)},
+                y: ${ball.getVelocity().y.toFixed(2)},
+                z: ${ball.getVelocity().z.toFixed(2)}
             } 
         }`;
     }

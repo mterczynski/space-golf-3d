@@ -16,7 +16,7 @@ export class Planet extends Mesh {
     public readonly density = 5;
 
     get acceleration(){
-        return Math.pow(this.size, 3) / Math.pow(10, 3);
+        return this.mass / Math.pow(10, 4.5);
     }
     get mass(){
         return this.density * 4/3 * Math.PI * Math.pow(this.size, 3);
