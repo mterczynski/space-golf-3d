@@ -17,10 +17,29 @@ body{
     left:0;
     bottom: 0;
     color: yellow;
+    height: 50%;
+    width: 300px;
     border-right: 1px solid rgba(255,255,0, 0.5);
-    border-top: 1px solid rgba(255,255,0, 0.5);
+    border-top: 1px dashed rgba(0, 0, 0, 1);
 }
 .infoTab__text{
+    padding: 10px;
+    display: block;
+    position: relative;
+    left:0;
+    bottom: 0;
+}
+.settingsTab{
+    position: absolute;
+    left:0;
+    top: 0;
+    color: blue;
+    border-right: 1px solid rgba(0,0,255, 0.5);
+    border-top: 1px solid rgba(0,0,255, 0.5);
+    height: 50%;
+    width: 300px;
+}
+.settingsTab__text{
     padding: 10px;
     display: block;
     position: relative;

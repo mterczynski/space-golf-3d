@@ -14,12 +14,12 @@ class App{
         let planet = new Planet(40);
         let planet2 = new Planet(20, new Color('rgb(0, 255, 0)'));
         let planet3 = new Planet(100, new Color('rgb(0, 0, 255)'));
-        let planet4 = new Planet(10, new Color('rgb(255, 255, 255)'));
+        let planet4 = new Planet(3, new Color('rgb(255, 255, 255)'));
 
         this.scene.add(planet);
-        // this.scene.add(planet2);
-        // this.scene.add(planet3);
-        // this.scene.add(planet4);
+        this.scene.add(planet2);
+        this.scene.add(planet3);
+        this.scene.add(planet4);
 
         planet4.position.set(100, 100, 100);
 
@@ -70,7 +70,9 @@ class App{
         requestAnimationFrame(this.render.bind(this));
         this.adjustCanvasSize();
 
-        this.eGetter.getPlanets().forEach((planet: Planet)=>{
+        let planets: Planet[] = this.eGetter.getPlanets();
+
+        planets.forEach((planet: Planet)=>{
             this.ball.addVelocity(planet.calcGravity(this.ball));
         });
 
@@ -80,7 +82,9 @@ class App{
             this.scene.remove(line);
         });
 
-        console.log(this.scene.children.length)
+        if(this.ball.isCollidingWithAny(planets)){
+            console.log('collision');
+        }
 
         this.scene.add(this.ball.getLine());
 
