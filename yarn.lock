@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@types/dat-gui@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@types/dat-gui/-/dat-gui-0.6.3.tgz#2285a22ee28fbed05f3932dda9144d18c9903b5d"
+
 "@types/three@^0.84.22":
   version "0.84.22"
   resolved "https://registry.yarnpkg.com/@types/three/-/three-0.84.22.tgz#ad1a7293bfeb7cc4a657c23ef020cd7e14d1efeb"
@@ -564,6 +568,10 @@ dashdash@^1.12.0:
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   dependencies:
     assert-plus "^1.0.0"
+
+dat.gui@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/dat.gui/-/dat.gui-0.7.0.tgz#877d9a1a1fb75e4963864d7d36e4ff122776fb64"
 
 date-now@^0.1.4:
   version "0.1.4"
