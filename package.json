@@ -14,11 +14,13 @@
     "@types/three": "^0.84.22",
     "dat.gui": "^0.7.0",
     "three": "^0.87.1",
+    "three-anaglypheffect": "^1.0.0",
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-loader": "^2.3.7",
     "typescript": "^2.6.2"
   },
   "devDependencies": {
+    "@types/node": "^9.3.0",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
   }

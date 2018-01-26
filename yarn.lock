@@ -6,6 +6,10 @@
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/@types/dat-gui/-/dat-gui-0.6.3.tgz#2285a22ee28fbed05f3932dda9144d18c9903b5d"
 
+"@types/node@^9.3.0":
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.3.0.tgz#3a129cda7c4e5df2409702626892cb4b96546dd5"
+
 "@types/three@^0.84.22":
   version "0.84.22"
   resolved "https://registry.yarnpkg.com/@types/three/-/three-0.84.22.tgz#ad1a7293bfeb7cc4a657c23ef020cd7e14d1efeb"
@@ -2534,6 +2538,10 @@ tar@^2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
+
+three-anaglypheffect@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/three-anaglypheffect/-/three-anaglypheffect-1.0.0.tgz#0c0c0f78b640cd1e58f01265d314ad36f66ed51e"
 
 three-orbitcontrols-ts@^0.1.2:
   version "0.1.2"

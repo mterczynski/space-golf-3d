@@ -7,24 +7,29 @@ import { Net } from './ts/Net';
 import { InfoTab } from './ts/InfoTab';
 import { Skybox } from './ts/Skybox';
 
+// import { AnaglyphEffect } from 'three-anaglypheffect'
+
+console.log(require('three-anaglypheffect'));
+declare var AnaglyphEffect: any;
+
 class App{
     constructor(){
         const controls = new OrbitControls(this.camera, this.renderer.domElement);
         
         const planets = [
             new Planet(40),
-            new Planet(20, new Color('rgb(0, 255, 0)')),
-            new Planet(100, new Color('rgb(0, 0, 255)')),
-            new Planet(3, new Color('rgb(255, 255, 255)'))
+            // new Planet(20, new Color('rgb(0, 255, 0)')),
+            // new Planet(100, new Color('rgb(0, 0, 255)')),
+            // new Planet(3, new Color('rgb(255, 255, 255)'))
         ];
 
         planets.forEach((planet)=>{
             this.scene.add(planet);
         });
 
-        planets[3].position.set(100, 100, 100);
-        planets[1].position.set(90, 10, 10);
-        planets[2].position.set(0, 0, 500);
+        // planets[3].position.set(100, 100, 100);
+        // planets[1].position.set(90, 10, 10);
+        // planets[2].position.set(0, 0, 500);
 
         this.ball.position.set(0, -100, -70);
         this.scene.add(this.ball);
@@ -47,6 +52,7 @@ class App{
     private readonly camera = new PerspectiveCamera(45, innerWidth/innerHeight, 0.1, Math.pow(10,6));
     private readonly eGetter = new ElementGetter(this.scene);
     private ball: Ball = new Ball();
+    private effectAnaglyphic = new AnaglyphEffect(this.renderer);
     // Example mesh
 
     private adjustCanvasSize(){
@@ -56,7 +62,7 @@ class App{
     }
 
     private render(){
-        this.renderer.render(this.scene, this.camera);
+        this.effectAnaglyphic.render(this.scene, this.camera);
         requestAnimationFrame(this.render.bind(this));
         this.adjustCanvasSize();
 
