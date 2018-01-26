@@ -1,26 +1,26 @@
 import { Planet } from './ts/Planet';
 import { OrbitControls } from 'three-orbitcontrols-ts';
 import { Ball } from './ts/Ball';
-import { AxisHelper, Color, Vector3, WebGLRenderer, Scene, PerspectiveCamera, Object3D, Light, PointLight } from 'three';
+import { AxisHelper, Color, Vector3, WebGLRenderer, Scene, PerspectiveCamera, Object3D, Light, PointLight, Camera } from 'three';
 import { ElementGetter } from './ts/ElementGetter';
 import { Net } from './ts/Net';
 import { InfoTab } from './ts/InfoTab';
 import { Skybox } from './ts/Skybox';
+import { SettingsTab } from './ts/SettingsTab';
 
 // import { AnaglyphEffect } from 'three-anaglypheffect'
 
-console.log(require('three-anaglypheffect'));
-declare var AnaglyphEffect: any;
+const AnaglyphEffect = require('three-anaglypheffect');
 
 class App{
     constructor(){
-        const controls = new OrbitControls(this.camera, this.renderer.domElement);
+        const controls = new OrbitControls(this.orbitCamera, this.renderer.domElement);
         
         const planets = [
-            new Planet(40),
-            // new Planet(20, new Color('rgb(0, 255, 0)')),
-            // new Planet(100, new Color('rgb(0, 0, 255)')),
-            // new Planet(3, new Color('rgb(255, 255, 255)'))
+            new Planet(40, this.settingsTab),
+            // new Planet(20, this.settingsTab, new Color('rgb(0, 255, 0)')),
+            // new Planet(100, this.settingsTab, new Color('rgb(0, 0, 255)')),
+            // new Planet(3, this.settingsTab, new Color('rgb(255, 255, 255)'))
         ];
 
         planets.forEach((planet)=>{
@@ -36,8 +36,8 @@ class App{
 
         // this.scene.add(new Net());
 
-        this.camera.position.set(200, 200, 200);
-        this.camera.lookAt(new Vector3());
+        this.orbitCamera.position.set(200, 200, 200);
+        this.orbitCamera.lookAt(new Vector3());
 
         this.scene.add(new Skybox());
         let light = new PointLight();
@@ -47,22 +47,28 @@ class App{
         this.render();
     }
   
+    private readonly settingsTab = new SettingsTab();
     private readonly renderer = new WebGLRenderer({antialias:true, canvas:<HTMLCanvasElement>document.getElementById('mainCanvas')});
     private readonly scene = new Scene();
-    private readonly camera = new PerspectiveCamera(45, innerWidth/innerHeight, 0.1, Math.pow(10,6));
+    private readonly orbitCamera = new PerspectiveCamera(45, innerWidth/innerHeight, 0.1, Math.pow(10,6));
     private readonly eGetter = new ElementGetter(this.scene);
-    private ball: Ball = new Ball();
-    private effectAnaglyphic = new AnaglyphEffect(this.renderer);
+    private ball: Ball = new Ball(this.settingsTab);
+    private effectAnaglyphic = new AnaglyphEffect(this.renderer, 2000, innerWidth, innerHeight);
+    private activeCamera: Camera = this.orbitCamera
     // Example mesh
 
     private adjustCanvasSize(){
         this.renderer.setSize(innerWidth, innerHeight);
-        this.camera.aspect = innerWidth/innerHeight;
-        this.camera.updateProjectionMatrix();
+        this.orbitCamera.aspect = innerWidth/innerHeight;
+        this.orbitCamera.updateProjectionMatrix();
     }
 
     private render(){
-        this.effectAnaglyphic.render(this.scene, this.camera);
+        if(this.settingsTab.getSettings().anaglyphEffect){
+            this.effectAnaglyphic.render(this.scene, this.activeCamera);
+        } else {
+            this.renderer.render(this.scene, this.activeCamera);
+        }
         requestAnimationFrame(this.render.bind(this));
         this.adjustCanvasSize();
 

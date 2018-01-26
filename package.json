@@ -12,7 +12,7 @@
   "dependencies": {
     "@types/dat-gui": "^0.6.3",
     "@types/three": "^0.84.22",
-    "dat.gui": "^0.7.0",
+    "dat-gui": "^0.5.0",
     "three": "^0.87.1",
     "three-anaglypheffect": "^1.0.0",
     "three-orbitcontrols-ts": "^0.1.2",

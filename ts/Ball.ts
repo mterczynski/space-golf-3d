@@ -1,14 +1,14 @@
-import { Mesh, SphereGeometry, MeshBasicMaterial, Vector3, ArrowHelper, LineBasicMaterial, Geometry, Line, AxisHelper, ConeGeometry } from "three";
+import { Mesh, SphereGeometry, MeshBasicMaterial, Vector3, ArrowHelper, LineBasicMaterial, Geometry, Line, AxisHelper, ConeGeometry, PerspectiveCamera, Matrix4 } from "three";
 import { Planet } from "./Planet";
+import { SettingsTab } from "./SettingsTab";
 
 export class Ball extends Mesh{
-    constructor(){
+    constructor(private settings: SettingsTab){
         super(new SphereGeometry(Ball.size, 32, 32), new MeshBasicMaterial({
             color: 'rgb(0,250,250)',
         }));
         this.add(this.arrowHelper);
-        this.add(new ArrowHelper(new Vector3(), new Vector3(), 30));
-        // this.add(new AxisHelper(20))
+        this.add(this.camera);
         let coneMesh = new Mesh(new ConeGeometry(4, 12), new MeshBasicMaterial({wireframe: true}));
         // this.add(coneMesh);
         coneMesh.rotateX(Math.PI/2);
@@ -22,13 +22,26 @@ export class Ball extends Mesh{
     private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
     private pathVerticies: Vector3[] = [];
 
+    public readonly camera = new PerspectiveCamera(45, innerWidth/innerHeight, 0.1, Math.pow(10,6));
+
     get name(){ return 'Ball' }
     set name(_){ console.warn('name is readonly') }
 
-    getVelocity(){
-        return this._velocity.clone();
+    private updateArrowHelper(){
+        this.arrowHelper.setDirection(this._velocity.clone().normalize());
+        this.arrowHelper.setLength(this._velocity.length() * 20);
+    }
+    private updateCamera(){
+        this.getVelocity().normalize();
+        this.camera.position.y = 200;
+        this.camera.aspect = innerWidth/innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.camera.lookAt(new Vector3());
     }
 
+    addVelocity(vector: Vector3){
+        this._velocity = this._velocity.add(vector);
+    }
     getLine(){
         var lineMaterial = new LineBasicMaterial({
             color: 0xff0000
@@ -40,17 +53,12 @@ export class Ball extends Mesh{
 
         return new Line( geometry, lineMaterial );
     }
-
-    private updateArrowHelper(){
-        this.arrowHelper.setDirection(this._velocity.clone().normalize());
-        this.arrowHelper.setLength(this._velocity.length() * 20);
-    }
-    addVelocity(vector: Vector3){
-        this._velocity = this._velocity.add(vector);
-    }
+    getVelocity(){
+        return this._velocity.clone();
+    }   
     isColliding(planet: Planet){
         if(this.isCollisionBlocked){
-            console.log('collision blocked, aborting')
+            // console.log('collision blocked, aborting')
             return false;
         }
         if(this.position.distanceTo(planet.position) <= Ball.size + planet.size){
@@ -84,13 +92,13 @@ export class Ball extends Mesh{
         this.rotation.set(0,0,0);
         this.position.add(this._velocity);
         let velNorm = this.getVelocity().normalize()//.multiplyScalar(Math.PI/2);
-        console.log(this.arrowHelper);
         this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
 
         this.updateArrowHelper();
+        this.updateCamera();
         this.pathVerticies.push(this.position.clone());
         setTimeout(()=>{
             this.pathVerticies.shift();
-        }, 50000); // path duration: 50s
+        }, this.settings.getSettings().pathDuration * 1000);
     }
 }
