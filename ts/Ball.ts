@@ -1,8 +1,9 @@
 import { Mesh, SphereGeometry, MeshBasicMaterial, Vector3, ArrowHelper, LineBasicMaterial, Geometry, Line, AxisHelper, ConeGeometry, PerspectiveCamera, Matrix4 } from "three";
 import { Planet } from "./Planet";
 import { SettingsTab } from "./SettingsTab";
+import { Tickable } from "./interfaces/Tickable";
 
-export class Ball extends Mesh{
+export class Ball extends Mesh implements Tickable{
     constructor(private settings: SettingsTab){
         super(new SphereGeometry(Ball.size, 32, 32), new MeshBasicMaterial({
             color: 'rgb(0,250,250)',
