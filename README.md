@@ -1,5 +1,7 @@
 # gravitee
 
+<img src="https://github.com/mterczynski/gravitee/blob/master/assets/preview.gif" width="300" height="300">
+
 <h3>Install dependencies:</h3>
 
     yarn
