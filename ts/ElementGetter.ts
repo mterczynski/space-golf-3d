@@ -1,74 +1,46 @@
 import { Scene, Object3D, Line } from "three";
 import { Planet } from "./Planet";
 
-export class ElementGetter{
-    
-    constructor(scene: Scene){
-        this.scene = scene;
-    }
+export class ElementGetter {
 
-    private scene: Scene;
+	constructor(scene: Scene) {
+		this.scene = scene;
+	}
 
-    deepSearch(element: Object3D, filteredObjects: Object3D[] = []) {
-        if(element.name == name){
-            filteredObjects.push(element);
-        }
-        // Todo: test
-        if(element.children){
-            element.children.forEach((subElement)=>{
-                return this.deepSearch(subElement, filteredObjects);
-            });  
-        }
-    }
-    
-    getPlanets(): Planet[]{
-        return <Planet[]> this.scene.children.filter((el)=>{
-            return el instanceof Planet;
-        });
-    }
+	private scene: Scene;
 
-    getLines(): Line[]{
-        return <Line[]> this.scene.children.filter((el)=>{
-            return el instanceof Line;
-        });
-    }
+	deepSearch(element: Object3D, filteredObjects: Object3D[] = []) {
+		if (element.name == name) {
+			filteredObjects.push(element);
+		}
+		// Todo: test
+		if (element.children) {
+			element.children.forEach((subElement) => {
+				return this.deepSearch(subElement, filteredObjects);
+			});
+		}
+	}
 
-    getObjectsByName(name: string, recursive=true){
-        if(recursive){
-            return this.deepSearch(this.scene);
-        }
-        else{
-            return this.scene.children.filter((el)=>{
-                return el.name == name;
-            });
-        }
-    }
+	getPlanets(): Planet[] {
+		return <Planet[]>this.scene.children.filter((el) => {
+			return el instanceof Planet;
+		});
+	}
+
+	getLines(): Line[] {
+		return <Line[]>this.scene.children.filter((el) => {
+			return el instanceof Line;
+		});
+	}
+
+	getObjectsByName(name: string, recursive = true) {
+		if (recursive) {
+			return this.deepSearch(this.scene);
+		}
+		else {
+			return this.scene.children.filter((el) => {
+				return el.name == name;
+			});
+		}
+	}
 }
-
-// function ElementGetter(){
-//     this.getObjectsByName = function(container, name="name", recursive=true){
-//         if(arguments.length < 2){
-//             throw new Error("Required arguments: container:THREE.Object3D, name:string");
-//         }
-//         if(recursive){
-//             const filteredObjects = [];
-//             function deepSearch(element) {
-//                 if(element.name == name){
-//                     filteredObjects.push(element);
-//                 }
-//                 if(element.children){
-//                     element.children.forEach((subElement)=>{
-//                         deepSearch(subElement);
-//                     })  
-//                 }
-//             }
-//             deepSearch(container);
-//             return filteredObjects;
-//         }
-//         else{
-//             return container.children.filter((el)=>{
-//                 return el.name == name;
-//             });
-//         }
-//     }
-// }
