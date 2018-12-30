@@ -1,4 +1,4 @@
-import { Mesh, BackSide, SphereGeometry, MeshBasicMaterial, BufferGeometry, Color, Vector3, ImageUtils, MeshPhongMaterial } from 'three';
+import { Mesh, BackSide, SphereGeometry, MeshBasicMaterial, Color, Vector3, MeshPhongMaterial } from 'three';
 import { Ball } from './Ball';
 import { SettingsTab } from './SettingsTab';
 
@@ -14,24 +14,20 @@ export class Planet extends Mesh {
 		this.add(shadowMesh);
 	}
 
+	readonly name = 'Planet';
+	readonly density = 5;
+
 	private readonly shadowMat = new MeshBasicMaterial({
 		color: 'rgb(0,0,0)',
-		side: BackSide
+		side: BackSide,
 	});
-
-	public readonly density = 5;
 
 	get acceleration() {
 		return this.mass / Math.pow(10, 4.3) * this.settings.getSettings().gravity;
 	}
+
 	get mass() {
 		return this.density * 4 / 3 * Math.PI * Math.pow(this.size, 3);
-	}
-	get name() {
-		return 'Planet';
-	}
-	set name(_) {
-		console.warn('name is readonly');
 	}
 
 	calcGravity(ball: Ball): Vector3 {

@@ -15,6 +15,7 @@ export class SettingsTab {
 			console.warn('changeCamera method not set');
 		}
 	}
+
 	private gui = new GUI();
 
 	private init() {

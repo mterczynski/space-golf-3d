@@ -31,8 +31,6 @@ class App {
 		this.ball.position.set(0, -100, -70);
 		this.scene.add(this.ball);
 
-		// this.scene.add(new Net());
-
 		this.orbitCamera.position.set(200, 200, 200);
 		this.orbitCamera.lookAt(new Vector3());
 
@@ -45,7 +43,10 @@ class App {
 	}
 
 	private readonly settingsTab = new SettingsTab();
-	private readonly renderer = new WebGLRenderer({ antialias: true, canvas: <HTMLCanvasElement>document.getElementById('mainCanvas') });
+	private readonly renderer = new WebGLRenderer({
+		antialias: true,
+		canvas: <HTMLCanvasElement>document.getElementById('mainCanvas')
+	});
 	private readonly scene = new Scene();
 	private readonly orbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	private readonly eGetter = new ElementGetter(this.scene);
@@ -66,7 +67,7 @@ class App {
 		} else {
 			this.renderer.render(this.scene, this.activeCamera);
 		}
-		// console.log(this.clock.getDelta());
+
 		requestAnimationFrame(this.render.bind(this));
 		this.adjustCanvasSize();
 
@@ -81,10 +82,6 @@ class App {
 		this.eGetter.getLines().forEach((line) => {
 			this.scene.remove(line);
 		});
-
-		if (this.ball.isCollidingWithAny(planets)) {
-			console.log('collision');
-		}
 
 		this.scene.add(this.ball.getLine());
 
