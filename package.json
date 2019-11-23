@@ -17,11 +17,11 @@
     "three-anaglypheffect": "^1.0.0",
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-loader": "^2.3.7",
-    "typescript": "^2.6.2"
-  },
-  "devDependencies": {
+    "typescript": "^2.6.2",
     "@types/node": "^9.3.0",
     "webpack": "^3.6.0",
+  },
+  "devDependencies": {
     "webpack-dev-server": "^2.8.2"
   }
 }

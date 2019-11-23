@@ -9,7 +9,7 @@
 ## Run webpack-dev-server
 
     # This will launch webpack server on localhost:8080
-    npm start
+    yarn start
     
     
 ## Compile code to bundle
