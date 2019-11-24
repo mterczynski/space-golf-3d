@@ -1,19 +1,9 @@
 {
     "defaultSeverity": "warning",
     "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "indent": [
-            true,
-            "tabs"
-        ],
-        "quotemark": [
-            true,
-            "single"
-        ],
-        "member-access": [true, "no-public"]
-    },
-    "rulesDirectory": []
+			"mterczynski-tslint"
+		],
+		"rules": {
+			"indent": [true, "tabs"]
+		}
 }
