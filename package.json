@@ -22,7 +22,7 @@
     "webpack": "^3.6.0"
   },
   "devDependencies": {
-    "mterczynski-tslint": "*",
+    "mterczynski-tslint": "~1.10.0",
     "webpack-dev-server": "^2.8.2"
   }
 }

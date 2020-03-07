@@ -1,3 +1,3 @@
 export interface Tickable {
-	tick: () => void
+	tick: () => void;
 }

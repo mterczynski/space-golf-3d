@@ -1,20 +1,16 @@
-import { GUI } from "dat-gui";
+import { GUI } from 'dat-gui';
 
 export class SettingsTab {
 
-	constructor() {
-		this.init();
-	}
-
 	private settings = {
-		timeSpeed: 1,
-		gravity: 1,
-		pathDuration: 25,
 		anaglyphEffect: false,
 		changeCamera: () => {
 			console.warn('changeCamera method not set');
-		}
-	}
+		},
+		gravity: 1,
+		pathDuration: 25,
+		timeSpeed: 1,
+	};
 
 	private gui = new GUI();
 
@@ -24,6 +20,10 @@ export class SettingsTab {
 		this.gui.add(this.settings, 'pathDuration', 0, 50);
 		this.gui.add(this.settings, 'anaglyphEffect');
 		this.gui.add(this.settings, 'changeCamera');
+	}
+
+	constructor() {
+		this.init();
 	}
 
 	getSettings() {

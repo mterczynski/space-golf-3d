@@ -1,16 +1,19 @@
-import { Mesh, SphereGeometry, MeshBasicMaterial, Vector3, ArrowHelper, LineBasicMaterial, Geometry, Line, PerspectiveCamera } from "three";
-import { Planet } from "./Planet";
-import { SettingsTab } from "./SettingsTab";
-import { Tickable } from "./interfaces/Tickable";
+import {
+	ArrowHelper,
+	Geometry,
+	Line,
+	LineBasicMaterial,
+	Mesh,
+	MeshBasicMaterial,
+	PerspectiveCamera,
+	SphereGeometry,
+	Vector3,
+} from 'three';
+import { Tickable } from './interfaces/Tickable';
+import { Planet } from './Planet';
+import { SettingsTab } from './SettingsTab';
 
 export class Ball extends Mesh implements Tickable {
-	constructor(private settings: SettingsTab) {
-		super(new SphereGeometry(Ball.size, 32, 32), new MeshBasicMaterial({
-			color: 'rgb(0,250,250)',
-		}));
-		this.add(this.arrowHelper);
-		this.add(this.camera);
-	}
 
 	private static readonly size = 3;
 	private isCollisionBlocked = true;
@@ -18,9 +21,6 @@ export class Ball extends Mesh implements Tickable {
 	private _velocity = new Vector3(-0.5, 0.5, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
 	private pathVerticies: Vector3[] = [];
-
-	readonly camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
-	readonly name = 'Ball';
 
 	private updateArrowHelper() {
 		this.arrowHelper.setDirection(this._velocity.clone().normalize());
@@ -35,13 +35,24 @@ export class Ball extends Mesh implements Tickable {
 		this.camera.lookAt(new Vector3());
 	}
 
+	readonly camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
+	readonly name = 'Ball';
+
+	constructor(private settings: SettingsTab) {
+		super(new SphereGeometry(Ball.size, 32, 32), new MeshBasicMaterial({
+			color: 'rgb(0,250,250)',
+		}));
+		this.add(this.arrowHelper);
+		this.add(this.camera);
+	}
+
 	addVelocity(vector: Vector3) {
 		this._velocity = this._velocity.add(vector);
 	}
 
 	getLine() {
 		const lineMaterial = new LineBasicMaterial({
-			color: 0xff0000
+			color: 'red',
 		});
 
 		const geometry = new Geometry();
@@ -62,8 +73,8 @@ export class Ball extends Mesh implements Tickable {
 
 		if (this.position.distanceTo(planet.position) <= Ball.size + planet.size) {
 			// rotate velocity vector by 90 degrees, slow it down
-			let axis = new Vector3(0, -1, 0);
-			let angle = Math.PI / 2;
+			const axis = new Vector3(0, -1, 0);
+			const angle = Math.PI / 2;
 			this._velocity.applyAxisAngle(axis, angle).multiplyScalar(0.6);
 			this.isCollisionBlocked = true;
 
@@ -90,7 +101,7 @@ export class Ball extends Mesh implements Tickable {
 		}
 		this.rotation.set(0, 0, 0);
 		this.position.add(this._velocity);
-		let velNorm = this.getVelocity().normalize();
+		const velNorm = this.getVelocity().normalize();
 		this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
 
 		this.updateArrowHelper();

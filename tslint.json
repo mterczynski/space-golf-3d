@@ -1,9 +1,11 @@
 {
-    "defaultSeverity": "warning",
-    "extends": [
-			"mterczynski-tslint"
-		],
-		"rules": {
-			"indent": [true, "tabs"]
-		}
+	"defaultSeverity": "warning",
+	"extends": [
+		"mterczynski-tslint"
+	],
+	"rules": {
+		"indent": [true, "tabs"],
+		"variable-name": false,
+		"no-var-requires": false
+	}
 }

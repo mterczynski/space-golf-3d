@@ -22,38 +22,6 @@ class App {
 	private ball: Ball = new Ball(this.settingsTab);
 	private effectAnaglyphic = new AnaglyphEffect(this.renderer, 2000, innerWidth, innerHeight);
 	private activeCamera: Camera = this.orbitCamera;
-
-	constructor() {
-		new OrbitControls(this.orbitCamera, this.renderer.domElement);
-
-		const planets = [
-			new Planet(40, this.settingsTab),
-			new Planet(20, this.settingsTab, new Color('rgb(0, 255, 0)')),
-			new Planet(100, this.settingsTab, new Color('rgb(0, 0, 255)')),
-			new Planet(3, this.settingsTab, new Color('rgb(255, 255, 255)')),
-		];
-
-		planets.forEach((planet) => {
-			this.scene.add(planet);
-		});
-
-		planets[3].position.set(100, 100, 100);
-		planets[1].position.set(90, 10, 10);
-		planets[2].position.set(0, 0, 500);
-
-		this.ball.position.set(0, -100, -70);
-		this.scene.add(this.ball);
-
-		this.orbitCamera.position.set(200, 200, 200);
-		this.orbitCamera.lookAt(new Vector3());
-
-		this.scene.add(new Skybox());
-		const light = new PointLight();
-		light.position.set(0, 100, 5000);
-		this.scene.add(light);
-
-		this.render();
-	}
 	// Example mesh
 
 	private adjustCanvasSize() {
@@ -80,14 +48,46 @@ class App {
 
 		this.ball.tick();
 
-		this.eGetter.getLines().forEach((line) => {
-			this.scene.remove(line);
-		});
+		this.eGetter.getLines().forEach(line => this.scene.remove(line));
 
 		this.scene.add(this.ball.getLine());
 
 		InfoTab.updateText(this.ball);
 	}
+
+	constructor() {
+		// tslint:disable-next-line:no-unused-expression
+		new OrbitControls(this.orbitCamera, this.renderer.domElement);
+
+		const planets = [
+			new Planet(40, this.settingsTab),
+			new Planet(20, this.settingsTab, new Color('rgb(0, 255, 0)')),
+			new Planet(100, this.settingsTab, new Color('rgb(0, 0, 255)')),
+			new Planet(3, this.settingsTab, new Color('rgb(255, 255, 255)')),
+		];
+
+		planets.forEach(planet => {
+			this.scene.add(planet);
+		});
+
+		planets[3].position.set(100, 100, 100);
+		planets[1].position.set(90, 10, 10);
+		planets[2].position.set(0, 0, 500);
+
+		this.ball.position.set(0, -100, -70);
+		this.scene.add(this.ball);
+
+		this.orbitCamera.position.set(200, 200, 200);
+		this.orbitCamera.lookAt(new Vector3());
+
+		this.scene.add(new Skybox());
+		const light = new PointLight();
+		light.position.set(0, 100, 5000);
+		this.scene.add(light);
+
+		this.render();
+	}
 }
 
+// tslint:disable-next-line:no-unused-expression
 new App();

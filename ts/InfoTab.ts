@@ -1,4 +1,4 @@
-import { Ball } from "./Ball";
+import { Ball } from './Ball';
 
 export abstract class InfoTab {
 	static updateText(ball: Ball) {
@@ -14,7 +14,7 @@ export abstract class InfoTab {
 		x: ${ball.getVelocity().x.toFixed(2)},
 		y: ${ball.getVelocity().y.toFixed(2)},
 		z: ${ball.getVelocity().z.toFixed(2)}
-	} 
+	}
 }`;
 		document.getElementById('infoTab__text')!.innerHTML = content;
 
