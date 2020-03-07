@@ -1,17 +1,16 @@
-# gravitee
+# Gravitee
 
-<img src="https://github.com/mterczynski/gravitee/blob/master/assets/preview.gif" width="300" height="300">
+<img src="assets/preview.gif" width="300" height="300">
 
-## Install dependencies
+## Installing dependencies
 
     yarn
     
-## Run webpack-dev-server
+## Running the app
 
-    # This will launch webpack server on localhost:8080
     yarn start
     
     
-## Compile code to bundle
+## Building the app bundle (for production)
 
-    webpack
+    yarn build

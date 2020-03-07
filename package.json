@@ -1,14 +1,14 @@
 {
-  "name": "34_webpack_threejs",
+  "name": "gravitee",
   "version": "1.0.0",
-  "description": "",
+  "description": "3D game in space",
   "main": "app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server"
+		"start": "webpack-dev-server",
+		"start:open": "webpack-dev-server",
+		"build": "webpack --mode=production"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "mterczynski",
   "dependencies": {
     "@types/dat-gui": "^0.6.3",
     "@types/node": "^9.3.0",
