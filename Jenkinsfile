@@ -21,9 +21,9 @@ pipeline {
 		stage('Deploy') {
 			steps {
 				sh '''
-					scp -r bundle.js root@mterczynski.pl:/var/www/html/gravitee
-					scp -r index.html root@mterczynski.pl:/var/www/html/gravitee
-					scp -r css root@mterczynski.pl:/var/www/html/gravitee
+					scp -r bundle.js root@mterczynski.pl:/var/www/html/gravitee/bundle.js
+					scp -r index.html root@mterczynski.pl:/var/www/html/gravitee/index.html
+					scp -r css root@mterczynski.pl:/var/www/html/gravitee/css
 				'''
 			}
 		}
