@@ -8,16 +8,16 @@ export class SettingsTab {
 		timeSpeed: 1,
 	};
 
-	private gui = new GUI();
+	private initGui() {
+		const gui = new GUI();
 
-	private init() {
-		this.gui.add(this.settings, 'timeSpeed', 0, 4);
-		this.gui.add(this.settings, 'gravity', -1, 2);
-		this.gui.add(this.settings, 'pathDuration', 0, 50);
+		gui.add(this.settings, 'timeSpeed', 0, 4);
+		gui.add(this.settings, 'gravity', -1, 2);
+		gui.add(this.settings, 'pathDuration', 0, 50);
 	}
 
 	constructor() {
-		this.init();
+		this.initGui();
 	}
 
 	getSettings() {

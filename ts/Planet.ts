@@ -14,7 +14,9 @@ export class Planet extends Mesh {
 	}
 
 	get mass() {
-		return this.density * 4 / 3 * Math.PI * Math.pow(this.size, 3);
+		const volumeMultiplier = Math.PI * 4 / 3;
+
+		return this.density * (this.size ** 3) * volumeMultiplier;
 	}
 
 	readonly name = 'Planet';
