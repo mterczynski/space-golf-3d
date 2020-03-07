@@ -6,7 +6,7 @@
   "scripts": {
 		"start": "webpack-dev-server",
 		"start:open": "webpack-dev-server",
-		"build": "webpack --mode=production"
+		"build": "webpack"
   },
   "author": "mterczynski",
   "dependencies": {
