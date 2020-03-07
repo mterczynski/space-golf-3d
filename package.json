@@ -4,10 +4,10 @@
   "description": "3D game in space",
   "main": "app.ts",
   "scripts": {
-		"start": "webpack-dev-server",
-		"start:open": "webpack-dev-server",
-		"lint": "tslint --project .",
-		"build": "webpack"
+    "start": "webpack-dev-server",
+    "start:open": "webpack-dev-server",
+    "lint": "tslint --project .",
+    "build": "webpack"
   },
   "author": "mterczynski",
   "dependencies": {
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "mterczynski-tslint": "~1.10.0",
+    "tslint": "^6.0.0",
     "webpack-dev-server": "^2.8.2"
   }
 }
