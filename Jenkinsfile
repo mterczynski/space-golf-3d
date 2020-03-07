@@ -23,6 +23,7 @@ pipeline {
 				sh '''
 					scp -r bundle.js root@mterczynski.pl:/var/www/html/gravitee
 					scp -r index.html root@mterczynski.pl:/var/www/html/gravitee
+					scp -r css root@mterczynski.pl:/var/www/html/gravitee
 				'''
 			}
 		}
