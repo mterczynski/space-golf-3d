@@ -12,17 +12,12 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.55.tgz#7cc1358c9c18e71f6c020e410962971863232cf5"
   integrity sha512-e/5tg8Ok0gSrN6pvHphnwTK0/CD9VPZrtZqpvvpEFAtfs+ZntusgGaWkf2lSEq1OFe2EDPeUMiMVpy4nZpJ4AQ==
 
-"@types/three@^0.84.22":
-  version "0.84.37"
-  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.84.37.tgz#30ddd17a59a970ef21d252c08ae1cdd7b8b57cff"
-  integrity sha512-lzekwNCdEEkGAts0iVHQb6sMGl3LzwFfqAcxyGMpNwkSGx9NN0EfDiBax2HGoELSahqnSehVKScyHKLONytFCw==
+"@types/three@~0.103":
+  version "0.103.2"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.103.2.tgz#f7d49130001c551941a0ded757def810579aafc4"
+  integrity sha512-zhtf0Qs5wLJpIn1+VWCpzSgpKayj/GSWZ6woiuz09FW59KEDeLpnBkYz6lbblVpRmGdlnG8nd0unaASshOvcXw==
   dependencies:
-    "@types/webvr-api" "*"
-
-"@types/webvr-api@*":
-  version "0.0.35"
-  resolved "https://registry.yarnpkg.com/@types/webvr-api/-/webvr-api-0.0.35.tgz#13b3cf1cd90544524d932ed36e6b109a2ec73d22"
-  integrity sha512-jdpJqweU5v7hYwUlHKQU6wzjQvUfBfmTz4WBwVd/5PVGYalKm6YbEnM/3T+M+QzRYf2R/ojBGnrWpjHBZFR3Og==
+    three "*"
 
 abbrev@1:
   version "1.1.1"
@@ -3383,11 +3378,6 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.3"
 
-three-anaglypheffect@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/three-anaglypheffect/-/three-anaglypheffect-1.0.0.tgz#0c0c0f78b640cd1e58f01265d314ad36f66ed51e"
-  integrity sha1-DAwPeLZAzR5Y8BJl0xStNvZu1R4=
-
 three-orbitcontrols-ts@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/three-orbitcontrols-ts/-/three-orbitcontrols-ts-0.1.2.tgz#2040955904022ae19c2e9c52ffdff43168658abd"
@@ -3395,15 +3385,20 @@ three-orbitcontrols-ts@^0.1.2:
   dependencies:
     three "^0.83.0"
 
+three@*:
+  version "0.114.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.114.0.tgz#754d08467a950ddeef06a0c645a1302b130e455a"
+  integrity sha512-3av45FxJeqYm7Rl02dfGBoqTaf2a934oUB4zMNrN8xjmASoSGeeykYoAr35+UntTdJDY/STw6CY3KuXFBWETig==
+
 three@^0.83.0:
   version "0.83.0"
   resolved "https://registry.yarnpkg.com/three/-/three-0.83.0.tgz#3b7f94790af3e021dac1f44a2617569ca2032b0b"
   integrity sha1-O3+UeQrz4CHawfRKJhdWnKIDKws=
 
-three@^0.87.1:
-  version "0.87.1"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.87.1.tgz#466a34edc4543459ced9b9d7d276b65216fe2ba8"
-  integrity sha1-Rmo07cRUNFnO2bnX0na2Uhb+K6g=
+three@~0.103:
+  version "0.103.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.103.0.tgz#63b3dbccc861caad93269618061a73dadebae71b"
+  integrity sha512-4WKRHTMt96sp+lX+Hx/eHtN9CWFyejDqr1ikgxZUJIkKEHVglSE7FY8n81NC6yWXqVSjUIQQppaxsoUe26Zi9g==
 
 thunky@^1.0.2:
   version "1.1.0"

@@ -7,8 +7,6 @@ import { Planet } from './ts/Planet';
 import { SettingsTab } from './ts/SettingsTab';
 import { Skybox } from './ts/Skybox';
 
-const AnaglyphEffect = require('three-anaglypheffect'); // no ts definition
-
 class App {
 
 	private readonly settingsTab = new SettingsTab();
@@ -20,9 +18,7 @@ class App {
 	private readonly orbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	private readonly eGetter = new ElementGetter(this.scene);
 	private ball: Ball = new Ball(this.settingsTab);
-	private effectAnaglyphic = new AnaglyphEffect(this.renderer, 2000, innerWidth, innerHeight);
 	private activeCamera: Camera = this.orbitCamera;
-	// Example mesh
 
 	private adjustCanvasSize() {
 		this.renderer.setSize(innerWidth, innerHeight);
@@ -31,11 +27,7 @@ class App {
 	}
 
 	private render() {
-		if (this.settingsTab.getSettings().anaglyphEffect) {
-			this.effectAnaglyphic.render(this.scene, this.activeCamera);
-		} else {
-			this.renderer.render(this.scene, this.activeCamera);
-		}
+		this.renderer.render(this.scene, this.activeCamera);
 
 		requestAnimationFrame(this.render.bind(this));
 		this.adjustCanvasSize();

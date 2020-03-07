@@ -12,10 +12,9 @@
   "dependencies": {
     "@types/dat-gui": "^0.6.3",
     "@types/node": "^9.3.0",
-    "@types/three": "^0.84.22",
+    "@types/three": "~0.103",
     "dat-gui": "^0.5.0",
-    "three": "^0.87.1",
-    "three-anaglypheffect": "^1.0.0",
+    "three": "~0.103",
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-loader": "^2.3.7",
     "typescript": "^2.6.2",

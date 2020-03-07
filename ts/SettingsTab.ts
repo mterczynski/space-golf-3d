@@ -3,7 +3,6 @@ import { GUI } from 'dat-gui';
 export class SettingsTab {
 
 	private settings = {
-		anaglyphEffect: false,
 		changeCamera: () => {
 			console.warn('changeCamera method not set');
 		},
@@ -18,7 +17,6 @@ export class SettingsTab {
 		this.gui.add(this.settings, 'timeSpeed', 0, 4);
 		this.gui.add(this.settings, 'gravity', -1, 2);
 		this.gui.add(this.settings, 'pathDuration', 0, 50);
-		this.gui.add(this.settings, 'anaglyphEffect');
 		this.gui.add(this.settings, 'changeCamera');
 	}
 
