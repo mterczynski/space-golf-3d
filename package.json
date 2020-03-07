@@ -6,6 +6,7 @@
   "scripts": {
 		"start": "webpack-dev-server",
 		"start:open": "webpack-dev-server",
+		"lint": "tslint --project .",
 		"build": "webpack"
   },
   "author": "mterczynski",

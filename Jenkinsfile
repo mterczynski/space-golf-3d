@@ -1,11 +1,23 @@
 pipeline {
 	agent any
 
+	environment {
+    DESTINATION = "root@mterczynski.pl:/var/www/html/sensors"
+  }
+
 	stages {
 		stage('Install') {
 			steps{
 				sh '''
 					yarn
+				'''
+			}
+		}
+
+		stage('TSLint') {
+			steps {
+				sh '''
+					yarn lint
 				'''
 			}
 		}
@@ -21,9 +33,10 @@ pipeline {
 		stage('Deploy') {
 			steps {
 				sh '''
-					scp -r bundle.js root@mterczynski.pl:/var/www/html/gravitee/bundle.js
-					scp -r index.html root@mterczynski.pl:/var/www/html/gravitee/index.html
-					scp -r css root@mterczynski.pl:/var/www/html/gravitee/css
+					scp -r bundle.js ${DESTINATION}/bundle.js
+					scp -r index.html ${DESTINATION}/index.html
+					scp -r css ${DESTINATION}/css
+					scp -r assets ${DESTINATION}/assets
 				'''
 			}
 		}
