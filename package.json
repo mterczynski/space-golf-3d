@@ -12,7 +12,6 @@
   "author": "mterczynski",
   "dependencies": {
     "@types/dat-gui": "^0.6.3",
-    "@types/node": "^9.3.0",
     "@types/three": "~0.103",
     "dat-gui": "^0.5.0",
     "three": "~0.103",
