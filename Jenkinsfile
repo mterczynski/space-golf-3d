@@ -33,7 +33,7 @@ pipeline {
 		stage('Deploy') {
 			steps {
 				sh '''
-					scp -r bundle.js ${DESTINATION}/bundle.js
+					scp -r dist ${DESTINATION}/dist
 					scp -r index.html ${DESTINATION}/index.html
 					scp -r css ${DESTINATION}/css
 					scp -r assets ${DESTINATION}/assets
