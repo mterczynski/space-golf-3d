@@ -2,7 +2,7 @@ pipeline {
 	agent any
 
 	environment {
-    DESTINATION = "root@mterczynski.pl:/var/www/html/sensors"
+    DESTINATION = "root@mterczynski.pl:/var/www/html/gravitee"
   }
 
 	stages {
