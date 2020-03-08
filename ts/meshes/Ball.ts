@@ -24,7 +24,7 @@ export class Ball extends Mesh implements Tickable {
 
 	private isCollisionBlocked = true;
 	private isOnPlanet = false;
-	private velocity = new Vector3(-0.5, 0.5, 0);
+	private velocity = new Vector3(0, 0, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
 	private pathVertices: Vector3[] = [];
 
