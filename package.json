@@ -18,7 +18,7 @@
     "three": "~0.103",
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-loader": "^2.3.7",
-    "typescript": "^2.6.2",
+    "typescript": "~3.2",
     "webpack": "^3.6.0"
   },
   "devDependencies": {
