@@ -18,36 +18,25 @@ export class Ball extends Mesh implements Tickable {
 	private static readonly size = 3;
 	private isCollisionBlocked = true;
 	private isOnPlanet = false;
-	private _velocity = new Vector3(-0.5, 0.5, 0);
+	private velocity = new Vector3(-0.5, 0.5, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
 	private pathVerticies: Vector3[] = [];
 
 	private updateArrowHelper() {
-		this.arrowHelper.setDirection(this._velocity.clone().normalize());
-		this.arrowHelper.setLength(this._velocity.length() * 20);
+		this.arrowHelper.setDirection(this.velocity.clone().normalize());
+		this.arrowHelper.setLength(this.velocity.length() * 20);
 	}
 
-	private updateCamera() {
-		this.getVelocity().normalize();
-		this.camera.position.y = 200;
-		this.camera.aspect = innerWidth / innerHeight;
-		this.camera.updateProjectionMatrix();
-		this.camera.lookAt(new Vector3());
-	}
-
-	readonly camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	readonly name = 'Ball';
 
 	constructor() {
 		super(new SphereGeometry(Ball.size, 32, 32), new MeshBasicMaterial({
 			color: 'rgb(0,250,250)',
 		}));
-		this.add(this.arrowHelper);
-		this.add(this.camera);
 	}
 
 	addVelocity(vector: Vector3) {
-		this._velocity = this._velocity.add(vector);
+		this.velocity = this.velocity.add(vector);
 	}
 
 	getLine() {
@@ -63,7 +52,7 @@ export class Ball extends Mesh implements Tickable {
 	}
 
 	getVelocity() {
-		return this._velocity.clone();
+		return this.velocity.clone();
 	}
 
 	isColliding(planet: Planet) {
@@ -75,7 +64,7 @@ export class Ball extends Mesh implements Tickable {
 			// rotate velocity vector by 90 degrees, slow it down
 			const axis = new Vector3(0, -1, 0);
 			const angle = Math.PI / 2;
-			this._velocity.applyAxisAngle(axis, angle).multiplyScalar(0.6);
+			this.velocity.applyAxisAngle(axis, angle).multiplyScalar(0.6);
 			this.isCollisionBlocked = true;
 
 			if (this.getVelocity().length() <= 0.02) {
@@ -97,16 +86,16 @@ export class Ball extends Mesh implements Tickable {
 
 	tick() {
 		if (this.isOnPlanet) {
-			this._velocity = new Vector3();
+			this.velocity = new Vector3();
 		}
 		this.rotation.set(0, 0, 0);
-		this.position.add(this._velocity);
+		this.position.add(this.velocity);
 		const velNorm = this.getVelocity().normalize();
 		this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
 
 		this.updateArrowHelper();
-		this.updateCamera();
 		this.pathVerticies.push(this.position.clone());
+
 		setTimeout(() => {
 			this.pathVerticies.shift();
 		}, settings.pathDuration * 1000);

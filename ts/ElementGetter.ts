@@ -2,7 +2,6 @@ import { Line, Scene } from 'three';
 import { Planet } from './Planet';
 
 export class ElementGetter {
-
 	constructor(private scene: Scene) { }
 
 	getPlanets(): Planet[] {
