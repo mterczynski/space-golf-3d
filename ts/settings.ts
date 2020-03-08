@@ -1,4 +1,5 @@
 export const settings = Object.freeze({
-	gravity: 1,
+	gravityMultiplier: 1,
+	planetDensity: 0.0003,
 	pathDuration: 25,
 });

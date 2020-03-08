@@ -22,18 +22,16 @@ function createBorderMesh(planetRadius: number) {
 	);
 }
 
-const planetDensity = 5;
-
 export class Planet extends Mesh {
 
 	get acceleration() {
-		return this.mass / Math.pow(10, 4.3) * settings.gravity;
+		return this.mass * settings.gravityMultiplier;
 	}
 
 	get mass() {
 		const volumeMultiplier = Math.PI * 4 / 3;
 
-		return planetDensity * (this.radius ** 3) * volumeMultiplier;
+		return settings.planetDensity * (this.radius ** 3) * volumeMultiplier;
 	}
 
 	readonly name = 'Planet';
