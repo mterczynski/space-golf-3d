@@ -50,10 +50,10 @@ class App {
 		new OrbitControls(this.orbitCamera, this.renderer.domElement);
 
 		const planets = [
-			new Planet(33),
-			new Planet(20, new Color('rgb(0, 255, 0)')),
-			new Planet(100, new Color('rgb(0, 0, 255)')),
-			new Planet(3, new Color('rgb(255, 255, 255)')),
+			new Planet({radius: 33}),
+			new Planet({radius: 20, color: new Color('rgb(0, 255, 0)')}),
+			new Planet({radius: 100, color: new Color('rgb(0, 0, 255)')}),
+			new Planet({radius: 3, color: new Color('rgb(255, 255, 255)')}),
 		];
 
 		planets.forEach(planet => {

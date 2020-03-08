@@ -37,12 +37,14 @@ export class Planet extends Mesh {
 	}
 
 	readonly name = 'Planet';
+	readonly radius: number;
 
-	constructor(
-		readonly radius: number,
-		color = new Color('rgb(255,0,0)'),
-	) {
+	constructor({radius, color = new Color('red')}: {
+		radius: number,
+		color?: Color
+	}) {
 		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
+		this.radius = radius;
 		const border = createBorderMesh(radius);
 		this.add(border);
 	}
