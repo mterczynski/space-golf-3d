@@ -24,9 +24,10 @@ function createBorderMesh(planetRadius: number) {
 
 export class Planet extends Mesh {
 	get mass() {
-		const volumeMultiplier = Math.PI * 4 / 3;
+		// https://en.wikipedia.org/wiki/Sphere#Enclosed_volume
+		const sphereVolumeMultiplier = Math.PI * 4 / 3;
 
-		return settings.planetDensity * (this.radius ** 3) * volumeMultiplier;
+		return settings.planetDensity * (this.radius ** 3) * sphereVolumeMultiplier;
 	}
 
 	readonly radius: number;
