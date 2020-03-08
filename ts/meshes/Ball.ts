@@ -40,7 +40,7 @@ export class Ball extends Mesh implements Tickable {
 	}
 
 	addVelocity(vector: Vector3) {
-		this.velocity = this.velocity.add(vector);
+		this.velocity.add(vector);
 	}
 
 	getLine() {
