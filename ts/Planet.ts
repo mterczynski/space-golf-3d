@@ -22,6 +22,8 @@ function createBorderMesh(planetRadius: number) {
 	);
 }
 
+const planetDensity = 5;
+
 export class Planet extends Mesh {
 
 	get acceleration() {
@@ -31,11 +33,10 @@ export class Planet extends Mesh {
 	get mass() {
 		const volumeMultiplier = Math.PI * 4 / 3;
 
-		return this.density * (this.radius ** 3) * volumeMultiplier;
+		return planetDensity * (this.radius ** 3) * volumeMultiplier;
 	}
 
 	readonly name = 'Planet';
-	readonly density = 5;
 
 	constructor(
 		readonly radius: number,
