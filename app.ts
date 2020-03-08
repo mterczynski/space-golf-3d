@@ -7,7 +7,6 @@ import { Planet } from './ts/Planet';
 import { Skybox } from './ts/Skybox';
 
 class App {
-
 	private readonly renderer = new WebGLRenderer({
 		antialias: true,
 		canvas: document.getElementById('mainCanvas') as HTMLCanvasElement,
@@ -45,10 +44,7 @@ class App {
 		InfoTab.updateText(this.ball);
 	}
 
-	constructor() {
-		// tslint:disable-next-line:no-unused-expression
-		new OrbitControls(this.orbitCamera, this.renderer.domElement);
-
+	private setupPlanets() {
 		const planets = [
 			new Planet({radius: 33}),
 			new Planet({radius: 20, color: new Color('rgb(0, 255, 0)')}),
@@ -63,17 +59,40 @@ class App {
 		planets[3].position.set(100, 100, 100);
 		planets[1].position.set(90, 10, 10);
 		planets[2].position.set(0, 0, 500);
+	}
 
+	private setupBall() {
 		this.ball.position.set(0, -100, -70);
 		this.scene.add(this.ball);
+	}
 
-		this.orbitCamera.position.set(200, 200, 200);
-		this.orbitCamera.lookAt(new Vector3());
-
-		this.scene.add(new Skybox());
+	private setupLight() {
 		const light = new PointLight();
 		light.position.set(0, 100, 5000);
 		this.scene.add(light);
+	}
+
+	private setupCamera() {
+		this.orbitCamera.position.set(200, 200, 200);
+		this.orbitCamera.lookAt(new Vector3());
+	}
+
+	private setupSkybox() {
+		this.scene.add(new Skybox());
+	}
+
+	private setupOrbitControls() {
+		// tslint:disable-next-line:no-unused-expression
+		new OrbitControls(this.orbitCamera, this.renderer.domElement);
+	}
+
+	constructor() {
+		this.setupOrbitControls();
+		this.setupPlanets();
+		this.setupBall();
+		this.setupLight();
+		this.setupCamera();
+		this.setupSkybox();
 
 		this.render();
 	}
