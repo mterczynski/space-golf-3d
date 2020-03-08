@@ -23,11 +23,6 @@ function createBorderMesh(planetRadius: number) {
 }
 
 export class Planet extends Mesh {
-
-	get acceleration() {
-		return this.mass * settings.gravityMultiplier;
-	}
-
 	get mass() {
 		const volumeMultiplier = Math.PI * 4 / 3;
 
@@ -49,7 +44,7 @@ export class Planet extends Mesh {
 
 	calcGravity(ball: Ball): Vector3 {
 		const distance = ball.position.distanceTo(this.position);
-		const scalar = this.acceleration / Math.pow(distance, 2);
+		const scalar = this.mass / (distance ** 2);
 
 		return new Vector3().subVectors(this.position, ball.position).normalize().multiplyScalar(scalar);
 	}
