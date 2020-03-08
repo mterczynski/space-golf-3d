@@ -23,12 +23,7 @@ export class App {
 		this.orbitCamera.updateProjectionMatrix();
 	}
 
-	private render() {
-		this.renderer.render(this.scene, this.activeCamera);
-
-		requestAnimationFrame(this.render.bind(this));
-		this.adjustCanvasSize();
-
+	private updateBall() {
 		const planets: Planet[] = this.eGetter.getPlanets();
 
 		planets.forEach((planet: Planet) => {
@@ -36,12 +31,23 @@ export class App {
 		});
 
 		this.ball.tick();
+	}
 
+	private updateBallTrace() {
 		this.eGetter.getLines().forEach(line => this.scene.remove(line));
 
 		this.scene.add(this.ball.getLine());
+	}
 
+	private onNewAnimationFrame() {
+		this.renderer.render(this.scene, this.activeCamera);
+
+		this.adjustCanvasSize();
+		this.updateBall();
+		this.updateBallTrace();
 		InfoTab.updateText(this.ball);
+
+		requestAnimationFrame(this.onNewAnimationFrame.bind(this));
 	}
 
 	private setupPlanets() {
@@ -94,6 +100,6 @@ export class App {
 		this.setupCamera();
 		this.setupSkybox();
 
-		this.render();
+		this.onNewAnimationFrame();
 	}
 }

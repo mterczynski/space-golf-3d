@@ -5,7 +5,6 @@ import {
 	LineBasicMaterial,
 	Mesh,
 	MeshBasicMaterial,
-	PerspectiveCamera,
 	SphereGeometry,
 	Vector3,
 } from 'three';
