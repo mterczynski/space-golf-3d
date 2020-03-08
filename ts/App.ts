@@ -17,6 +17,40 @@ export class App {
 	private ball: Ball = new Ball();
 	private activeCamera: Camera = this.orbitCamera;
 
+	private setup = {
+		planets: () => {
+			const planets = [
+				new Planet({radius: 33}),
+				new Planet({radius: 20, color: new Color('rgb(0, 255, 0)')}),
+				new Planet({radius: 100, color: new Color('rgb(0, 0, 255)')}),
+				new Planet({radius: 3, color: new Color('rgb(255, 255, 255)')}),
+			];
+
+			planets.forEach(planet => {
+				this.scene.add(planet);
+			});
+
+			planets[3].position.set(100, 100, 100);
+			planets[1].position.set(90, 10, 10);
+			planets[2].position.set(0, 0, 500);
+		},
+		ball: () => {
+			this.ball.position.set(0, -100, -70);
+			this.scene.add(this.ball);
+		},
+		light: () => {
+			const light = new PointLight();
+			light.position.set(0, 100, 5000);
+			this.scene.add(light);
+		},
+		camera: () => {
+			this.orbitCamera.position.set(200, 200, 200);
+			this.orbitCamera.lookAt(new Vector3());
+		},
+		skybox: () => this.scene.add(new Skybox()),
+		orbitControls: () => new OrbitControls(this.orbitCamera, this.renderer.domElement),
+	}
+
 	private adjustCanvasSize() {
 		this.renderer.setSize(innerWidth, innerHeight);
 		this.orbitCamera.aspect = innerWidth / innerHeight;
@@ -50,55 +84,13 @@ export class App {
 		requestAnimationFrame(this.onNewAnimationFrame.bind(this));
 	}
 
-	private setupPlanets() {
-		const planets = [
-			new Planet({radius: 33}),
-			new Planet({radius: 20, color: new Color('rgb(0, 255, 0)')}),
-			new Planet({radius: 100, color: new Color('rgb(0, 0, 255)')}),
-			new Planet({radius: 3, color: new Color('rgb(255, 255, 255)')}),
-		];
-
-		planets.forEach(planet => {
-			this.scene.add(planet);
-		});
-
-		planets[3].position.set(100, 100, 100);
-		planets[1].position.set(90, 10, 10);
-		planets[2].position.set(0, 0, 500);
-	}
-
-	private setupBall() {
-		this.ball.position.set(0, -100, -70);
-		this.scene.add(this.ball);
-	}
-
-	private setupLight() {
-		const light = new PointLight();
-		light.position.set(0, 100, 5000);
-		this.scene.add(light);
-	}
-
-	private setupCamera() {
-		this.orbitCamera.position.set(200, 200, 200);
-		this.orbitCamera.lookAt(new Vector3());
-	}
-
-	private setupSkybox() {
-		this.scene.add(new Skybox());
-	}
-
-	private setupOrbitControls() {
-		// tslint:disable-next-line:no-unused-expression
-		new OrbitControls(this.orbitCamera, this.renderer.domElement);
-	}
-
 	constructor() {
-		this.setupOrbitControls();
-		this.setupPlanets();
-		this.setupBall();
-		this.setupLight();
-		this.setupCamera();
-		this.setupSkybox();
+		this.setup.orbitControls();
+		this.setup.planets();
+		this.setup.ball();
+		this.setup.light();
+		this.setup.camera();
+		this.setup.skybox();
 
 		this.onNewAnimationFrame();
 	}
