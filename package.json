@@ -7,7 +7,7 @@
     "start": "webpack-dev-server",
     "start:open": "webpack-dev-server",
     "lint": "tslint --project .",
-    "build": "webpack"
+    "build": "webpack --mode=production"
   },
   "author": "mterczynski",
   "dependencies": {
@@ -17,13 +17,14 @@
     "file-loader": "^5.1.0",
     "three": "~0.103",
     "three-orbitcontrols-ts": "^0.1.2",
-    "ts-loader": "^2.3.7",
+    "ts-loader": "^6.2.1",
     "typescript": "~3.2",
-    "webpack": "^3.6.0"
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
   },
   "devDependencies": {
     "mterczynski-tslint": "~1.10.0",
     "tslint": "^6.0.0",
-    "webpack-dev-server": "^2.8.2"
+    "webpack-dev-server": "^3.10.3"
   }
 }
