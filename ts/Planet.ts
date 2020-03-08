@@ -2,12 +2,27 @@ import { BackSide, Color, Mesh, MeshBasicMaterial, MeshPhongMaterial, SphereGeom
 import { Ball } from './Ball';
 import { SettingsTab } from './SettingsTab';
 
-export class Planet extends Mesh {
-
-	private readonly shadowMat = new MeshBasicMaterial({
+function createBorderMesh(planetRadius: number) {
+	const borderMaterial = new MeshBasicMaterial({
 		color: 'rgb(0,0,0)',
 		side: BackSide,
 	});
+
+	const widthSegments = 32;
+	const heightSegments = 32;
+	const borderThickness = 1;
+
+	return new Mesh(
+		new SphereGeometry(
+			planetRadius + borderThickness,
+			widthSegments,
+			heightSegments
+		),
+		borderMaterial
+	);
+}
+
+export class Planet extends Mesh {
 
 	get acceleration() {
 		return this.mass / Math.pow(10, 4.3) * this.settings.getSettings().gravity;
@@ -16,20 +31,20 @@ export class Planet extends Mesh {
 	get mass() {
 		const volumeMultiplier = Math.PI * 4 / 3;
 
-		return this.density * (this.size ** 3) * volumeMultiplier;
+		return this.density * (this.radius ** 3) * volumeMultiplier;
 	}
 
 	readonly name = 'Planet';
 	readonly density = 5;
 
 	constructor(
-		readonly size: number,
+		readonly radius: number,
 		private settings: SettingsTab,
 		color = new Color('rgb(255,0,0)'),
 	) {
-		super(new SphereGeometry(size, 32, 32), new MeshPhongMaterial({ color }));
-		const shadowMesh = new Mesh(new SphereGeometry(size + 1, 32, 32), this.shadowMat);
-		this.add(shadowMesh);
+		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
+		const border = createBorderMesh(radius);
+		this.add(border);
 	}
 
 	calcGravity(ball: Ball): Vector3 {

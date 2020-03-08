@@ -71,7 +71,7 @@ export class Ball extends Mesh implements Tickable {
 			return false;
 		}
 
-		if (this.position.distanceTo(planet.position) <= Ball.size + planet.size) {
+		if (this.position.distanceTo(planet.position) <= Ball.size + planet.radius) {
 			// rotate velocity vector by 90 degrees, slow it down
 			const axis = new Vector3(0, -1, 0);
 			const angle = Math.PI / 2;
