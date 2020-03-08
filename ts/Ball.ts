@@ -11,7 +11,7 @@ import {
 } from 'three';
 import { Tickable } from './interfaces/Tickable';
 import { Planet } from './Planet';
-import { SettingsTab } from './SettingsTab';
+import { settings } from './settings';
 
 export class Ball extends Mesh implements Tickable {
 
@@ -38,7 +38,7 @@ export class Ball extends Mesh implements Tickable {
 	readonly camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	readonly name = 'Ball';
 
-	constructor(private settings: SettingsTab) {
+	constructor() {
 		super(new SphereGeometry(Ball.size, 32, 32), new MeshBasicMaterial({
 			color: 'rgb(0,250,250)',
 		}));
@@ -109,6 +109,6 @@ export class Ball extends Mesh implements Tickable {
 		this.pathVerticies.push(this.position.clone());
 		setTimeout(() => {
 			this.pathVerticies.shift();
-		}, this.settings.getSettings().pathDuration * 1000);
+		}, settings.pathDuration * 1000);
 	}
 }

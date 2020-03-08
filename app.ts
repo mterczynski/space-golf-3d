@@ -4,12 +4,10 @@ import { Ball } from './ts/Ball';
 import { ElementGetter } from './ts/ElementGetter';
 import { InfoTab } from './ts/InfoTab';
 import { Planet } from './ts/Planet';
-import { SettingsTab } from './ts/SettingsTab';
 import { Skybox } from './ts/Skybox';
 
 class App {
 
-	private readonly settingsTab = new SettingsTab();
 	private readonly renderer = new WebGLRenderer({
 		antialias: true,
 		canvas: document.getElementById('mainCanvas') as HTMLCanvasElement,
@@ -17,7 +15,7 @@ class App {
 	private readonly scene = new Scene();
 	private readonly orbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	private readonly eGetter = new ElementGetter(this.scene);
-	private ball: Ball = new Ball(this.settingsTab);
+	private ball: Ball = new Ball();
 	private activeCamera: Camera = this.orbitCamera;
 
 	private adjustCanvasSize() {
@@ -52,10 +50,10 @@ class App {
 		new OrbitControls(this.orbitCamera, this.renderer.domElement);
 
 		const planets = [
-			new Planet(40, this.settingsTab),
-			new Planet(20, this.settingsTab, new Color('rgb(0, 255, 0)')),
-			new Planet(100, this.settingsTab, new Color('rgb(0, 0, 255)')),
-			new Planet(3, this.settingsTab, new Color('rgb(255, 255, 255)')),
+			new Planet(33),
+			new Planet(20, new Color('rgb(0, 255, 0)')),
+			new Planet(100, new Color('rgb(0, 0, 255)')),
+			new Planet(3, new Color('rgb(255, 255, 255)')),
 		];
 
 		planets.forEach(planet => {

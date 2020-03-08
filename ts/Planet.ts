@@ -1,6 +1,6 @@
 import { BackSide, Color, Mesh, MeshBasicMaterial, MeshPhongMaterial, SphereGeometry, Vector3 } from 'three';
 import { Ball } from './Ball';
-import { SettingsTab } from './SettingsTab';
+import { settings } from './settings';
 
 function createBorderMesh(planetRadius: number) {
 	const borderMaterial = new MeshBasicMaterial({
@@ -27,7 +27,7 @@ const planetDensity = 5;
 export class Planet extends Mesh {
 
 	get acceleration() {
-		return this.mass / Math.pow(10, 4.3) * this.settings.getSettings().gravity;
+		return this.mass / Math.pow(10, 4.3) * settings.gravity;
 	}
 
 	get mass() {
@@ -40,7 +40,6 @@ export class Planet extends Mesh {
 
 	constructor(
 		readonly radius: number,
-		private settings: SettingsTab,
 		color = new Color('rgb(255,0,0)'),
 	) {
 		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));

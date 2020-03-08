@@ -18,11 +18,6 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@types/dat-gui@^0.6.3":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@types/dat-gui/-/dat-gui-0.6.3.tgz#2285a22ee28fbed05f3932dda9144d18c9903b5d"
-  integrity sha512-N0JUd1/jrKQ00w0lz6uyx/4XhJ+qQb9Ir05DEzP4YS5N+vQUyKtcyVBG/u+NF7EkAkHHYDyzpvYf0AMS89R2OQ==
-
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -938,11 +933,6 @@ cyclist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
-
-dat-gui@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/dat-gui/-/dat-gui-0.5.0.tgz#1212da836109747d0ac220bad7b07c17daa03583"
-  integrity sha1-EhLag2EJdH0KwiC617B8F9qgNYM=
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"
