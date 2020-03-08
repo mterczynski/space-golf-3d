@@ -14,3 +14,7 @@
 ## Building the app bundle (for production)
 
     yarn build
+
+## Running Jest tests
+
+    yarn test
