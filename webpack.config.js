@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	devtool: 'inline-source-map',
-	entry: './app.ts',
+	entry: './ts/main.ts',
 	output: {
 		filename: 'bundle.js',
 		path: path.resolve(__dirname, 'dist'),
@@ -14,12 +14,6 @@ module.exports = {
 	module: {
 		rules: [
 			{ test: /\.tsx?$/, loader: 'ts-loader' },
-			{
-				test: /\.(png|svg|jpg|gif)$/,
-				use: [
-					'file-loader',
-				],
-			},
 		]
 	}
 }

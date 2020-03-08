@@ -12,7 +12,6 @@
   "author": "mterczynski",
   "dependencies": {
     "@types/three": "~0.103",
-    "file-loader": "^5.1.0",
     "three": "~0.103",
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-loader": "^6.2.1",

@@ -1,12 +1,12 @@
 import { Camera, Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three-orbitcontrols-ts';
-import { Ball } from './ts/Ball';
-import { ElementGetter } from './ts/ElementGetter';
-import { InfoTab } from './ts/InfoTab';
-import { Planet } from './ts/Planet';
-import { Skybox } from './ts/Skybox';
+import { Ball } from './Ball';
+import { ElementGetter } from './ElementGetter';
+import { InfoTab } from './InfoTab';
+import { Planet } from './Planet';
+import { Skybox } from './Skybox';
 
-class App {
+export class App {
 	private readonly renderer = new WebGLRenderer({
 		antialias: true,
 		canvas: document.getElementById('mainCanvas') as HTMLCanvasElement,
@@ -97,6 +97,3 @@ class App {
 		this.render();
 	}
 }
-
-// tslint:disable-next-line:no-unused-expression
-new App();
