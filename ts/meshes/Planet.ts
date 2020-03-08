@@ -45,6 +45,9 @@ export class Planet extends Mesh {
 		const distance = ball.position.distanceTo(this.position);
 		const scalar = this.mass / (distance ** 2);
 
-		return new Vector3().subVectors(this.position, ball.position).normalize().multiplyScalar(scalar);
+		return new Vector3()
+			.subVectors(this.position, ball.position)
+			.normalize()
+			.multiplyScalar(scalar);
 	}
 }
