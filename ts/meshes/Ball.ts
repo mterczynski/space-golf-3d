@@ -9,9 +9,9 @@ import {
 	SphereGeometry,
 	Vector3,
 } from 'three';
-import { Tickable } from './interfaces/Tickable';
+import { settings } from '../settings';
+import { Tickable } from '../interfaces/Tickable';
 import { Planet } from './Planet';
-import { settings } from './settings';
 
 function createBallGeometry() {
 	return new SphereGeometry(settings.ballRadius, 32, 32);

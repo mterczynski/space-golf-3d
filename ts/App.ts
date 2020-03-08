@@ -1,10 +1,10 @@
 import { Camera, Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three-orbitcontrols-ts';
-import { Ball } from './Ball';
+import { Ball } from './meshes/Ball';
 import { ElementGetter } from './ElementGetter';
 import { InfoTab } from './InfoTab';
-import { Planet } from './Planet';
-import { Skybox } from './Skybox';
+import { Planet } from './meshes/Planet';
+import { Skybox } from './meshes/Skybox';
 
 export class App {
 	private readonly renderer = new WebGLRenderer({

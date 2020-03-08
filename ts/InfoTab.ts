@@ -1,4 +1,4 @@
-import { Ball } from './Ball';
+import { Ball } from './meshes/Ball';
 
 const htmlElement = document.getElementById('infoTab__text') as HTMLPreElement;
 

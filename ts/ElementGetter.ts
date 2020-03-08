@@ -1,5 +1,5 @@
 import { Line, Scene } from 'three';
-import { Planet } from './Planet';
+import { Planet } from './meshes/Planet';
 
 export class ElementGetter {
 	constructor(private scene: Scene) { }
