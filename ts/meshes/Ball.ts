@@ -43,7 +43,7 @@ export class Ball extends Mesh implements Tickable {
 		this.velocity.add(vector);
 	}
 
-	getLine() {
+	createTrace() {
 		const lineMaterial = new LineBasicMaterial({
 			color: 'red',
 		});

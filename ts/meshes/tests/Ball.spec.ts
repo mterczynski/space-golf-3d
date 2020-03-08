@@ -1,5 +1,5 @@
 import { Ball } from '../Ball'
-import { Vector3 } from 'three';
+import { Vector3, Line } from 'three';
 
 describe('Ball', () => {
 	test('addVelocity should work', () => {
@@ -11,5 +11,13 @@ describe('Ball', () => {
 		ball.addVelocity(vel2);
 
 		expect(ball.getVelocity()).toEqual(new Vector3(2, 3, 4));
+	}),
+
+	test('createTrace should return new trace', () => {
+		const ball = new Ball();
+
+		const trace = ball.createTrace();
+
+		expect(trace).toBeInstanceOf(Line)
 	})
 })

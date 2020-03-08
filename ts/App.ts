@@ -70,7 +70,7 @@ export class App {
 	private updateBallTrace() {
 		this.eGetter.getLines().forEach(line => this.scene.remove(line));
 
-		this.scene.add(this.ball.getLine());
+		this.scene.add(this.ball.createTrace());
 	}
 
 	private onNewAnimationFrame() {
