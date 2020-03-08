@@ -34,8 +34,6 @@ export class Ball extends Mesh implements Tickable {
 		this.arrowHelper.setLength(this.velocity.length() * 20);
 	}
 
-	readonly name = 'Ball';
-
 	constructor() {
 		super(createBallGeometry(), createBallMaterial());
 

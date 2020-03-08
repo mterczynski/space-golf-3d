@@ -29,7 +29,6 @@ export class Planet extends Mesh {
 		return settings.planetDensity * (this.radius ** 3) * volumeMultiplier;
 	}
 
-	readonly name = 'Planet';
 	readonly radius: number;
 
 	constructor({radius, color = new Color('red')}: {
@@ -38,8 +37,7 @@ export class Planet extends Mesh {
 	}) {
 		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
 		this.radius = radius;
-		const border = createBorderMesh(radius);
-		this.add(border);
+		this.add(createBorderMesh(radius));
 	}
 
 	calcGravity(ball: Ball): Vector3 {
