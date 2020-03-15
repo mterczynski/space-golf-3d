@@ -49,7 +49,7 @@ export class App {
 		},
 		skybox: () => this.scene.add(new Skybox()),
 		orbitControls: () => new OrbitControls(this.orbitCamera, this.renderer.domElement),
-	}
+	};
 
 	private adjustCanvasSize() {
 		this.renderer.setSize(innerWidth, innerHeight);

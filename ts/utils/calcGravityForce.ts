@@ -6,5 +6,5 @@ interface Gravitable {
 }
 
 export function calcGravityForce(object1: Gravitable, object2: Gravitable) {
-	return object1.mass * object2.mass / (object1.position.distanceToSquared(object2.position))
+	return object1.mass * object2.mass / (object1.position.distanceToSquared(object2.position));
 }

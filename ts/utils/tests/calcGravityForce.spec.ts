@@ -1,5 +1,5 @@
-import { calcGravityForce } from '../calcGravityForce'
-import { Planet } from '../../meshes/Planet'
+import { calcGravityForce } from '../calcGravityForce';
+import { Planet } from '../../meshes/Planet';
 import { Ball } from '../../meshes/Ball';
 
 describe('calcGravityForce', () => {
@@ -18,4 +18,4 @@ describe('calcGravityForce', () => {
 
 		expect(calcGravityForce(planet, ball)).toBe(ball.mass * planet.mass / (distance ** 2));
 	});
-})
+});

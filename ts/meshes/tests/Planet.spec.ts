@@ -1,4 +1,4 @@
-import { Planet } from '../Planet'
+import { Planet } from '../Planet';
 import { settings } from '../../settings';
 
 describe('Planet', () => {
@@ -14,7 +14,7 @@ describe('Planet', () => {
 			const mass = planet.mass;
 
 			expect(mass).toBe(Math.PI * 4 / 3 * planetDensity * planetRadius ** 3);
-		})
+		});
 	}),
 
 	test('should take radius value from constructor', () => {
@@ -22,5 +22,5 @@ describe('Planet', () => {
 		const planet = new Planet({radius});
 
 		expect(planet.radius).toBe(radius);
-	})
-})
+	});
+});
