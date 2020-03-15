@@ -12,8 +12,8 @@ import { settings } from '../settings';
 import { Tickable } from '../interfaces/Tickable';
 import { Planet } from './Planet';
 
-function createBallGeometry() {
-	return new SphereGeometry(settings.ballRadius, 32, 32);
+function createBallGeometry(ballRadius: number) {
+	return new SphereGeometry(ballRadius, 32, 32);
 }
 
 function createBallMaterial() {
@@ -21,7 +21,6 @@ function createBallMaterial() {
 }
 
 export class Ball extends Mesh implements Tickable {
-
 	private isCollisionBlocked = true;
 	private isOnPlanet = false;
 	private velocity = new Vector3(0, 0, 0);
@@ -33,9 +32,14 @@ export class Ball extends Mesh implements Tickable {
 		this.arrowHelper.setLength(this.velocity.length() * 20);
 	}
 
-	constructor() {
-		super(createBallGeometry(), createBallMaterial());
+	readonly radius: number;
+	readonly mass = 3;
 
+	constructor({radius = 3}: {
+		radius?: number
+	} = {}) {
+		super(createBallGeometry(radius), createBallMaterial());
+		this.radius = radius;
 		this.add(this.arrowHelper);
 	}
 
@@ -64,7 +68,7 @@ export class Ball extends Mesh implements Tickable {
 			return false;
 		}
 
-		if (this.position.distanceTo(planet.position) <= settings.ballRadius + planet.radius) {
+		if (this.position.distanceTo(planet.position) <= this.radius + planet.radius) {
 			// rotate velocity vector by 90 degrees, slow it down
 			const axis = new Vector3(0, -1, 0);
 			const angle = Math.PI / 2;

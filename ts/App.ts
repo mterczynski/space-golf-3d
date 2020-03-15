@@ -61,7 +61,7 @@ export class App {
 		const planets: Planet[] = this.eGetter.getPlanets();
 
 		planets.forEach((planet: Planet) => {
-			this.ball.addVelocity(planet.calcGravity(this.ball));
+			this.ball.addVelocity(planet.calcGravityForce(this.ball));
 		});
 
 		this.ball.tick();

@@ -4,12 +4,16 @@ import { settings } from '../../settings';
 describe('Planet', () => {
 	describe('mass getter', () => {
 		test('should return correct mass', () => {
-			const radius = 30;
-			const planet = new Planet({radius});
+			const planetRadius = 30;
+			const planetDensity = 4;
+			const planet = new Planet({
+				radius: planetRadius,
+				density: planetDensity
+			});
 
 			const mass = planet.mass;
 
-			expect(mass).toBe(Math.PI * 4 / 3 * settings.planetDensity * radius ** 3);
+			expect(mass).toBe(Math.PI * 4 / 3 * planetDensity * planetRadius ** 3);
 		})
 	}),
 
