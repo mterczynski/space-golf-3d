@@ -8,7 +8,8 @@
     "start:open": "webpack-dev-server",
     "lint": "tslint --project .",
     "build": "webpack --mode=production",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": "mterczynski",
   "dependencies": {
