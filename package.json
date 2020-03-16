@@ -1,7 +1,7 @@
 {
   "name": "gravitee",
   "version": "1.0.0",
-  "description": "3D game in space",
+  "description": "3D game set in space",
   "main": "app.ts",
   "scripts": {
     "start": "webpack-dev-server",
@@ -12,8 +12,7 @@
   },
   "author": "mterczynski",
   "dependencies": {
-    "@types/three": "~0.103",
-    "three": "~0.103",
+    "three": "~0.114",
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-loader": "^6.2.1",
     "typescript": "~3.8",
