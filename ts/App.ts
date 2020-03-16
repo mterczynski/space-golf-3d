@@ -5,6 +5,7 @@ import { ElementGetter } from './ElementGetter';
 import { InfoTab } from './InfoTab';
 import { Planet } from './meshes/Planet';
 import { Skybox } from './meshes/Skybox';
+import { calcGravityForce } from './utils/calcGravityForce';
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -61,7 +62,7 @@ export class App {
 		const planets: Planet[] = this.eGetter.getPlanets();
 
 		planets.forEach((planet: Planet) => {
-			this.ball.addVelocity(planet.calcGravityForce(this.ball));
+			this.ball.addVelocity(calcGravityForce({puller: planet, pulled: this.ball}));
 		});
 
 		this.ball.tick();

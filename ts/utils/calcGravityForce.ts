@@ -1,4 +1,5 @@
 import { Vector3 } from 'three';
+import { settings } from '../settings';
 
 interface Gravitable {
 	mass: number,
@@ -7,7 +8,7 @@ interface Gravitable {
 
 export function calcGravityForce({pulled, puller} : {
 	pulled: Gravitable,
-	puller: Gravitable
+	puller: Gravitable,
 }) {
 	const directionVector = puller.position.clone().sub(pulled.position);
 	const distance = puller.position.distanceTo(pulled.position);
