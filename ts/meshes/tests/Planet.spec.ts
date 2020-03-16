@@ -1,5 +1,4 @@
 import { Planet } from '../Planet';
-import { settings } from '../../settings';
 
 describe('Planet', () => {
 	describe('mass getter', () => {
@@ -17,7 +16,7 @@ describe('Planet', () => {
 		});
 	}),
 
-	test('should take radius value from constructor', () => {
+test('should take radius value from constructor', () => {
 		const radius = 20;
 		const planet = new Planet({radius});
 

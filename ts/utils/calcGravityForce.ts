@@ -5,6 +5,16 @@ interface Gravitable {
 	position: Vector3
 }
 
-export function calcGravityForce(object1: Gravitable, object2: Gravitable) {
-	return object1.mass * object2.mass / (object1.position.distanceToSquared(object2.position));
+export function calcGravityForce({pulled, puller} : {
+	pulled: Gravitable,
+	puller: Gravitable
+}) {
+	const directionVector = puller.position.clone().sub(pulled.position);
+	const distance = puller.position.distanceTo(pulled.position);
+
+	return directionVector
+		.normalize()
+		.multiplyScalar(puller.mass)
+		.multiplyScalar(pulled.mass)
+		.divideScalar(distance ** 2);
 }

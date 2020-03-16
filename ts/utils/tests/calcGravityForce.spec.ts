@@ -1,21 +1,84 @@
 import { calcGravityForce } from '../calcGravityForce';
-import { Planet } from '../../meshes/Planet';
-import { Ball } from '../../meshes/Ball';
+import { Vector3 } from 'three';
 
 describe('calcGravityForce', () => {
-	test(`gravity force should be equal to masses of two objects multiplied by each other,
-	  and divided by square of distance between these two objects
-	`, () => {
-		const planet = new Planet({radius: 10});
-		const ball = new Ball();
-		const planetX = 5;
-		const ballX = 20;
+	test(`calcGravityForce shouldn't mutate puller's position`, () => {
+		const puller = {mass: 30, position: new Vector3(4, 0, 0)};
+		const pulled = {mass: 2, position: new Vector3(20, 0, 0)};
 
-		planet.position.set(planetX, 0, 0); // there will be planet's circuit at x=15
-		ball.position.set(ballX, 0, 0); // there will be ball's circuit at x=17
+		calcGravityForce({
+			pulled,
+			puller
+		});
 
-		const distance = Math.abs(ballX - planetX);
+		expect(puller.position).toEqual(new Vector3(4, 0, 0));
+	});
 
-		expect(calcGravityForce(planet, ball)).toBe(ball.mass * planet.mass / (distance ** 2));
+	test(`calcGravityForce shouldn't mutate pulled's position`, () => {
+		const puller = {mass: 30, position: new Vector3(4, 0, 0)};
+		const pulled = {mass: 2, position: new Vector3(20, 0, 0)};
+
+		calcGravityForce({
+			pulled,
+			puller
+		});
+
+		expect(pulled.position).toEqual(new Vector3(20, 0, 0));
+	});
+
+	test(`scenario #1: objects are placed on x axis'`, () => {
+		const mockPlanet = {mass: 30, position: new Vector3(4, 0, 0)};
+		const mockBall = {mass: 2, position: new Vector3(20, 0, 0)};
+
+		const distance = 16;
+
+		const result = calcGravityForce({
+			pulled: mockBall,
+			puller: mockPlanet
+		});
+
+		const expected = new Vector3(
+			-60 / (distance ** 2),
+			0,
+			0
+		);
+
+		expect(result).toEqual(expected);
+	});
+
+	test('scenario #2" objects have non-zero x, y, z values - simple version', () => {
+		const puller = {mass: 3, position: new Vector3(2, 2, 2)};
+		const pulled = {mass: 2, position: new Vector3(10, 10, 10)};
+
+		const distance = pulled.position.distanceTo(puller.position);
+
+		const result = calcGravityForce({
+			pulled,
+			puller
+		});
+
+		const normalizedDirVector = new Vector3(-1, -1, -1).normalize();
+		const expectedForce = normalizedDirVector.clone().multiplyScalar(puller.mass * pulled.mass / distance ** 2);
+
+		expect(result).toEqual(expectedForce);
+	});
+
+	test('scenario #3" objects have non-zero x, y, z values - advanced version', () => {
+		const puller = {mass: 3, position: new Vector3(1, 2, 3)};
+		const pulled = {mass: 2, position: new Vector3(15, 16, 17)};
+
+		const distance = pulled.position.distanceTo(puller.position);
+
+		const result = calcGravityForce({
+			pulled,
+			puller
+		});
+
+		const normalizedDirVector = new Vector3(-1, -1, -1).normalize();
+		const expectedForce = normalizedDirVector.clone().multiplyScalar(puller.mass * pulled.mass / distance ** 2);
+
+		expect(result.x).toBeCloseTo(expectedForce.x);
+		expect(result.y).toBeCloseTo(expectedForce.y);
+		expect(result.z).toBeCloseTo(expectedForce.z);
 	});
 });
