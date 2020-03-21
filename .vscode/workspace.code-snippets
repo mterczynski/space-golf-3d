@@ -1,0 +1,24 @@
+// Docs:
+// https://code.visualstudio.com/docs/editor/userdefinedsnippets
+
+{
+	"Create Jest test": {
+		"scope": "javascript, typescript",
+		"prefix": "test",
+		"body": [
+			"import { ${TM_FILENAME_BASE/\\.spec//} } from '../${TM_FILENAME_BASE/\\.spec//}';",
+			"",
+			"describe('${TM_FILENAME_BASE/\\.spec//}', () => {",
+				"\ttest('$0', () => {",
+					"\t\tconst expected = ",
+					"\t\t",
+					"\t\tconst result = ${TM_FILENAME_BASE/\\.spec//}();",
+					"\t\t",
+					"\t\texpect(result).toEqual(expected);",
+				"\t});",
+			"});"
+			
+		],
+		"description": "Create Jest test"
+	}
+}
