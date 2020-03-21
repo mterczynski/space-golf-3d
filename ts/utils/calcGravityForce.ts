@@ -1,5 +1,4 @@
 import { Vector3 } from 'three';
-import { settings } from '../settings';
 
 interface Gravitable {
 	mass: number,
