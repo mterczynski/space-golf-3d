@@ -5,7 +5,7 @@ import { ElementGetter } from './ElementGetter';
 import { InfoTab } from './InfoTab';
 import { Planet } from './meshes/Planet';
 import { Skybox } from './meshes/Skybox';
-import { calcGravityForce } from './utils/calcGravityForce';
+import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from './utils';
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -59,8 +59,21 @@ export class App {
 	}
 
 	private updateBall() {
-		const planets: Planet[] = this.eGetter.getPlanets();
+		const planets = this.eGetter.getPlanets();
 
+		// bounce ball off planets
+		planets.forEach(planet => {
+			if(areSpheresColliding(planet, this.ball)) {
+				const newVelocity = calcVelocityAfterRebound({
+					staticSphere: planet,
+					movingSphere: this.ball
+				});
+
+				this.ball.velocity = newVelocity;
+			}
+		});
+
+		// update ball's velocity by planets gravity:
 		planets.forEach((planet: Planet) => {
 			this.ball.addVelocity(calcGravityForce({puller: planet, pulled: this.ball}));
 		});
