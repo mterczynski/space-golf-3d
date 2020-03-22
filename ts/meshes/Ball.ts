@@ -21,7 +21,6 @@ function createBallMaterial() {
 }
 
 export class Ball extends Mesh implements Tickable {
-	private isCollisionBlocked = true;
 	private isOnPlanet = false;
 	private _velocity = new Vector3(0, 0, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
@@ -48,7 +47,10 @@ export class Ball extends Mesh implements Tickable {
 	} = {}) {
 		super(createBallGeometry(radius), createBallMaterial());
 		this.radius = radius;
-		this.add(this.arrowHelper);
+
+		if(settings.ball.showVelocityVector) {
+			this.add(this.arrowHelper);
+		}
 	}
 
 	addVelocity(vector: Vector3) {
@@ -114,6 +116,6 @@ export class Ball extends Mesh implements Tickable {
 
 		setTimeout(() => {
 			this.pathVertices.shift();
-		}, settings.pathDuration * 1000);
+		}, settings.ball.traceDuration * 1000);
 	}
 }
