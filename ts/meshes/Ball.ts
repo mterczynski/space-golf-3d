@@ -73,35 +73,6 @@ export class Ball extends Mesh implements Tickable {
 		return this._velocity.clone();
 	}
 
-	// isColliding(planet: Planet) {
-	// 	if (this.isCollisionBlocked) {
-	// 		return false;
-	// 	}
-
-	// 	if (this.position.distanceTo(planet.position) <= this.radius + planet.radius) {
-	// 		// rotate velocity vector by 90 degrees, slow it down
-	// 		const axis = new Vector3(0, -1, 0);
-	// 		const angle = Math.PI / 2;
-	// 		this.velocity.applyAxisAngle(axis, angle).multiplyScalar(0.6);
-	// 		this.isCollisionBlocked = true;
-
-	// 		if (this.getVelocity().length() <= 0.02) {
-	// 			this.isOnPlanet = true;
-	// 		}
-	// 		setTimeout(() => {
-	// 			this.isCollisionBlocked = false;
-	// 		}, 150);
-
-	// 		return true;
-	// 	} else {
-	// 		return false;
-	// 	}
-	// }
-
-	// isCollidingWithAny(planets: Planet[]) {
-	// 	return planets.some(planet => this.isColliding(planet));
-	// }
-
 	tick() {
 		if (this.isOnPlanet) {
 			this._velocity = new Vector3();
