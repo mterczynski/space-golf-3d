@@ -43,14 +43,4 @@ export class Planet extends Mesh {
 		this.density = density;
 		this.add(createBorderMesh(radius));
 	}
-
-	calcGravityForce(ball: Ball): Vector3 {
-		const distance = ball.position.distanceTo(this.position);
-		const scalar = this.mass / (distance ** 2);
-
-		return new Vector3()
-			.subVectors(this.position, ball.position)
-			.normalize()
-			.multiplyScalar(scalar);
-	}
 }
