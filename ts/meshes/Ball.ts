@@ -27,8 +27,8 @@ export class Ball extends Mesh implements Tickable {
 	private pathVertices: Vector3[] = [];
 
 	private updateArrowHelper() {
-		this.arrowHelper.setDirection(this._velocity.clone().normalize());
-		this.arrowHelper.setLength(this._velocity.length() * 20);
+		this.arrowHelper.setDirection(this.velocity.normalize());
+		this.arrowHelper.setLength(this.velocity.length() * 20);
 	}
 
 	readonly radius: number;
@@ -69,17 +69,13 @@ export class Ball extends Mesh implements Tickable {
 		return new Line(geometry, lineMaterial);
 	}
 
-	getVelocity() {
-		return this._velocity.clone();
-	}
-
 	tick() {
 		if (this.isOnPlanet) {
-			this._velocity = new Vector3();
+			this.velocity = new Vector3();
 		}
 		this.rotation.set(0, 0, 0);
-		this.position.add(this._velocity);
-		const velNorm = this.getVelocity().normalize();
+		this.position.add(this.velocity);
+		const velNorm = this.velocity.normalize();
 		this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
 
 		this.updateArrowHelper();
