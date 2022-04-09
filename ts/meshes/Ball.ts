@@ -14,20 +14,22 @@ import { settings } from '../settings';
 import { Tickable } from '../interfaces/Tickable';
 import { Planet } from './Planet';
 import { launchBall } from '../utils/launchBall';
+import randomColor = require('randomcolor');
 
 function createBallGeometry(ballRadius: number) {
 	return new SphereGeometry(ballRadius, 32, 32);
 }
 
-function createBallMaterial() {
-	return new MeshBasicMaterial({color: 'rgb(255,255,255)'});
+function createBallMaterial(color: string) {
+	return new MeshBasicMaterial({color});
 }
 
 export class Ball extends Mesh implements Tickable {
-	private readonly light = new PointLight('rgb(255,255,255)', undefined, 100);
+	private readonly light;
 	private _velocity = new Vector3(0, 0, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
 	private pathVertices: Vector3[] = [];
+	readonly color;
 	readonly camera = new PerspectiveCamera(30);
 	launchBallTimeout: number | null = null;
 	isOnPlanet = false;
@@ -51,7 +53,10 @@ export class Ball extends Mesh implements Tickable {
 	constructor({radius = 4}: {
 		radius?: number
 	} = {}) {
-		super(createBallGeometry(radius), createBallMaterial());
+		const color = randomColor();
+		super(createBallGeometry(radius), createBallMaterial(color));
+		this.light = new PointLight(color, undefined, 100);
+		this.color = color;
 		this.radius = radius;
 
 		if(settings.ball.showVelocityVector) {
