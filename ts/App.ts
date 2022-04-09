@@ -6,6 +6,8 @@ import { InfoTab } from './InfoTab';
 import { Planet } from './meshes/Planet';
 import { Skybox } from './meshes/Skybox';
 import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from './utils';
+import Stats from 'three/examples/jsm/libs/stats.module'
+
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -17,6 +19,7 @@ export class App {
 	private readonly eGetter = new ElementGetter(this.scene);
 	private ball: Ball = new Ball();
 	private activeCamera: Camera = this.orbitCamera;
+	private stats = Stats();
 
 	private setup = {
 		planets: () => {
@@ -89,6 +92,7 @@ export class App {
 
 	private onNewAnimationFrame() {
 		this.renderer.render(this.scene, this.activeCamera);
+		this.stats.update();
 
 		this.adjustCanvasSize();
 		this.updateBall();
@@ -105,7 +109,7 @@ export class App {
 		this.setup.light();
 		this.setup.camera();
 		this.setup.skybox();
-
 		this.onNewAnimationFrame();
+		document.body.appendChild(this.stats.dom);
 	}
 }
