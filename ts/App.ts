@@ -8,20 +8,21 @@ import { Skybox } from './meshes/Skybox';
 import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from './utils';
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
-import { launchBall } from './utils/launchBall';
 import { settings } from './settings';
 import _ = require('lodash');
 
 export class App {
+	private readonly startDate = Date.now();
 	private readonly renderer = new WebGLRenderer({
 		antialias: true,
 		canvas: document.getElementById('mainCanvas') as HTMLCanvasElement,
 	});
 	private readonly scene = new Scene();
-	private readonly orbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
+	private readonly manualOrbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
+	private readonly autoRotatingOrbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6))
 	private readonly eGetter = new ElementGetter(this.scene);
 	private balls: Ball[] = [new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball()];
-	private activeCamera: Camera = this.orbitCamera;
+	private activeCamera: PerspectiveCamera = this.autoRotatingOrbitCamera;
 	private stats = Stats();
 	private readonly clock = new Clock();
 
@@ -46,11 +47,10 @@ export class App {
 
 			this.balls.forEach(ball => {
 				this.scene.add(ball);
-				// todo - verify that ball is not intersecting or insideany planet
+				// todo - verify that ball is not intersecting or inside any planet
 				const position = new Vector3(_.random(-500, 500), _.random(-500, 500), _.random(-500, 500));
 				ball.position.set(position.x, position.y, position.z);
 			});
-			// this.scene.add(this.ball);
 		},
 		light: () => {
 			const light = new PointLight();
@@ -58,24 +58,25 @@ export class App {
 			this.scene.add(light);
 		},
 		camera: () => {
-			this.orbitCamera.position.set(400, 200, 40);
-			this.orbitCamera.lookAt(new Vector3());
+			this.manualOrbitCamera.position.set(400, 200, 40);
+			this.manualOrbitCamera.lookAt(new Vector3());
+			this.autoRotatingOrbitCamera.position.set(600, 0, 0);
+			this.autoRotatingOrbitCamera.lookAt(new Vector3());
 		},
 		skybox: () => this.scene.add(new Skybox()),
-		orbitControls: () => new OrbitControls(this.orbitCamera, this.renderer.domElement),
-		keyListeners: () => {
-			// addEventListener('keydown', ({key}) => {
-			// 	if(['Enter', ' '].includes(key) && this.ball.isOnPlanet) {
-			// 		launchBall(this.ball);
-			// 	}
-			// })
-		}
+		orbitControls: () => new OrbitControls(this.manualOrbitCamera, this.renderer.domElement),
 	};
 
-	private adjustCanvasSize() {
+	private adjustRendererSize() {
 		this.renderer.setSize(innerWidth, innerHeight);
-		this.orbitCamera.aspect = innerWidth / innerHeight;
-		this.orbitCamera.updateProjectionMatrix();
+	}
+
+	private updateCameras() {
+		const totalTimeElapsed = Date.now() - this.startDate;
+		this.activeCamera.aspect = innerWidth / innerHeight;
+		this.activeCamera.updateProjectionMatrix();
+		this.autoRotatingOrbitCamera.lookAt(new Vector3());
+		this.autoRotatingOrbitCamera.position.set(Math.sin(totalTimeElapsed/3000) * 800,Math.cos(totalTimeElapsed/3000) * 800,Math.cos(totalTimeElapsed/3000) * 800);
 	}
 
 	private updateBall(timeDelta: number) {
@@ -99,7 +100,7 @@ export class App {
 			});
 		});
 
-		// update ball's velocity by planets gravity:
+		// update velocity of balls by gravity of planets:
 		planets.forEach((planet: Planet) => {
 			this.balls.forEach(ball => {
 				ball.addVelocity(calcGravityForce({puller: planet, pulled: ball, timeDelta}));
@@ -124,7 +125,8 @@ export class App {
 		this.renderer.render(this.scene, this.activeCamera);
 		this.stats.update();
 
-		this.adjustCanvasSize();
+		this.adjustRendererSize();
+		this.updateCameras();
 		this.updateBall(delta);
 		this.updateBallTrace();
 		InfoTab.updateText(this.balls[0]);
@@ -139,7 +141,6 @@ export class App {
 		this.setup.light();
 		this.setup.camera();
 		this.setup.skybox();
-		this.setup.keyListeners();
 		this.onNewAnimationFrame();
 		if(settings.showFPSCounter) {
 			document.body.appendChild(this.stats.dom);
