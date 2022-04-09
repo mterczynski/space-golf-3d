@@ -2,7 +2,7 @@ import { calcVelocityAfterRebound } from '../calcVelocityAfterRebound';
 import { Vector3 } from 'three';
 
 describe('calcVelocityAfterRebound', () => {
-	test('case #1 - moving sphere falls vertically on static sphere', () => {
+	test('case #1 - moving sphere falls vertically on a static sphere', () => {
 		const staticSphere = {
 			radius: 5,
 			position: new Vector3(0, 0, 0)
@@ -27,7 +27,7 @@ describe('calcVelocityAfterRebound', () => {
 		expect(result).toEqual(expectedVelocity);
 	});
 
-	test('case #2 - moving sphere comes at 45° angle to static sphere', () => {
+	test('case #2 - moving sphere comes at 45° angle to a static sphere', () => {
 		const staticSphere = {
 			radius: 5,
 			position: new Vector3(0, 0, 0)
