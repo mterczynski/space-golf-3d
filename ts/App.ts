@@ -10,6 +10,7 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
 import { launchBall } from './utils/launchBall';
 import { settings } from './settings';
+import _ = require('lodash');
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -19,7 +20,7 @@ export class App {
 	private readonly scene = new Scene();
 	private readonly orbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	private readonly eGetter = new ElementGetter(this.scene);
-	private ball: Ball = new Ball();
+	private balls: Ball[] = [new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball()];
 	private activeCamera: Camera = this.orbitCamera;
 	private stats = Stats();
 	private readonly clock = new Clock();
@@ -42,8 +43,14 @@ export class App {
 			planets[3].position.set(30, 30, 100);
 		},
 		ball: () => {
-			this.ball.position.set(0, -100, -70);
-			this.scene.add(this.ball);
+
+			this.balls.forEach(ball => {
+				this.scene.add(ball);
+				// todo - verify that ball is not intersecting or insideany planet
+				const position = new Vector3(_.random(-500, 500), _.random(-500, 500), _.random(-500, 500));
+				ball.position.set(position.x, position.y, position.z);
+			});
+			// this.scene.add(this.ball);
 		},
 		light: () => {
 			const light = new PointLight();
@@ -57,11 +64,11 @@ export class App {
 		skybox: () => this.scene.add(new Skybox()),
 		orbitControls: () => new OrbitControls(this.orbitCamera, this.renderer.domElement),
 		keyListeners: () => {
-			addEventListener('keydown', ({key}) => {
-				if(['Enter', ' '].includes(key) && this.ball.isOnPlanet) {
-					launchBall(this.ball);
-				}
-			})
+			// addEventListener('keydown', ({key}) => {
+			// 	if(['Enter', ' '].includes(key) && this.ball.isOnPlanet) {
+			// 		launchBall(this.ball);
+			// 	}
+			// })
 		}
 	};
 
@@ -76,33 +83,40 @@ export class App {
 
 		// bounce ball off planets
 		planets.forEach(planet => {
-			if(areSpheresColliding(planet, this.ball)) {
-				console.log('spheres are colliding', JSON.stringify(planet.position), JSON.stringify(this.ball.position), Date.now());
-				const newVelocity = calcVelocityAfterRebound({
-					staticSphere: planet,
-					movingSphere: this.ball,
-				});
-
-				this.ball.velocity = newVelocity;
-				adjustBallPositionAfterCollision(this.ball, planet);
-				if(this.ball.velocity.length() < 0.2) {
-					this.ball.isOnPlanet = true;
+			this.balls.forEach(ball => {
+				if(areSpheresColliding(planet, ball)) {
+					const newVelocity = calcVelocityAfterRebound({
+						staticSphere: planet,
+						movingSphere: ball,
+					});
+	
+					ball.velocity = newVelocity;
+					adjustBallPositionAfterCollision(ball, planet);
+					if(ball.velocity.length() < 0.2) {
+						ball.isOnPlanet = true;
+					}
 				}
-			}
+			});
 		});
 
 		// update ball's velocity by planets gravity:
 		planets.forEach((planet: Planet) => {
-			this.ball.addVelocity(calcGravityForce({puller: planet, pulled: this.ball, timeDelta}));
+			this.balls.forEach(ball => {
+				ball.addVelocity(calcGravityForce({puller: planet, pulled: ball, timeDelta}));
+			});
 		});
 
-		this.ball.tick();
+		this.balls.forEach(ball => {
+			ball.tick();
+		})
 	}
 
 	private updateBallTrace() {
 		this.eGetter.getLines().forEach(line => this.scene.remove(line));
 
-		this.scene.add(this.ball.createTrace());
+		this.balls.forEach(ball => {
+			this.scene.add(ball.createTrace());
+		});
 	}
 
 	private onNewAnimationFrame() {
@@ -113,7 +127,7 @@ export class App {
 		this.adjustCanvasSize();
 		this.updateBall(delta);
 		this.updateBallTrace();
-		InfoTab.updateText(this.ball);
+		InfoTab.updateText(this.balls[0]);
 
 		requestAnimationFrame(this.onNewAnimationFrame.bind(this));
 	}
