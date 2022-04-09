@@ -50,7 +50,7 @@ export class Ball extends Mesh implements Tickable {
 		this._velocity = newVelocity;
 	}
 
-	constructor({radius = 4}: {
+	constructor({radius = settings.ball.radius}: {
 		radius?: number
 	} = {}) {
 		const color = randomColor({luminosity: 'dark', alpha: 1});

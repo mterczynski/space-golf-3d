@@ -18,8 +18,8 @@ export class App {
 		canvas: document.getElementById('mainCanvas') as HTMLCanvasElement,
 	});
 	private readonly scene = new Scene();
-	private readonly manualOrbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
-	private readonly autoRotatingOrbitCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, Math.pow(10, 6))
+	private readonly manualOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
+	private readonly autoRotatingOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6))
 	private readonly eGetter = new ElementGetter(this.scene);
 	private balls: Ball[] = [new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball()];
 	private activeCamera: PerspectiveCamera = this.autoRotatingOrbitCamera;
