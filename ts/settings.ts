@@ -3,7 +3,8 @@ export const settings = Object.freeze({
 		bounciness: 0.8,
 		launchForce: 7,
 		showVelocityVector: false,
-		traceDuration: 0,
+		traceDuration: 5,
+		traceTransparency: 0.1
 	}),
 	defaultPlanetDensity: 0.00014,
 	showFPSCounter: true,

@@ -73,7 +73,9 @@ export class Ball extends Mesh implements Tickable {
 
 	createTrace() {
 		const lineMaterial = new LineBasicMaterial({
-			color: 0xffaa00
+			color: 0xffaa00,
+			opacity: settings.ball.traceTransparency,
+			transparent: true,
 		});
 
 		const geometry = new Geometry();
