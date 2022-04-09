@@ -52,6 +52,31 @@ describe('calcVelocityAfterRebound', () => {
 		expect(result).toEqual(expectedVelocity);
 	});
 
+	test(`case #3 - moving sphere falls vertically on a static sphere, moving sphere is slightly inside the static sphere`, () => {
+		const staticSphere = {
+			radius: 5,
+			position: new Vector3(0, 0, 0)
+		};
+
+		const movingSphere = {
+			radius: 3,
+			position: new Vector3(0, 7.7, 0),
+			velocity: new Vector3(0, -1, 0)
+		};
+
+		const onBounceVelocityMultiplier = 0.6;
+
+		const expectedVelocity = new Vector3(0, 0.6, 0);
+
+		const result = calcVelocityAfterRebound({
+			staticSphere,
+			movingSphere,
+			onBounceVelocityMultiplier
+		});
+
+		expect(result).toEqual(expectedVelocity);
+	});
+
 	describe('immutability tests', () => {
 		const onBounceVelocityMultiplier = 0.6;
 		let staticSphere: any;
