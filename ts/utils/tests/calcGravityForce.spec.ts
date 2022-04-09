@@ -2,13 +2,16 @@ import { calcGravityForce } from '../calcGravityForce';
 import { Vector3 } from 'three';
 
 describe('calcGravityForce', () => {
+	const mockTimeDelta = 0.01;
+
 	test(`calcGravityForce shouldn't mutate puller's position`, () => {
 		const puller = {mass: 30, position: new Vector3(4, 0, 0)};
 		const pulled = {mass: 2, position: new Vector3(20, 0, 0)};
 
 		calcGravityForce({
 			pulled,
-			puller
+			puller,
+			timeDelta: mockTimeDelta,
 		});
 
 		expect(puller.position).toEqual(new Vector3(4, 0, 0));
@@ -20,7 +23,8 @@ describe('calcGravityForce', () => {
 
 		calcGravityForce({
 			pulled,
-			puller
+			puller,
+			timeDelta: mockTimeDelta,
 		});
 
 		expect(pulled.position).toEqual(new Vector3(20, 0, 0));
@@ -34,7 +38,8 @@ describe('calcGravityForce', () => {
 
 		const result = calcGravityForce({
 			pulled: mockBall,
-			puller: mockPlanet
+			puller: mockPlanet,
+			timeDelta: mockTimeDelta,
 		});
 
 		const expected = new Vector3(
@@ -54,7 +59,8 @@ describe('calcGravityForce', () => {
 
 		const result = calcGravityForce({
 			pulled,
-			puller
+			puller,
+			timeDelta: mockTimeDelta,
 		});
 
 		const normalizedDirVector = new Vector3(-1, -1, -1).normalize();
@@ -71,7 +77,8 @@ describe('calcGravityForce', () => {
 
 		const result = calcGravityForce({
 			pulled,
-			puller
+			puller,
+			timeDelta: mockTimeDelta,
 		});
 
 		const normalizedDirVector = new Vector3(-1, -1, -1).normalize();
