@@ -5,6 +5,7 @@ import {
 	LineBasicMaterial,
 	Mesh,
 	MeshBasicMaterial,
+	PerspectiveCamera,
 	SphereGeometry,
 	Vector3,
 } from 'three';
@@ -25,6 +26,7 @@ export class Ball extends Mesh implements Tickable {
 	private _velocity = new Vector3(0, 0, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
 	private pathVertices: Vector3[] = [];
+	readonly camera = new PerspectiveCamera(30);
 
 	private updateArrowHelper() {
 		this.arrowHelper.setDirection(this.velocity.normalize());
@@ -51,6 +53,8 @@ export class Ball extends Mesh implements Tickable {
 		if(settings.ball.showVelocityVector) {
 			this.add(this.arrowHelper);
 		}
+
+		this.add(this.camera);
 	}
 
 	addVelocity(vector: Vector3) {
@@ -80,9 +84,16 @@ export class Ball extends Mesh implements Tickable {
 
 		this.updateArrowHelper();
 		this.pathVertices.push(this.position.clone());
+		this.updateCameraPosition();
 
 		setTimeout(() => {
 			this.pathVertices.shift();
 		}, settings.ball.traceDuration * 1000);
+	}
+
+	private updateCameraPosition() {
+		// todo
+		this.camera.position.setY(400);
+		this.camera.lookAt(this.position);
 	}
 }
