@@ -1,6 +1,7 @@
 import { BackSide, Color, Mesh, MeshBasicMaterial, MeshPhongMaterial, SphereGeometry, Vector3 } from 'three';
 import { Ball } from './Ball';
 import { settings } from '../settings';
+import { MeshName } from '../interfaces/MeshName';
 
 function createBorderMesh(planetRadius: number) {
 	const borderMaterial = new MeshBasicMaterial({
@@ -22,7 +23,9 @@ function createBorderMesh(planetRadius: number) {
 	);
 }
 
-export class Planet extends Mesh {
+export class Planet {
+	mesh;
+
 	get mass() {
 		// https://en.wikipedia.org/wiki/Sphere#Enclosed_volume
 		const sphereVolumeMultiplier = Math.PI * 4 / 3;
@@ -38,9 +41,10 @@ export class Planet extends Mesh {
 		density?: number
 		color?: Color
 	}) {
-		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
+		this.mesh = new Mesh(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
+		this.mesh.name = MeshName.Planet;
 		this.radius = radius;
 		this.density = density;
-		this.add(createBorderMesh(radius));
+		this.mesh.add(createBorderMesh(radius));
 	}
 }

@@ -1,6 +1,8 @@
 import {
 	ArrowHelper,
-	Geometry,
+	BufferAttribute,
+	BufferGeometry,
+	// Geometry,
 	Line,
 	LineBasicMaterial,
 	Mesh,
@@ -20,7 +22,8 @@ function createBallMaterial() {
 	return new MeshBasicMaterial({color: 'rgb(0,250,250)'});
 }
 
-export class Ball extends Mesh implements Tickable {
+export class Ball implements Tickable {
+	private readonly _mesh = new Mesh();
 	private isOnPlanet = false;
 	private _velocity = new Vector3(0, 0, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
@@ -42,14 +45,22 @@ export class Ball extends Mesh implements Tickable {
 		this._velocity = newVelocity;
 	}
 
+	get position(): Vector3 {
+		return this._mesh.position;
+	}
+
+	get mesh(): Mesh {
+		return this.mesh;
+	}
+
 	constructor({radius = 3}: {
 		radius?: number
 	} = {}) {
-		super(createBallGeometry(radius), createBallMaterial());
+		this._mesh = new Mesh(createBallGeometry(radius), createBallMaterial());
 		this.radius = radius;
 
 		if(settings.ball.showVelocityVector) {
-			this.add(this.arrowHelper);
+			this._mesh.add(this.arrowHelper);
 		}
 	}
 
@@ -62,9 +73,25 @@ export class Ball extends Mesh implements Tickable {
 			color: 'red',
 		});
 
-		const geometry = new Geometry();
+		const geometry = new BufferGeometry();
 
-		geometry.vertices = this.pathVertices;
+		// const vertices = new Float32Array( [
+		// 	-1.0, -1.0,  1.0,
+		// 	 1.0, -1.0,  1.0,
+		// 	 1.0,  1.0,  1.0,
+		
+		// 	 1.0,  1.0,  1.0,
+		// 	-1.0,  1.0,  1.0,
+		// 	-1.0, -1.0,  1.0
+		// ] );
+
+		const vertices = new Float32Array(this.pathVertices.map(v => [v.x, v.y, v.z]).flat() );
+
+		geometry.setAttribute( 'position', new BufferAttribute( vertices, 3 ) )
+
+
+// geometry.attributes.position
+		// geometry.vertices = this.pathVertices;
 
 		return new Line(geometry, lineMaterial);
 	}
@@ -73,13 +100,13 @@ export class Ball extends Mesh implements Tickable {
 		if (this.isOnPlanet) {
 			this.velocity = new Vector3();
 		}
-		this.rotation.set(0, 0, 0);
-		this.position.add(this.velocity);
+		this._mesh.rotation.set(0, 0, 0);
+		this._mesh.position.add(this.velocity);
 		const velNorm = this.velocity.normalize();
-		this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
+		this._mesh.rotation.set(velNorm.x, velNorm.y, velNorm.z);
 
 		this.updateArrowHelper();
-		this.pathVertices.push(this.position.clone());
+		this.pathVertices.push(this._mesh.position.clone());
 
 		setTimeout(() => {
 			this.pathVertices.shift();

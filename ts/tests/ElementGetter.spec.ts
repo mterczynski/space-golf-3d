@@ -11,7 +11,7 @@ describe('ElementGetter', () => {
 			const planet2 = new Planet({radius: 2});
 			const unrelatedObject = new Object3D();
 
-			scene.add(planet1, unrelatedObject, planet2);
+			scene.add(planet1.mesh, unrelatedObject, planet2.mesh);
 
 			expect(elementGetter.getPlanets()).toEqual([planet1, planet2]);
 		})

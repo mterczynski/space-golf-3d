@@ -4,7 +4,9 @@ function buildSkyboxUrl(part: number) {
 	return `${document.baseURI}assets/skybox/sky${part}.png`;
 }
 
-export class Skybox extends Mesh {
+export class Skybox {
+	mesh;
+
 	constructor() {
 		const materials = [
 			new MeshBasicMaterial({ side: BackSide, map: ImageUtils.loadTexture(buildSkyboxUrl(4)) }),
@@ -17,6 +19,6 @@ export class Skybox extends Mesh {
 		const skyboxWidth = 10 ** 5;
 		const geometry = new BoxGeometry(skyboxWidth, skyboxWidth, skyboxWidth);
 
-		super(geometry, materials);
+		this.mesh = new Mesh(geometry, materials);
 	}
 }

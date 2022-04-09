@@ -28,16 +28,16 @@ export class App {
 			];
 
 			planets.forEach(planet => {
-				this.scene.add(planet);
+				this.scene.add(planet.mesh);
 			});
 
-			planets[3].position.set(100, 100, 100);
-			planets[1].position.set(90, 10, 10);
-			planets[2].position.set(0, 0, 500);
+			planets[3].mesh.position.set(100, 100, 100);
+			planets[1].mesh.position.set(90, 10, 10);
+			planets[2].mesh.position.set(0, 0, 500);
 		},
 		ball: () => {
 			this.ball.position.set(0, -100, -70);
-			this.scene.add(this.ball);
+			this.scene.add(this.ball.mesh);
 		},
 		light: () => {
 			const light = new PointLight();
@@ -48,7 +48,7 @@ export class App {
 			this.orbitCamera.position.set(200, 200, 200);
 			this.orbitCamera.lookAt(new Vector3());
 		},
-		skybox: () => this.scene.add(new Skybox()),
+		skybox: () => this.scene.add(new Skybox().mesh),
 		orbitControls: () => new OrbitControls(this.orbitCamera, this.renderer.domElement),
 	};
 
@@ -63,7 +63,7 @@ export class App {
 
 		// bounce ball off planets
 		planets.forEach(planet => {
-			if(areSpheresColliding(planet, this.ball)) {
+			if(areSpheresColliding(planet.mesh, this.ball)) {
 				const newVelocity = calcVelocityAfterRebound({
 					staticSphere: planet,
 					movingSphere: this.ball
