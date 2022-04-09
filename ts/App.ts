@@ -8,6 +8,7 @@ import { Skybox } from './meshes/Skybox';
 import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from './utils';
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
+import { launchBall } from './utils/launchBall';
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -54,6 +55,13 @@ export class App {
 		},
 		skybox: () => this.scene.add(new Skybox()),
 		orbitControls: () => new OrbitControls(this.orbitCamera, this.renderer.domElement),
+		keyListeners: () => {
+			addEventListener('keydown', ({key}) => {
+				if(['Enter', ' '].includes(key) && this.ball.isOnPlanet) {
+					launchBall(this.ball);
+				}
+			})
+		}
 	};
 
 	private adjustCanvasSize() {
@@ -116,6 +124,7 @@ export class App {
 		this.setup.light();
 		this.setup.camera();
 		this.setup.skybox();
+		this.setup.keyListeners();
 		this.onNewAnimationFrame();
 		document.body.appendChild(this.stats.dom);
 	}
