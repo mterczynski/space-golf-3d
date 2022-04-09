@@ -36,9 +36,9 @@ export class App {
 				this.scene.add(planet);
 			});
 
-			planets[3].position.set(100, 100, 100);
 			planets[1].position.set(90, 10, 10);
-			planets[2].position.set(0, 0, 500);
+			planets[2].position.set(0, 0, 200);
+			planets[3].position.set(30, 30, 100);
 		},
 		ball: () => {
 			this.ball.position.set(0, -100, -70);
@@ -50,7 +50,7 @@ export class App {
 			this.scene.add(light);
 		},
 		camera: () => {
-			this.orbitCamera.position.set(200, 200, 200);
+			this.orbitCamera.position.set(400, 200, 40);
 			this.orbitCamera.lookAt(new Vector3());
 		},
 		skybox: () => this.scene.add(new Skybox()),
