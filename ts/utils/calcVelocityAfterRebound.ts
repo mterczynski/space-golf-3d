@@ -13,7 +13,7 @@ interface MovingSphere extends Sphere {
 export function calcVelocityAfterRebound({
 	staticSphere,
 	movingSphere,
-	onBounceVelocityMultiplier = settings.defaultOnBounceVelocityMultiplier,
+	onBounceVelocityMultiplier = settings.ball.bounciness,
 }: {
 	staticSphere: Sphere,
 	movingSphere: MovingSphere,
