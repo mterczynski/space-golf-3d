@@ -5,9 +5,10 @@ interface Gravitable {
 	position: Vector3
 }
 
-export function calcGravityForce({pulled, puller} : {
+export function calcGravityForce({pulled, puller, timeDelta} : {
 	pulled: Gravitable,
 	puller: Gravitable,
+	timeDelta: number,
 }) {
 	const directionVector = puller.position.clone().sub(pulled.position);
 	const distance = puller.position.distanceTo(pulled.position);
@@ -16,5 +17,6 @@ export function calcGravityForce({pulled, puller} : {
 		.normalize()
 		.multiplyScalar(puller.mass)
 		.multiplyScalar(pulled.mass)
+		.multiplyScalar(timeDelta * 100)
 		.divideScalar(distance ** 2);
 }

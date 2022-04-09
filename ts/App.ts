@@ -1,4 +1,4 @@
-import { Camera, Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from 'three';
+import { Camera, Clock, Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three-orbitcontrols-ts';
 import { Ball } from './meshes/Ball';
 import { ElementGetter } from './ElementGetter';
@@ -20,6 +20,7 @@ export class App {
 	private ball: Ball = new Ball();
 	private activeCamera: Camera = this.orbitCamera;
 	private stats = Stats();
+	private readonly clock = new Clock();
 
 	private setup = {
 		planets: () => {
@@ -61,7 +62,7 @@ export class App {
 		this.orbitCamera.updateProjectionMatrix();
 	}
 
-	private updateBall() {
+	private updateBall(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
 
 		// bounce ball off planets
@@ -69,7 +70,7 @@ export class App {
 			if(areSpheresColliding(planet, this.ball)) {
 				const newVelocity = calcVelocityAfterRebound({
 					staticSphere: planet,
-					movingSphere: this.ball
+					movingSphere: this.ball,
 				});
 
 				this.ball.velocity = newVelocity;
@@ -78,7 +79,7 @@ export class App {
 
 		// update ball's velocity by planets gravity:
 		planets.forEach((planet: Planet) => {
-			this.ball.addVelocity(calcGravityForce({puller: planet, pulled: this.ball}));
+			this.ball.addVelocity(calcGravityForce({puller: planet, pulled: this.ball, timeDelta}));
 		});
 
 		this.ball.tick();
@@ -91,11 +92,12 @@ export class App {
 	}
 
 	private onNewAnimationFrame() {
+		const delta = this.clock.getDelta();
 		this.renderer.render(this.scene, this.activeCamera);
 		this.stats.update();
 
 		this.adjustCanvasSize();
-		this.updateBall();
+		this.updateBall(delta);
 		this.updateBallTrace();
 		InfoTab.updateText(this.ball);
 
