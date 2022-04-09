@@ -7,6 +7,7 @@ import { Planet } from './meshes/Planet';
 import { Skybox } from './meshes/Skybox';
 import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from './utils';
 import Stats from 'three/examples/jsm/libs/stats.module'
+import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
 
 
 export class App {
@@ -68,12 +69,14 @@ export class App {
 		// bounce ball off planets
 		planets.forEach(planet => {
 			if(areSpheresColliding(planet, this.ball)) {
+				console.log('spheres are colliding', JSON.stringify(planet.position), JSON.stringify(this.ball.position), Date.now());
 				const newVelocity = calcVelocityAfterRebound({
 					staticSphere: planet,
 					movingSphere: this.ball,
 				});
 
 				this.ball.velocity = newVelocity;
+				adjustBallPositionAfterCollision(this.ball, planet);
 			}
 		});
 
