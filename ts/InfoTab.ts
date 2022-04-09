@@ -1,4 +1,5 @@
 import { Ball } from './meshes/Ball';
+import { settings } from './settings';
 
 const htmlElement = document.getElementById('infoTab__text') as HTMLPreElement;
 
@@ -22,3 +23,7 @@ export const InfoTab = {
 		htmlElement.innerHTML = content;
 	}
 };
+
+if(!settings.showInfoTab) {
+	htmlElement.style.display = 'none';
+}
