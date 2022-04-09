@@ -1,12 +1,12 @@
 export const settings = Object.freeze({
 	ball: Object.freeze({
-		traceDuration: 0,
-		showVelocityVector: false,
 		launchForce: 6,
+		showVelocityVector: false,
+		traceDuration: 0,
 	}),
-	showInfoTab: false,
-	showFPSCounter: true,
-	defaultPlanetDensity: 0.00014,
 	defaultOnBounceVelocityMultiplier: 0.8,
+	defaultPlanetDensity: 0.00014,
+	showFPSCounter: true,
+	showInfoTab: false,
 	skyboxOpacity: 1,
 });
