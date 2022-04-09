@@ -60,7 +60,7 @@ describe('calcVelocityAfterRebound', () => {
 
 		const movingSphere = {
 			radius: 3,
-			position: new Vector3(0, 7.7, 0),
+			position: new Vector3(0, 7.8, 0),
 			velocity: new Vector3(0, -1, 0)
 		};
 
