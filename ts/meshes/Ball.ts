@@ -6,6 +6,7 @@ import {
 	Mesh,
 	MeshBasicMaterial,
 	PerspectiveCamera,
+	PointLight,
 	SphereGeometry,
 	Vector3,
 } from 'three';
@@ -18,10 +19,11 @@ function createBallGeometry(ballRadius: number) {
 }
 
 function createBallMaterial() {
-	return new MeshBasicMaterial({color: 'rgb(0,250,250)'});
+	return new MeshBasicMaterial({color: 'rgb(255,255,255)'});
 }
 
 export class Ball extends Mesh implements Tickable {
+	private readonly light = new PointLight('rgb(255,255,255)', undefined, 100);
 	private isOnPlanet = false;
 	private _velocity = new Vector3(0, 0, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
@@ -44,7 +46,7 @@ export class Ball extends Mesh implements Tickable {
 		this._velocity = newVelocity;
 	}
 
-	constructor({radius = 3}: {
+	constructor({radius = 4}: {
 		radius?: number
 	} = {}) {
 		super(createBallGeometry(radius), createBallMaterial());
@@ -55,6 +57,7 @@ export class Ball extends Mesh implements Tickable {
 		}
 
 		this.add(this.camera);
+		this.add(this.light);
 	}
 
 	addVelocity(vector: Vector3) {
@@ -63,7 +66,7 @@ export class Ball extends Mesh implements Tickable {
 
 	createTrace() {
 		const lineMaterial = new LineBasicMaterial({
-			color: 'red',
+			color: 0xffaa00
 		});
 
 		const geometry = new Geometry();
