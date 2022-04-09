@@ -4,6 +4,7 @@ export const settings = Object.freeze({
 		showVelocityVector: false,
 	}),
 	showInfoTab: true,
+	showFPSCounter: true,
 	defaultPlanetDensity: 0.00014,
 	defaultOnBounceVelocityMultiplier: 0.8,
 });

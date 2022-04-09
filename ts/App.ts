@@ -9,6 +9,7 @@ import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from 
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
 import { launchBall } from './utils/launchBall';
+import { settings } from './settings';
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -126,6 +127,8 @@ export class App {
 		this.setup.skybox();
 		this.setup.keyListeners();
 		this.onNewAnimationFrame();
-		document.body.appendChild(this.stats.dom);
+		if(settings.showFPSCounter) {
+			document.body.appendChild(this.stats.dom);
+		}
 	}
 }
