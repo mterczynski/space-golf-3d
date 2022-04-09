@@ -33,10 +33,10 @@ export class Planet extends Mesh {
 	readonly radius: number;
 	readonly density: number;
 
-	constructor({radius, color = new Color('red'), density = settings.defaultPlanetDensity}: {
+	constructor({radius, color = 'rgb(255,0,0)', density = settings.defaultPlanetDensity}: {
 		radius: number,
 		density?: number
-		color?: Color
+		color?: string
 	}) {
 		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
 		this.radius = radius;

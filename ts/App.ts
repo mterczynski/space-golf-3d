@@ -29,10 +29,10 @@ export class App {
 	private setup = {
 		planets: () => {
 			const planets = [
-				new Planet({radius: 33}),
-				new Planet({radius: 20, color: new Color('rgb(0, 255, 0)')}),
-				new Planet({radius: 100, color: new Color('rgb(0, 0, 255)')}),
-				new Planet({radius: 3, color: new Color('rgb(255, 255, 255)')}),
+				new Planet({radius: 33, color: 'rgb(255, 0, 0)'}),
+				new Planet({radius: 20, color: 'rgb(0, 255, 0)'}),
+				new Planet({radius: 100, color: 'rgb(0, 0, 255)'}),
+				new Planet({radius: 3, color: 'rgb(255, 255, 255)'}),
 			];
 
 			planets.forEach(planet => {
