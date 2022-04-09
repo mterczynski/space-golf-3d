@@ -13,6 +13,7 @@ import {
 import { settings } from '../settings';
 import { Tickable } from '../interfaces/Tickable';
 import { Planet } from './Planet';
+import { launchBall } from '../utils/launchBall';
 
 function createBallGeometry(ballRadius: number) {
 	return new SphereGeometry(ballRadius, 32, 32);
@@ -28,6 +29,7 @@ export class Ball extends Mesh implements Tickable {
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
 	private pathVertices: Vector3[] = [];
 	readonly camera = new PerspectiveCamera(30);
+	launchBallTimeout: number | null = null;
 	isOnPlanet = false;
 
 	private updateArrowHelper() {
@@ -79,6 +81,12 @@ export class Ball extends Mesh implements Tickable {
 	tick() {
 		if (this.isOnPlanet) {
 			this.velocity = new Vector3();
+			if(!this.launchBallTimeout) {
+				this.launchBallTimeout = window.setTimeout(() => {
+					launchBall(this);
+					this.launchBallTimeout = null;
+				}, 1000)
+			}
 		}
 		this.rotation.set(0, 0, 0);
 		this.position.add(this.velocity);
