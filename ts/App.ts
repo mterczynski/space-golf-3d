@@ -9,7 +9,6 @@ import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from 
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
 
-
 export class App {
 	private readonly renderer = new WebGLRenderer({
 		antialias: true,
@@ -77,6 +76,9 @@ export class App {
 
 				this.ball.velocity = newVelocity;
 				adjustBallPositionAfterCollision(this.ball, planet);
+				if(this.ball.velocity.length() < 0.2) {
+					this.ball.isOnPlanet = true;
+				}
 			}
 		});
 

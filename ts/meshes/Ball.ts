@@ -24,11 +24,11 @@ function createBallMaterial() {
 
 export class Ball extends Mesh implements Tickable {
 	private readonly light = new PointLight('rgb(255,255,255)', undefined, 100);
-	private isOnPlanet = false;
 	private _velocity = new Vector3(0, 0, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
 	private pathVertices: Vector3[] = [];
 	readonly camera = new PerspectiveCamera(30);
+	isOnPlanet = false;
 
 	private updateArrowHelper() {
 		this.arrowHelper.setDirection(this.velocity.normalize());
