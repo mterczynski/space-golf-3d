@@ -32,16 +32,17 @@ export class App {
 				new Planet({radius: 33, color: 'rgb(255, 0, 0)'}),
 				new Planet({radius: 20, color: 'rgb(0, 255, 0)'}),
 				new Planet({radius: 100, color: 'rgb(0, 0, 255)'}),
-				new Planet({radius: 3, color: 'rgb(255, 255, 255)'}),
+				new Planet({radius: 60, color: 'rgb(255, 255, 255)'}),
 			];
 
 			planets.forEach(planet => {
 				this.scene.add(planet);
 			});
 
-			planets[1].position.set(90, 10, 10);
-			planets[2].position.set(0, 0, 200);
-			planets[3].position.set(30, 30, 100);
+			planets[0].position.set(0, 230, 50);
+			planets[1].position.set(300, -100, 10);
+			planets[2].position.set(0, 0, 0);
+			planets[3].position.set(300, -240, 90);
 		},
 		ball: () => {
 
@@ -76,7 +77,11 @@ export class App {
 		this.activeCamera.aspect = innerWidth / innerHeight;
 		this.activeCamera.updateProjectionMatrix();
 		this.autoRotatingOrbitCamera.lookAt(new Vector3());
-		this.autoRotatingOrbitCamera.position.set(Math.sin(totalTimeElapsed/3000) * 800,Math.cos(totalTimeElapsed/3000) * 800,Math.cos(totalTimeElapsed/3000) * 800);
+		this.autoRotatingOrbitCamera.position.set(
+			Math.sin(totalTimeElapsed/14000) * 1300,
+			Math.abs(Math.cos(totalTimeElapsed/14000) * 1300),
+			Math.cos(totalTimeElapsed/14000) * 1300
+		);
 	}
 
 	private updateBall(timeDelta: number) {
