@@ -4,7 +4,7 @@ import {
 	Line,
 	LineBasicMaterial,
 	Mesh,
-	MeshToonMaterial,
+	MeshBasicMaterial,
 	PerspectiveCamera,
 	PointLight,
 	SphereGeometry,
@@ -17,17 +17,18 @@ import { launchBall } from '../utils/launchBall';
 import randomColor = require('randomcolor');
 
 function createBallGeometry(ballRadius: number) {
-	return new SphereGeometry(ballRadius, 32, 32);
+	const quality = 32;
+	return new SphereGeometry(ballRadius, quality, quality);
 }
 
 function createBallMaterial(color: string) {
-	return new MeshToonMaterial({color});
+	return new MeshBasicMaterial({color});
 }
 
 export class Ball extends Mesh implements Tickable {
 	private readonly light;
 	private _velocity = new Vector3(0, 0, 0);
-	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3(), 50);
+	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3());
 	private pathVertices: Vector3[] = [];
 	readonly color;
 	readonly camera = new PerspectiveCamera(30);

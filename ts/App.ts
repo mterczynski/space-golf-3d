@@ -10,6 +10,7 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
 import { settings } from './settings';
 import _ = require('lodash');
+import { generateRandomLevel } from './utils/generateRandomLevel';
 
 export class App {
 	private readonly startDate = Date.now();
@@ -21,37 +22,28 @@ export class App {
 	private readonly manualOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	private readonly autoRotatingOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6))
 	private readonly eGetter = new ElementGetter(this.scene);
-	private balls: Ball[] = [new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball(),new Ball()];
+	private readonly clock = new Clock();
+	private readonly level = generateRandomLevel();
+	private balls: Ball[] = [];
 	private activeCamera: PerspectiveCamera = this.autoRotatingOrbitCamera;
 	private stats = Stats();
-	private readonly clock = new Clock();
 
 	private setup = {
-		planets: () => {
-			const planets = [
-				new Planet({radius: 33, color: 'rgb(255, 0, 0)'}),
-				new Planet({radius: 20, color: 'rgb(0, 255, 0)'}),
-				new Planet({radius: 100, color: 'rgb(0, 0, 255)'}),
-				new Planet({radius: 60, color: 'rgb(255, 255, 255)'}),
-			];
-
-			planets.forEach(planet => {
-				this.scene.add(planet);
+		level: () => {
+			this.level.planets.forEach(planet => {
+				const planetInstance = new Planet({radius: planet.radius, color: planet.color});
+				planetInstance.position.set(planet.position.x, planet.position.y, planet.position.z);
+				this.scene.add(planetInstance);
 			});
 
-			planets[0].position.set(0, 230, 50);
-			planets[1].position.set(300, -100, 10);
-			planets[2].position.set(0, 0, 0);
-			planets[3].position.set(300, -240, 90);
-		},
-		ball: () => {
-
-			this.balls.forEach(ball => {
-				this.scene.add(ball);
-				// todo - verify that ball is not intersecting or inside any planet
-				const position = new Vector3(_.random(-500, 500), _.random(-500, 500), _.random(-500, 500));
-				ball.position.set(position.x, position.y, position.z);
-			});
+			const ball = new Ball(); 
+			ball.position.set(
+				this.level.initialBallPosition.x,
+				this.level.initialBallPosition.y,
+				this.level.initialBallPosition.z,
+			);
+			this.balls.push(ball);
+			this.scene.add(ball);
 		},
 		light: () => {
 			const light = new PointLight();
@@ -76,11 +68,13 @@ export class App {
 		const totalTimeElapsed = Date.now() - this.startDate;
 		this.activeCamera.aspect = innerWidth / innerHeight;
 		this.activeCamera.updateProjectionMatrix();
-		this.autoRotatingOrbitCamera.lookAt(new Vector3());
+		this.autoRotatingOrbitCamera.lookAt(this.balls[0].position);
+		const autoRotatingOrbitCameraOffset = 2e3;
+		const autoRotatingOrbitCameraSpeed = 0.000064;
 		this.autoRotatingOrbitCamera.position.set(
-			Math.sin(totalTimeElapsed/14000) * 1300,
-			Math.abs(Math.cos(totalTimeElapsed/14000) * 1300),
-			Math.cos(totalTimeElapsed/14000) * 1300
+			Math.sin(totalTimeElapsed*autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset,
+			Math.abs(Math.cos(totalTimeElapsed*autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
+			Math.cos(totalTimeElapsed*autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset
 		);
 	}
 
@@ -141,8 +135,7 @@ export class App {
 
 	constructor() {
 		this.setup.orbitControls();
-		this.setup.planets();
-		this.setup.ball();
+		this.setup.level();
 		this.setup.light();
 		this.setup.camera();
 		this.setup.skybox();
