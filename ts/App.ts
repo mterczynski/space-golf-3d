@@ -11,6 +11,7 @@ import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfte
 import { settings } from './settings';
 import _ = require('lodash');
 import { generateRandomLevel } from './utils/generateRandomLevel';
+import { DistantCameras } from './DistantCameras';
 
 export class App {
 	private readonly startDate = Date.now();
@@ -24,6 +25,7 @@ export class App {
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
 	private readonly level = generateRandomLevel();
+	private readonly distantCameras = new DistantCameras();
 	private balls: Ball[] = [];
 	private activeCamera: PerspectiveCamera = this.autoRotatingOrbitCamera;
 	private stats = Stats();
@@ -50,11 +52,12 @@ export class App {
 			light.position.set(0, 100, 5000);
 			this.scene.add(light);
 		},
-		camera: () => {
+		cameras: () => {
 			this.manualOrbitCamera.position.set(400, 200, 40);
 			this.manualOrbitCamera.lookAt(new Vector3());
 			this.autoRotatingOrbitCamera.position.set(600, 0, 0);
 			this.autoRotatingOrbitCamera.lookAt(new Vector3());
+			this.scene.add(this.distantCameras);
 		},
 		skybox: () => this.scene.add(new Skybox()),
 		orbitControls: () => new OrbitControls(this.manualOrbitCamera, this.renderer.domElement),
@@ -76,6 +79,7 @@ export class App {
 			Math.abs(Math.cos(totalTimeElapsed*autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
 			Math.cos(totalTimeElapsed*autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset
 		);
+		this.distantCameras.update(this.balls[0].position);
 	}
 
 	private updateBall(timeDelta: number) {
@@ -137,7 +141,7 @@ export class App {
 		this.setup.orbitControls();
 		this.setup.level();
 		this.setup.light();
-		this.setup.camera();
+		this.setup.cameras();
 		this.setup.skybox();
 		this.onNewAnimationFrame();
 		if(settings.showFPSCounter) {

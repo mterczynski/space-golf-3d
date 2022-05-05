@@ -37,7 +37,6 @@ function getRandomInitialBallPosition(planets: Sphere[], ballRadius: number) {
 }
 
 export function generateRandomLevel(): Level {
-	const maxPlanetOffset = 700;
 	const minimumDistanceBetweenPlanets = 20;
 	const planetCount = 10;
 
@@ -46,9 +45,9 @@ export function generateRandomLevel(): Level {
 	while(planets.length < planetCount) {
 		const radius = _.random(20, 100);
 		const position = new Vector3(
-			_.random(-maxPlanetOffset, maxPlanetOffset),
-			_.random(-maxPlanetOffset, maxPlanetOffset),
-			_.random(-maxPlanetOffset, maxPlanetOffset)
+			_.random(-settings.maxPlanetOffset, settings.maxPlanetOffset),
+			_.random(-settings.maxPlanetOffset, settings.maxPlanetOffset),
+			_.random(-settings.maxPlanetOffset, settings.maxPlanetOffset)
 		);
 
 		const planet = {
