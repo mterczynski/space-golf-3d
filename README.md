@@ -10,17 +10,16 @@ Skybox graphics are also not mine, I will need to update them.
 
 ## Installing dependencies
 
-    yarn
-    
+    npm i
+
 ## Running the app
 
-    yarn start
-    
-    
+    npm start
+
 ## Building the app bundle (for production)
 
-    yarn build
+    npm run build
 
 ## Running Jest tests
 
-    yarn test
+    npm test
