@@ -14,7 +14,7 @@ import { settings } from '../settings';
 import { Tickable } from '../interfaces/Tickable';
 import { Planet } from './Planet';
 import { launchBall } from '../utils/launchBall';
-import * as randomColor from 'randomcolor'
+import randomColor from 'randomcolor'
 
 function createBallGeometry(ballRadius: number) {
 	const quality = 32;

@@ -1,4 +1,4 @@
-import * as randomColor from 'randomcolor'
+import randomColor from 'randomcolor'
 import { Vector3 } from "three";
 import { settings } from "../settings";
 import * as _ from "lodash";
