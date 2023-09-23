@@ -1,5 +1,4 @@
-import { BackSide, Color, Mesh, MeshBasicMaterial, MeshPhongMaterial, SphereGeometry, Vector3 } from 'three';
-import { Ball } from './Ball';
+import { BackSide, Mesh, MeshBasicMaterial, MeshPhongMaterial, SphereGeometry } from 'three';
 import { settings } from '../settings';
 
 function createBorderMesh(planetRadius: number) {
@@ -33,7 +32,7 @@ export class Planet extends Mesh {
 	readonly radius: number;
 	readonly density: number;
 
-	constructor({radius, color = 'rgb(255,0,0)', density = settings.defaultPlanetDensity}: {
+	constructor({ radius, color = 'rgb(255,0,0)', density = settings.defaultPlanetDensity }: {
 		radius: number,
 		density?: number
 		color?: string
