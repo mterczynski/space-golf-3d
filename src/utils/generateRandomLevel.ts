@@ -1,7 +1,7 @@
-import _ = require("lodash");
-import randomColor = require("randomcolor");
+import * as randomColor from 'randomcolor'
 import { Vector3 } from "three";
 import { settings } from "../settings";
+import * as _ from "lodash";
 
 
 interface Sphere {
@@ -42,7 +42,7 @@ export function generateRandomLevel(): Level {
 
 	let planets: Planet[] = [];
 
-	while(planets.length < planetCount) {
+	while (planets.length < planetCount) {
 		const radius = _.random(20, 100);
 		const position = new Vector3(
 			_.random(-settings.maxPlanetOffset, settings.maxPlanetOffset),
@@ -56,7 +56,7 @@ export function generateRandomLevel(): Level {
 			color: randomColor()
 		}
 
-		if(!planets.some(_planet => isMinimumDistanceBetweenSpheres(planet, _planet, minimumDistanceBetweenPlanets))) {
+		if (!planets.some(_planet => isMinimumDistanceBetweenSpheres(planet, _planet, minimumDistanceBetweenPlanets))) {
 			planets.push(planet)
 		}
 	}

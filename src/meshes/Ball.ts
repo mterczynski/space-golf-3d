@@ -14,7 +14,7 @@ import { settings } from '../settings';
 import { Tickable } from '../interfaces/Tickable';
 import { Planet } from './Planet';
 import { launchBall } from '../utils/launchBall';
-import randomColor = require('randomcolor');
+import * as randomColor from 'randomcolor'
 
 function createBallGeometry(ballRadius: number) {
 	const quality = 32;
@@ -22,7 +22,7 @@ function createBallGeometry(ballRadius: number) {
 }
 
 function createBallMaterial(color: string) {
-	return new MeshBasicMaterial({color});
+	return new MeshBasicMaterial({ color });
 }
 
 export class Ball extends Mesh implements Tickable {
@@ -51,16 +51,16 @@ export class Ball extends Mesh implements Tickable {
 		this._velocity = newVelocity;
 	}
 
-	constructor({radius = settings.ball.radius}: {
+	constructor({ radius = settings.ball.radius }: {
 		radius?: number
 	} = {}) {
-		const color = randomColor({luminosity: 'dark', alpha: 1});
+		const color = randomColor({ luminosity: 'dark', alpha: 1 });
 		super(createBallGeometry(radius), createBallMaterial(color));
 		this.light = new PointLight(color, undefined, 100);
 		this.color = color;
 		this.radius = radius;
 
-		if(settings.ball.showVelocityVector) {
+		if (settings.ball.showVelocityVector) {
 			this.add(this.arrowHelper);
 		}
 
@@ -89,7 +89,7 @@ export class Ball extends Mesh implements Tickable {
 	tick() {
 		if (this.isOnPlanet) {
 			this.velocity = new Vector3();
-			if(!this.launchBallTimeout) {
+			if (!this.launchBallTimeout) {
 				this.launchBallTimeout = window.setTimeout(() => {
 					launchBall(this);
 					this.launchBallTimeout = null;
