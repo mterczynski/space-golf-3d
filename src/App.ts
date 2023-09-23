@@ -9,7 +9,6 @@ import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from 
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
 import { settings } from './settings';
-import _ = require('lodash');
 import { generateRandomLevel } from './utils/generateRandomLevel';
 import { DistantCameras } from './DistantCameras';
 
@@ -33,12 +32,12 @@ export class App {
 	private setup = {
 		level: () => {
 			this.level.planets.forEach(planet => {
-				const planetInstance = new Planet({radius: planet.radius, color: planet.color});
+				const planetInstance = new Planet({ radius: planet.radius, color: planet.color });
 				planetInstance.position.set(planet.position.x, planet.position.y, planet.position.z);
 				this.scene.add(planetInstance);
 			});
 
-			const ball = new Ball(); 
+			const ball = new Ball();
 			ball.position.set(
 				this.level.initialBallPosition.x,
 				this.level.initialBallPosition.y,
@@ -75,9 +74,9 @@ export class App {
 		const autoRotatingOrbitCameraOffset = 2e3;
 		const autoRotatingOrbitCameraSpeed = 0.000064;
 		this.autoRotatingOrbitCamera.position.set(
-			Math.sin(totalTimeElapsed*autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset,
-			Math.abs(Math.cos(totalTimeElapsed*autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
-			Math.cos(totalTimeElapsed*autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset
+			Math.sin(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset,
+			Math.abs(Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
+			Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset
 		);
 		this.distantCameras.update(this.balls[0].position);
 	}
@@ -88,15 +87,15 @@ export class App {
 		// bounce ball off planets
 		planets.forEach(planet => {
 			this.balls.forEach(ball => {
-				if(areSpheresColliding(planet, ball)) {
+				if (areSpheresColliding(planet, ball)) {
 					const newVelocity = calcVelocityAfterRebound({
 						staticSphere: planet,
 						movingSphere: ball,
 					});
-	
+
 					ball.velocity = newVelocity;
 					adjustBallPositionAfterCollision(ball, planet);
-					if(ball.velocity.length() < 0.2) {
+					if (ball.velocity.length() < 0.2) {
 						ball.isOnPlanet = true;
 					}
 				}
@@ -106,7 +105,7 @@ export class App {
 		// update velocity of balls by gravity of planets:
 		planets.forEach((planet: Planet) => {
 			this.balls.forEach(ball => {
-				ball.addVelocity(calcGravityForce({puller: planet, pulled: ball, timeDelta}));
+				ball.addVelocity(calcGravityForce({ puller: planet, pulled: ball, timeDelta }));
 			});
 		});
 
@@ -144,7 +143,7 @@ export class App {
 		this.setup.cameras();
 		this.setup.skybox();
 		this.onNewAnimationFrame();
-		if(settings.showFPSCounter) {
+		if (settings.showFPSCounter) {
 			document.body.appendChild(this.stats.dom);
 		}
 	}

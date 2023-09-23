@@ -2,12 +2,12 @@
   "name": "gravitee",
   "version": "1.0.0",
   "description": "3D game set in space",
-  "main": "app.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "webpack-dev-server",
-    "start:open": "webpack-dev-server",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
     "lint": "tslint --project .",
-    "build": "webpack --mode=production",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -21,6 +21,7 @@
     "three-orbitcontrols-ts": "^0.1.2",
     "ts-loader": "^8",
     "typescript": "~4.6",
+    "vite": "^4.4.9",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11"
   },
