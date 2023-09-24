@@ -1,7 +1,7 @@
 {
-  "name": "gravitee",
+  "name": "space-golf-3d",
   "version": "1.0.0",
-  "description": "3D game set in space",
+  "description": "A 3D golf game set in space",
   "main": "src/index.ts",
   "scripts": {
     "start": "vite",
