@@ -1,11 +1,12 @@
 export enum SoundName {
-	BallHit = 'audio-ball-hit',
+	// BallHit = 'audio-ball-hit',
+	BallHit = 'audio-ping-pong-ball-hit',
 	BallFlightStart = 'audio-ball-flight-start'
 }
 
 export const playSound = {
 	ballHit: (volume = 1) => playAudioTrack(SoundName.BallHit, { volume }),
-	ballFlightStart: (volume = 1) => playAudioTrack(SoundName.BallFlightStart, { volume, startTimeMS: 800, stopTimeMS: 1000 })
+	ballFlightStart: (volume = 0.5) => playAudioTrack(SoundName.BallFlightStart, { volume, startTimeMS: 800, stopTimeMS: 1000 })
 }
 
 interface AudioTrackOptions {
