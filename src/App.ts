@@ -95,7 +95,7 @@ export class App {
 					});
 
 					const hitVolume = Math.min(1, ball.velocity.length() / 5)
-					playSound(SoundName.BallHit, hitVolume)
+					playSound.ballHit(hitVolume)
 
 					ball.velocity = newVelocity;
 					adjustBallPositionAfterCollision(ball, planet);
