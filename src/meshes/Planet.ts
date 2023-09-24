@@ -37,7 +37,7 @@ export class Planet extends Mesh {
 		density?: number
 		color?: string
 	}) {
-		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
+		super(new SphereGeometry(radius, 32, 32), new MeshBasicMaterial({ color }));
 		this.radius = radius;
 		this.density = density;
 		this.add(createBorderMesh(radius));
