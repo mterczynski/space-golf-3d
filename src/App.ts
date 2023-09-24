@@ -11,6 +11,7 @@ import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfte
 import { settings } from './settings';
 import { generateRandomLevel } from './utils/generateRandomLevel';
 import { DistantCameras } from './DistantCameras';
+import { SoundName, playSound } from './utils/playSound';
 
 export class App {
 	private readonly startDate = Date.now();
@@ -92,6 +93,9 @@ export class App {
 						staticSphere: planet,
 						movingSphere: ball,
 					});
+
+					const hitVolume = Math.min(1, ball.velocity.length() / 5)
+					playSound(SoundName.BallHit, hitVolume)
 
 					ball.velocity = newVelocity;
 					adjustBallPositionAfterCollision(ball, planet);
