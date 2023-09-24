@@ -1,6 +1,6 @@
 import {
 	ArrowHelper,
-	Geometry,
+	BufferGeometry,
 	Line,
 	LineBasicMaterial,
 	Mesh,
@@ -79,9 +79,7 @@ export class Ball extends Mesh implements Tickable {
 			transparent: true,
 		});
 
-		const geometry = new Geometry();
-
-		geometry.vertices = this.pathVertices;
+		const geometry = new BufferGeometry().setFromPoints(this.pathVertices);
 
 		return new Line(geometry, lineMaterial);
 	}
