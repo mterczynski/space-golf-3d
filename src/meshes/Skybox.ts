@@ -2,7 +2,7 @@ import { BackSide, BoxGeometry, ImageUtils, Mesh, MeshBasicMaterial } from 'thre
 import { settings } from '../settings';
 
 function buildSkyboxUrl(part: number) {
-	return `${document.baseURI}public/assets/skybox/sky${part}.png`;
+	return `${document.baseURI}public/assets/gfx/skybox/sky${part}.png`;
 }
 
 export class Skybox extends Mesh {
