@@ -56,7 +56,7 @@ export class Ball extends Mesh implements Tickable {
 	} = {}) {
 		const color = randomColor({ luminosity: 'dark', alpha: 1 });
 		super(createBallGeometry(radius), createBallMaterial(color));
-		this.light = new PointLight(color, 100000, 10000);
+		this.light = new PointLight(color, 16_000, 10000);
 		this.color = color;
 		this.radius = radius;
 
