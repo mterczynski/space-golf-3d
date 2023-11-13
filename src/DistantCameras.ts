@@ -18,7 +18,7 @@ export class DistantCameras extends Group {
 	];
 	private activeCamera = this.cameras[0];
 	private lastSwitchDate = Date.now();
-	
+
 	constructor() {
 		super();
 
@@ -30,25 +30,25 @@ export class DistantCameras extends Group {
 		const n = -cameraOffset;
 		const p = cameraOffset;
 
-		this.cameras[0].position.set(n, n/2, n);
-		this.cameras[1].position.set(n, n/2, p);
-		this.cameras[2].position.set(n, p/2, n);
-		this.cameras[3].position.set(n, p/2, p);
-		this.cameras[4].position.set(p, n/2, n);
-		this.cameras[5].position.set(p, n/2, p);
-		this.cameras[6].position.set(p, p/2, n);
-		this.cameras[7].position.set(p, p/2, p);
+		this.cameras[0].position.set(n, n / 2, n);
+		this.cameras[1].position.set(n, n / 2, p);
+		this.cameras[2].position.set(n, p / 2, n);
+		this.cameras[3].position.set(n, p / 2, p);
+		this.cameras[4].position.set(p, n / 2, n);
+		this.cameras[5].position.set(p, n / 2, p);
+		this.cameras[6].position.set(p, p / 2, n);
+		this.cameras[7].position.set(p, p / 2, p);
 	}
 
 	private selectActiveCamera(ballPosition: Vector3) {
 		const minimumTimeOnOneCamera = 3000;
 		const timeElapsedFromLastSwitch = Date.now() - this.lastSwitchDate;
-		if(timeElapsedFromLastSwitch < minimumTimeOnOneCamera) {
+		if (timeElapsedFromLastSwitch < minimumTimeOnOneCamera) {
 			return;
 		}
 
-		const newActiveCameraIndex = 
-			Number((ballPosition.x > 0)) * 4 + 
+		const newActiveCameraIndex =
+			Number((ballPosition.x > 0)) * 4 +
 			Number((ballPosition.y > 0)) * 2 +
 			Number((ballPosition.z > 0)) * 1;
 

@@ -1,17 +1,17 @@
-import { Camera, Clock, Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from 'three';
+import { Clock, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three-orbitcontrols-ts';
-import { Ball } from './meshes/Ball';
+import Stats from 'three/examples/jsm/libs/stats.module';
+import { DistantCameras } from './DistantCameras';
 import { ElementGetter } from './ElementGetter';
 import { InfoTab } from './InfoTab';
+import { Ball } from './meshes/Ball';
 import { Planet } from './meshes/Planet';
-import { Skybox } from './meshes/Skybox';
-import { areSpheresColliding, calcVelocityAfterRebound, calcGravityForce } from './utils';
-import Stats from 'three/examples/jsm/libs/stats.module'
-import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
+import { SphereSkybox } from './meshes/SphereSkybox';
 import { settings } from './settings';
+import { areSpheresColliding, calcGravityForce, calcVelocityAfterRebound } from './utils';
+import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
 import { generateRandomLevel } from './utils/generateRandomLevel';
-import { DistantCameras } from './DistantCameras';
-import { SoundName, playSound } from './utils/playSound';
+import { playSound } from './utils/playSound';
 
 export class App {
 	private readonly startDate = Date.now();
@@ -28,6 +28,7 @@ export class App {
 	private readonly distantCameras = new DistantCameras();
 	private balls: Ball[] = [];
 	private activeCamera: PerspectiveCamera = this.autoRotatingOrbitCamera;
+	// private activeCamera: PerspectiveCamera = this.manualOrbitCamera;
 	private stats = Stats();
 
 	private setup = {
@@ -58,8 +59,10 @@ export class App {
 			this.autoRotatingOrbitCamera.position.set(600, 0, 0);
 			this.autoRotatingOrbitCamera.lookAt(new Vector3());
 			this.scene.add(this.distantCameras);
+			this.scene.add(this.manualOrbitCamera)
 		},
-		skybox: () => this.scene.add(new Skybox()),
+		// skybox: () => this.scene.add(new Skybox()),
+		skybox: () => this.scene.add(new SphereSkybox()),
 		orbitControls: () => new OrbitControls(this.manualOrbitCamera, this.renderer.domElement),
 	};
 
