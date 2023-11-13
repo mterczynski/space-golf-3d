@@ -29,6 +29,7 @@ export class App {
 	private balls: Ball[] = [];
 	private activeCamera: PerspectiveCamera = this.autoRotatingOrbitCamera;
 	// private activeCamera: PerspectiveCamera = this.manualOrbitCamera;
+	// @ts-ignore
 	private stats = Stats();
 
 	private setup = {
