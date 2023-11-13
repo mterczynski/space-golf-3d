@@ -48,7 +48,7 @@ export class App {
 			this.scene.add(ball);
 		},
 		light: () => {
-			const light = new PointLight(0xFFFFFF,100_000_000);
+			const light = new PointLight(0xFFFFFF, 50_000_000);
 			light.position.set(0, 100, 5000);
 			this.scene.add(light);
 		},
