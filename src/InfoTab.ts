@@ -1,12 +1,13 @@
 import { Ball } from './meshes/Ball';
 import { settings } from './settings';
 
-const htmlElement = document.getElementById('infoTab__text') as HTMLPreElement;
+const infoTab = document.getElementById('infoTab') as HTMLPreElement;
+const infoTabText = document.getElementById('infoTab__text') as HTMLPreElement;
 
 export const InfoTab = {
 	updateText(ball: Ball) {
 		const content =
-`Ball: {
+			`Ball: {
 	position: {
 		x: ${ball.position.x.toFixed(0)},
 		y: ${ball.position.y.toFixed(0)},
@@ -20,10 +21,10 @@ export const InfoTab = {
 	}
 }`;
 
-		htmlElement.innerHTML = content;
+		infoTabText.innerHTML = content;
 	}
 };
 
-if(!settings.showInfoTab) {
-	htmlElement.style.display = 'none';
+if (!settings.showInfoTab) {
+	infoTab.style.display = 'none';
 }
