@@ -106,7 +106,7 @@ export class App {
 	private updateBalls(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
 
-		// bounce ball off planets
+		// bounce balls off planets
 		planets.forEach(planet => {
 			this.balls.forEach(ball => {
 				if (areSpheresColliding(planet, ball)) {
