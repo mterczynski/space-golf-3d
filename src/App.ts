@@ -115,8 +115,8 @@ export class App {
 						movingSphere: ball,
 					});
 
-					const hitVolume = Math.min(1, ball.velocity.length() / 5)
-					playSound.ballHit(hitVolume)
+					const hitSoundVolume = Math.min(1, ball.velocity.length() / 5)
+					playSound.ballHit(hitSoundVolume)
 
 					ball.velocity = newVelocity;
 					adjustBallPositionAfterCollision(ball, planet);
