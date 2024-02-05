@@ -22,16 +22,19 @@ export class App {
 		canvas: document.getElementById('mainCanvas') as HTMLCanvasElement,
 	});
 	private readonly scene = new Scene();
-	private readonly aimCamera = new AimCamera(this.renderer.domElement);
-	private readonly landedBallTopDownCamera = new LandedBallTopDownCamera(this.renderer.domElement);
-	private readonly staticManualOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
-	private readonly autoRotatingOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6))
+	private cameras = {
+		aim: new AimCamera(this.renderer.domElement),
+		landedBallTopDown: new LandedBallTopDownCamera(this.renderer.domElement),
+		staticManualOrbit: new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6)),
+		autoRotatingOrbit: new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6)),
+		distant: new DistantCameras()
+	}
+
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
 	private readonly level = generateRandomLevel();
-	private readonly distantCameras = new DistantCameras();
 	private balls: Ball[] = [];
-	private activeCamera: PerspectiveCamera = this.aimCamera;
+	private activeCamera: PerspectiveCamera = this.cameras.aim;
 	// private activeCamera: PerspectiveCamera = this.manualOrbitCamera;
 	// @ts-ignore
 	private stats = Stats();
@@ -59,19 +62,19 @@ export class App {
 			this.scene.add(light);
 		},
 		cameras: () => {
-			this.staticManualOrbitCamera.position.set(400, 200, 40);
-			this.staticManualOrbitCamera.lookAt(new Vector3());
-			this.autoRotatingOrbitCamera.position.set(600, 0, 0);
-			this.autoRotatingOrbitCamera.lookAt(new Vector3());
-			this.scene.add(this.distantCameras);
-			this.scene.add(this.staticManualOrbitCamera)
-			this.scene.add(this.landedBallTopDownCamera)
-			this.scene.add(this.aimCamera)
+			this.cameras.staticManualOrbit.position.set(400, 200, 40);
+			this.cameras.staticManualOrbit.lookAt(new Vector3());
+			this.cameras.autoRotatingOrbit.position.set(600, 0, 0);
+			this.cameras.autoRotatingOrbit.lookAt(new Vector3());
+			this.scene.add(this.cameras.distant);
+			this.scene.add(this.cameras.staticManualOrbit)
+			this.scene.add(this.cameras.landedBallTopDown)
+			this.scene.add(this.cameras.aim)
 		},
 		// skybox: () => this.scene.add(new Skybox()),
 		skybox: () => this.scene.add(new SphereSkybox()),
 		orbitControls: () => {
-			new OrbitControls(this.staticManualOrbitCamera, this.renderer.domElement)
+			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement)
 		}
 	};
 
@@ -88,15 +91,15 @@ export class App {
 		const totalTimeElapsed = Date.now() - this.startDate;
 		this.activeCamera.aspect = innerWidth / innerHeight;
 		this.activeCamera.updateProjectionMatrix();
-		this.autoRotatingOrbitCamera.lookAt(this.getCurrentBall().position);
+		this.cameras.autoRotatingOrbit.lookAt(this.getCurrentBall().position);
 		const autoRotatingOrbitCameraOffset = 2e3;
 		const autoRotatingOrbitCameraSpeed = 0.000064;
-		this.autoRotatingOrbitCamera.position.set(
+		this.cameras.autoRotatingOrbit.position.set(
 			Math.sin(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset,
 			Math.abs(Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
 			Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset
 		);
-		this.distantCameras.update(this.getCurrentBall().position);
+		this.cameras.distant.update(this.getCurrentBall().position);
 	}
 
 	private updateBall(timeDelta: number) {
@@ -118,8 +121,8 @@ export class App {
 					adjustBallPositionAfterCollision(ball, planet);
 					if (ball.velocity.length() < 0.2 && !ball.landedPlanet) {
 						ball.landedPlanet = planet;
-						this.landedBallTopDownCamera.reset(ball)
-						this.aimCamera.reset(ball)
+						this.cameras.landedBallTopDown.reset(ball)
+						this.cameras.aim.reset(ball)
 					}
 				}
 			});
