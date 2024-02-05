@@ -3,7 +3,7 @@ import { settings } from "../settings";
 import { Ball } from "../meshes/Ball";
 import { OrbitControls } from "three-orbitcontrols-ts";
 
-export class AimCamera extends PerspectiveCamera {
+export class LandedBallTopDownCamera extends PerspectiveCamera {
 	private readonly orbitControls: OrbitControls
 
 	constructor(domElement: HTMLElement) {
