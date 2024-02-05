@@ -2,7 +2,7 @@ import { Group, PerspectiveCamera, Vector3 } from "three";
 import { Tickable } from "../interfaces/Tickable";
 import { settings } from "../settings";
 
-const createCamera = () => new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
+const createCamera = () => new PerspectiveCamera(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far);
 
 export class DistantCameras extends Group {
 	private readonly cameras = [

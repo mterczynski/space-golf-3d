@@ -26,8 +26,8 @@ export class App {
 	private cameras = {
 		aim: new AimCamera(this.renderer.domElement),
 		landedBallTopDown: new LandedBallTopDownCamera(this.renderer.domElement),
-		staticManualOrbit: new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6)),
-		autoRotatingOrbit: new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6)),
+		staticManualOrbit: new PerspectiveCamera(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far),
+		autoRotatingOrbit: new PerspectiveCamera(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far),
 		distant: new DistantCameras()
 	}
 	private activeCamera: PerspectiveCamera = this.cameras.aim; // todo - use this.manualOrbitCamera for flight

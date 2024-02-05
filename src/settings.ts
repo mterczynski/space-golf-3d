@@ -8,7 +8,11 @@ export const settings = Object.freeze({
 		traceTransparency: 0.6,
 	}),
 	autoLaunch: false,
-	cameraFov: 30,
+	camera: {
+		fov: 30,
+		near: 0.1,
+		far: Math.pow(10, 6),
+	},
 	defaultPlanetDensity: 0.00014,
 	maxPlanetOffset: 700,
 	showFPSCounter: true,

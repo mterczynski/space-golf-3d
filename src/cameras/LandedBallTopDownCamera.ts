@@ -7,7 +7,7 @@ export class LandedBallTopDownCamera extends PerspectiveCamera {
 	private readonly orbitControls: OrbitControls
 
 	constructor(domElement: HTMLElement) {
-		super(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6))
+		super(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far)
 
 		this.position.set(400, 200, 40);
 		this.orbitControls = new OrbitControls(this, domElement);
