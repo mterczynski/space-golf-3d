@@ -30,13 +30,13 @@ export class App {
 		autoRotatingOrbit: new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6)),
 		distant: new DistantCameras()
 	}
-	private activeCamera: PerspectiveCamera = this.cameras.aim;
+	private activeCamera: PerspectiveCamera = this.cameras.aim; // todo - use this.manualOrbitCamera for flight
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
 	private readonly level = generateRandomLevel();
 	private balls: Ball[] = [];
-	// private activeCamera: PerspectiveCamera = this.manualOrbitCamera;
+
 	// @ts-ignore
 	private stats = Stats();
 
