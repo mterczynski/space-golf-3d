@@ -121,9 +121,7 @@ export class App {
 					ball.velocity = newVelocity;
 					adjustBallPositionAfterCollision(ball, planet);
 					if (ball.velocity.length() < 0.2 && !ball.landedPlanet) {
-						ball.landedPlanet = planet;
-						this.cameras.landedBallTopDown.reset(ball)
-						this.cameras.aim.reset(ball)
+						this.stopBall(ball, planet)
 					}
 				}
 			});
@@ -139,6 +137,12 @@ export class App {
 		this.balls.forEach(ball => {
 			ball.tick();
 		})
+	}
+
+	private stopBall(ball: Ball, planet: Planet) {
+		ball.landedPlanet = planet;
+		this.cameras.landedBallTopDown.reset(ball)
+		this.cameras.aim.reset(ball)
 	}
 
 	private updateBallTrace() {
