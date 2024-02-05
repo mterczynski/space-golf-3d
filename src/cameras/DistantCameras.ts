@@ -1,6 +1,6 @@
 import { Group, PerspectiveCamera, Vector3 } from "three";
-import { Tickable } from "./interfaces/Tickable";
-import { settings } from "./settings";
+import { Tickable } from "../interfaces/Tickable";
+import { settings } from "../settings";
 
 const createCamera = () => new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 

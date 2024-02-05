@@ -7,6 +7,7 @@ export const settings = Object.freeze({
 		traceDuration: 5,
 		traceTransparency: 0.6,
 	}),
+	autoLaunch: false,
 	cameraFov: 30,
 	defaultPlanetDensity: 0.00014,
 	maxPlanetOffset: 700,

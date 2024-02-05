@@ -1,7 +1,7 @@
 import { Clock, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three-orbitcontrols-ts';
 import Stats from 'three/examples/jsm/libs/stats.module';
-import { DistantCameras } from './DistantCameras';
+import { DistantCameras } from './cameras/DistantCameras';
 import { ElementGetter } from './ElementGetter';
 import { InfoTab } from './InfoTab';
 import { Ball } from './meshes/Ball';
@@ -20,14 +20,14 @@ export class App {
 		canvas: document.getElementById('mainCanvas') as HTMLCanvasElement,
 	});
 	private readonly scene = new Scene();
-	private readonly manualOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
+	private readonly staticManualOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	private readonly autoRotatingOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6))
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
 	private readonly level = generateRandomLevel();
 	private readonly distantCameras = new DistantCameras();
 	private balls: Ball[] = [];
-	private activeCamera: PerspectiveCamera = this.autoRotatingOrbitCamera;
+	private activeCamera: PerspectiveCamera = this.staticManualOrbitCamera;
 	// private activeCamera: PerspectiveCamera = this.manualOrbitCamera;
 	// @ts-ignore
 	private stats = Stats();
@@ -55,16 +55,16 @@ export class App {
 			this.scene.add(light);
 		},
 		cameras: () => {
-			this.manualOrbitCamera.position.set(400, 200, 40);
-			this.manualOrbitCamera.lookAt(new Vector3());
+			this.staticManualOrbitCamera.position.set(400, 200, 40);
+			this.staticManualOrbitCamera.lookAt(new Vector3());
 			this.autoRotatingOrbitCamera.position.set(600, 0, 0);
 			this.autoRotatingOrbitCamera.lookAt(new Vector3());
 			this.scene.add(this.distantCameras);
-			this.scene.add(this.manualOrbitCamera)
+			this.scene.add(this.staticManualOrbitCamera)
 		},
 		// skybox: () => this.scene.add(new Skybox()),
 		skybox: () => this.scene.add(new SphereSkybox()),
-		orbitControls: () => new OrbitControls(this.manualOrbitCamera, this.renderer.domElement),
+		orbitControls: () => new OrbitControls(this.staticManualOrbitCamera, this.renderer.domElement),
 	};
 
 	private adjustRendererSize() {
