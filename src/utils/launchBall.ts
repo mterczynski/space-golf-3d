@@ -3,8 +3,12 @@ import { Ball } from "../meshes/Ball";
 import { settings } from "../settings";
 import { playSound } from "./playSound";
 
-export function launchBall(ball: Ball) {
-	const launchVector = new Vector3(Math.random(), Math.random(), Math.random()).normalize().multiplyScalar(settings.ball.launchForce)
+export function launchBall(ball: Ball, directionVector?: Vector3) {
+	const launchVector = new Vector3(
+		directionVector?.x || Math.random(),
+		directionVector?.y || Math.random(),
+		directionVector?.z || Math.random()
+	).normalize().multiplyScalar(settings.ball.launchForce)
 
 	ball.landedPlanet = null;
 	ball.velocity = launchVector;

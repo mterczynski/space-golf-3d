@@ -10,7 +10,5 @@ interface Sphere {
 export function adjustBallPositionAfterCollision(ball: Ball, planet: Sphere) {
 	const directionVector = ball.position.clone().sub(planet.position).normalize().multiplyScalar(planet.radius + ball.radius);
 	const newBallPosition = planet.position.clone().add(directionVector);
-
-	console.log({directionVector, newBallPosition})
 	ball.position.set(newBallPosition.x, newBallPosition.y, newBallPosition.z);
 }

@@ -14,6 +14,7 @@ import { generateRandomLevel } from './utils/generateRandomLevel';
 import { playSound } from './utils/playSound';
 import { LandedBallTopDownCamera } from './cameras/LandedBallTopDownCamera';
 import { AimCamera } from './cameras/AimCamera';
+import { launchBall } from './utils/launchBall';
 
 export class App {
 	private readonly startDate = Date.now();
@@ -76,6 +77,19 @@ export class App {
 		skybox: () => this.scene.add(new SphereSkybox()),
 		orbitControls: () => {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement)
+		},
+		listeners: () => {
+			addEventListener('keypress', (event) => {
+				if (event.key === ' ') {
+					const ball = this.getCurrentBall()
+					if (ball.landedPlanet) {
+						const directionVector = this.getCurrentBall().position.clone().sub(this.cameras.aim.position.clone())
+
+						launchBall(ball, directionVector)
+						this.activeCamera = this.cameras.autoRotatingOrbit
+					}
+				}
+			});
 		}
 	};
 
@@ -148,6 +162,7 @@ export class App {
 
 	private stopBall(ball: Ball, planet: Planet) {
 		ball.landedPlanet = planet;
+		this.activeCamera = this.cameras.aim
 		this.cameras.landedBallTopDown.reset(ball)
 		this.cameras.aim.reset(ball)
 	}
@@ -180,6 +195,7 @@ export class App {
 		this.setup.light();
 		this.setup.cameras();
 		this.setup.skybox();
+		this.setup.listeners();
 		this.onNewAnimationFrame();
 		if (settings.showFPSCounter) {
 			document.body.appendChild(this.stats.dom);
