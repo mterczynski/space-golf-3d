@@ -87,7 +87,7 @@ export class Ball extends Mesh implements Tickable {
 	tick() {
 		if (this.landedPlanet !== null) {
 			this.velocity = new Vector3();
-			if (settings.autoLaunch && !this.launchBallTimeout) {
+			if (settings.ball.autoLaunch && !this.launchBallTimeout) {
 				this.launchBallTimeout = window.setTimeout(() => {
 					launchBall(this);
 					this.launchBallTimeout = null;

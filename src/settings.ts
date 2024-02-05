@@ -1,13 +1,13 @@
 export const settings = Object.freeze({
 	ball: Object.freeze({
 		bounciness: 0.8,
+		autoLaunch: false,
 		launchForce: 5.4,
 		radius: 8,
 		showVelocityVector: false,
 		traceDuration: 5,
 		traceTransparency: 0.6,
 	}),
-	autoLaunch: false,
 	camera: {
 		fov: 30,
 		near: 0.1,
