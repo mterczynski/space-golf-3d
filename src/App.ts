@@ -8,7 +8,7 @@ import { Ball } from './meshes/Ball';
 import { Planet } from './meshes/Planet';
 import { SphereSkybox } from './meshes/SphereSkybox';
 import { settings } from './settings';
-import { areSpheresColliding, calcGravityForce, calcVelocityAfterRebound } from './utils';
+import { areSpheresColliding, calcGravityForce, calcVelocityAfterRebound as calcVelocityAfterBounce } from './utils';
 import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfterCollision';
 import { generateRandomLevel } from './utils/generateRandomLevel';
 import { playSound } from './utils/playSound';
@@ -110,7 +110,7 @@ export class App {
 		planets.forEach(planet => {
 			this.balls.forEach(ball => {
 				if (areSpheresColliding(planet, ball)) {
-					const newVelocity = calcVelocityAfterRebound({
+					const newVelocity = calcVelocityAfterBounce({
 						staticSphere: planet,
 						movingSphere: ball,
 					});
