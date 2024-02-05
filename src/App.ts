@@ -13,6 +13,7 @@ import { adjustBallPositionAfterCollision } from './utils/adjustBallPositionAfte
 import { generateRandomLevel } from './utils/generateRandomLevel';
 import { playSound } from './utils/playSound';
 import { LandedBallTopDownCamera } from './cameras/LandedBallTopDownCamera';
+import { AimCamera } from './cameras/AimCamera';
 
 export class App {
 	private readonly startDate = Date.now();
@@ -21,6 +22,7 @@ export class App {
 		canvas: document.getElementById('mainCanvas') as HTMLCanvasElement,
 	});
 	private readonly scene = new Scene();
+	private readonly aimCamera = new AimCamera(this.renderer.domElement);
 	private readonly landedBallTopDownCamera = new LandedBallTopDownCamera(this.renderer.domElement);
 	private readonly staticManualOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6));
 	private readonly autoRotatingOrbitCamera = new PerspectiveCamera(settings.cameraFov, innerWidth / innerHeight, 0.1, Math.pow(10, 6))
@@ -29,7 +31,7 @@ export class App {
 	private readonly level = generateRandomLevel();
 	private readonly distantCameras = new DistantCameras();
 	private balls: Ball[] = [];
-	private activeCamera: PerspectiveCamera = this.landedBallTopDownCamera;
+	private activeCamera: PerspectiveCamera = this.aimCamera;
 	// private activeCamera: PerspectiveCamera = this.manualOrbitCamera;
 	// @ts-ignore
 	private stats = Stats();
@@ -64,6 +66,7 @@ export class App {
 			this.scene.add(this.distantCameras);
 			this.scene.add(this.staticManualOrbitCamera)
 			this.scene.add(this.landedBallTopDownCamera)
+			this.scene.add(this.aimCamera)
 		},
 		// skybox: () => this.scene.add(new Skybox()),
 		skybox: () => this.scene.add(new SphereSkybox()),
@@ -111,6 +114,7 @@ export class App {
 					if (ball.velocity.length() < 0.2 && !ball.landedPlanet) {
 						ball.landedPlanet = planet;
 						this.landedBallTopDownCamera.reset(ball)
+						this.aimCamera.reset(ball)
 					}
 				}
 			});
