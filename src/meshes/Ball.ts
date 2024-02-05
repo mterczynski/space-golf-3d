@@ -31,7 +31,7 @@ export class Ball extends Mesh implements Tickable {
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3());
 	private pathVertices: Vector3[] = [];
 	readonly color;
-	readonly camera = new PerspectiveCamera(30);
+	readonly camera = new PerspectiveCamera(settings.cameraFov);
 	launchBallTimeout: number | null = null;
 	landedPlanet: null | Planet = null; // planet on which the ball has landed
 
