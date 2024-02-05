@@ -75,6 +75,11 @@ export class App {
 		}
 	};
 
+	// to be changed for multiplayer mode with multiple balls
+	private getCurrentBall() {
+		return this.balls[0]
+	}
+
 	private adjustRendererSize() {
 		this.renderer.setSize(innerWidth, innerHeight);
 	}
@@ -83,7 +88,7 @@ export class App {
 		const totalTimeElapsed = Date.now() - this.startDate;
 		this.activeCamera.aspect = innerWidth / innerHeight;
 		this.activeCamera.updateProjectionMatrix();
-		this.autoRotatingOrbitCamera.lookAt(this.balls[0].position);
+		this.autoRotatingOrbitCamera.lookAt(this.getCurrentBall().position);
 		const autoRotatingOrbitCameraOffset = 2e3;
 		const autoRotatingOrbitCameraSpeed = 0.000064;
 		this.autoRotatingOrbitCamera.position.set(
@@ -91,7 +96,7 @@ export class App {
 			Math.abs(Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
 			Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset
 		);
-		this.distantCameras.update(this.balls[0].position);
+		this.distantCameras.update(this.getCurrentBall().position);
 	}
 
 	private updateBall(timeDelta: number) {
@@ -149,7 +154,7 @@ export class App {
 		this.updateCameras();
 		this.updateBall(delta);
 		this.updateBallTrace();
-		InfoTab.updateText(this.balls[0]);
+		InfoTab.updateText(this.getCurrentBall());
 
 		requestAnimationFrame(this.onNewAnimationFrame.bind(this));
 	}
