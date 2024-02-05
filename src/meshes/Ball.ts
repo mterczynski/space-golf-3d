@@ -33,7 +33,7 @@ export class Ball extends Mesh implements Tickable {
 	readonly color;
 	readonly camera = new PerspectiveCamera(30);
 	launchBallTimeout: number | null = null;
-	isOnPlanet = false;
+	landedPlanet: null | Planet = null; // planet on which the ball has landed
 
 	private updateArrowHelper() {
 		this.arrowHelper.setDirection(this.velocity.normalize());
@@ -85,7 +85,7 @@ export class Ball extends Mesh implements Tickable {
 	}
 
 	tick() {
-		if (this.isOnPlanet) {
+		if (this.landedPlanet !== null) {
 			this.velocity = new Vector3();
 			if (settings.autoLaunch && !this.launchBallTimeout) {
 				this.launchBallTimeout = window.setTimeout(() => {
