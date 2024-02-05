@@ -106,7 +106,12 @@ export class App {
 	private updateBalls(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
 
-		// bounce balls off planets
+		this.bounceBallsOffPlanets(planets);
+		this.gravitateBalls(timeDelta)
+		this.balls.forEach(ball => ball.tick())
+	}
+
+	private bounceBallsOffPlanets(planets: Planet[]) {
 		planets.forEach(planet => {
 			this.balls.forEach(ball => {
 				if (areSpheresColliding(planet, ball)) {
@@ -115,28 +120,30 @@ export class App {
 						movingSphere: ball,
 					});
 
-					const hitSoundVolume = Math.min(1, ball.velocity.length() / 5)
-					playSound.ballHit(hitSoundVolume)
+					const hitSoundVolume = Math.min(1, ball.velocity.length() / 5);
+					playSound.ballHit(hitSoundVolume);
 
 					ball.velocity = newVelocity;
 					adjustBallPositionAfterCollision(ball, planet);
 					if (ball.velocity.length() < 0.2 && !ball.landedPlanet) {
-						this.stopBall(ball, planet)
+						this.stopBall(ball, planet);
 					}
 				}
 			});
 		});
+	}
 
-		// update velocity of balls by gravity of planets:
+	/**
+	 * @description Updates velocity of balls by gravity of planets
+	 */
+	private gravitateBalls(timeDelta: number) {
+		const planets = this.eGetter.getPlanets()
+
 		planets.forEach((planet: Planet) => {
 			this.balls.forEach(ball => {
 				ball.addVelocity(calcGravityForce({ puller: planet, pulled: ball, timeDelta }));
 			});
 		});
-
-		this.balls.forEach(ball => {
-			ball.tick();
-		})
 	}
 
 	private stopBall(ball: Ball, planet: Planet) {
