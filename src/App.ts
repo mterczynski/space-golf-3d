@@ -103,7 +103,7 @@ export class App {
 		this.cameras.distant.update(this.getCurrentBall().position);
 	}
 
-	private updateBall(timeDelta: number) {
+	private updateBalls(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
 
 		// bounce ball off planets
@@ -156,7 +156,7 @@ export class App {
 
 		this.adjustRendererSize();
 		this.updateCameras();
-		this.updateBall(delta);
+		this.updateBalls(delta);
 		this.updateBallTrace();
 		InfoTab.updateText(this.getCurrentBall());
 
