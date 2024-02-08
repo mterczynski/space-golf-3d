@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<title>Space Golf 3D</title>
-		<link rel="stylesheet" href="./css/main.css" />
-		<div>
-			<audio id="audio-ball-hit">
-				<!-- Taken from https://freesound.org/people/EminYILDIRIM/sounds/536104/ -->
-				<source src="assets/audio/swordHit.wav" type="audio/mpeg" />
-			</audio>
 
-			<audio id="audio-ball-flight-start">
-				<!-- Taken from https://freesound.org/people/DrMaysta/sounds/402994/ -->
-				<source src="assets/audio/golfClubHit.wav" type="audio/mpeg" />
-			</audio>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Space Golf 3D</title>
+	<link rel="stylesheet" href="./css/main.css" />
+	<div>
+		<audio id="audio-ball-hit">
+			<!-- Taken from https://freesound.org/people/EminYILDIRIM/sounds/536104/ -->
+			<source src="assets/audio/swordHit.wav" type="audio/mpeg" />
+		</audio>
 
-			<audio id="audio-ping-pong-ball-hit">
-				<!-- Taken from https://freesound.org/people/michorvath/sounds/269718/ -->
-				<source src="assets/audio/pingPongBallHit.wav" type="audio/mpeg" />
-			</audio>
-		</div>
-	</head>
+		<audio id="audio-ball-flight-start">
+			<!-- Taken from https://freesound.org/people/DrMaysta/sounds/402994/ -->
+			<source src="assets/audio/golfClubHit.wav" type="audio/mpeg" />
+		</audio>
 
-	<body>
-		<canvas id="mainCanvas"></canvas>
-		<div class="infoTab" id="infoTab">
-			<pre class="infoTab__text" id="infoTab__text"></pre>
-		</div>
-		<script type="module" src="/src/index.ts"></script>
-	</body>
+		<audio id="audio-ping-pong-ball-hit">
+			<!-- Taken from https://freesound.org/people/michorvath/sounds/269718/ -->
+			<source src="assets/audio/pingPongBallHit.wav" type="audio/mpeg" />
+		</audio>
+
+		<audio id="audio-ambient" loop>
+			<!-- Taken from https://soundraw.io/edit_music?m=65c50b4a8fef3a0012ddd47c -->
+			<source src="assets/audio/very_ambient.mp3" type="audio/mpeg" />
+		</audio>
+	</div>
+</head>
+
+<body>
+	<canvas id="mainCanvas"></canvas>
+	<div class="infoTab" id="infoTab">
+		<pre class="infoTab__text" id="infoTab__text"></pre>
+	</div>
+	<script type="module" src="/src/index.ts"></script>
+</body>
+
 </html>
