@@ -92,7 +92,7 @@ export class App {
 			this.scene.add(light);
 		},
 		sound: () => {
-			const userInteractions = ["click", "keypress", "touchstart"];
+			const userInteractions = ["mousedown", "keypress", "touchstart"];
 			const playSoundOnUserInteraction = () => {
 				playSound.ambient();
 				userInteractions.forEach((interaction) =>
@@ -157,13 +157,13 @@ export class App {
 		const autoRotatingOrbitCameraSpeed = 0.000064;
 		this.cameras.autoRotatingOrbit.position.set(
 			Math.sin(totalTimeElapsed * autoRotatingOrbitCameraSpeed) *
-				autoRotatingOrbitCameraOffset,
+			autoRotatingOrbitCameraOffset,
 			Math.abs(
 				Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) *
-					autoRotatingOrbitCameraOffset
+				autoRotatingOrbitCameraOffset
 			),
 			Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) *
-				autoRotatingOrbitCameraOffset
+			autoRotatingOrbitCameraOffset
 		);
 		this.cameras.distant.update(this.getCurrentBall().position);
 	}
