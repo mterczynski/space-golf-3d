@@ -8,6 +8,7 @@ export const settings = Object.freeze({
 		traceTransparency: 0.6,
 	}),
 	simulationMode: true,
+	ticksPerSecond: 500, // game calculations per second, FPS independent
 	camera: {
 		fov: 30,
 		near: 0.1,

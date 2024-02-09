@@ -200,7 +200,7 @@ export class App {
 					});
 
 					if (settings.simulationMode) {
-						console.log('## simulation', 'hit', ball.position.toArray().map(i => parseInt(i)).toString())
+						console.log('## simulation', 'hit', ball.position.toArray().map(i => parseInt(i)).toString(), 'time: ', performance.now())
 					}
 
 					const hitSoundVolume = Math.min(1, ball.velocity.length() / 5);
