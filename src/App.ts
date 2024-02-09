@@ -226,7 +226,10 @@ export class App {
 
 	private stopBall(ball: Ball, planet: Planet) {
 		ball.landedPlanet = planet;
-		this.activeCamera = this.cameras.aim;
+		this.activeCamera = this.cameras.landedBallTopDown
+		setTimeout(() => {
+			this.activeCamera = this.cameras.aim;
+		}, 1000)
 		this.cameras.landedBallTopDown.reset(ball);
 		this.cameras.aim.reset(ball);
 	}
