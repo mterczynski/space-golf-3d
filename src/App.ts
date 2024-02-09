@@ -8,9 +8,11 @@ import {
 } from "three";
 import { OrbitControls } from 'three/examples/jsm/Addons';
 import Stats from "three/examples/jsm/libs/stats.module";
-import { DistantCameras } from "./cameras/DistantCameras";
 import { ElementGetter } from "./ElementGetter";
 import { InfoTab } from "./InfoTab";
+import { AimCamera } from "./cameras/AimCamera";
+import { DistantCameras } from "./cameras/DistantCameras";
+import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
 import { Ball } from "./meshes/Ball";
 import { Planet } from "./meshes/Planet";
 import { SphereSkybox } from "./meshes/SphereSkybox";
@@ -21,11 +23,10 @@ import {
 	calcVelocityAfterRebound as calcVelocityAfterBounce,
 } from "./utils";
 import { adjustBallPositionAfterCollision } from "./utils/adjustBallPositionAfterCollision";
-import { generateRandomLevel } from "./utils/generateRandomLevel";
-import { playSound } from "./utils/playSound";
-import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
-import { AimCamera } from "./cameras/AimCamera";
+import { createTestLevel } from "./utils/createTestLevel";
 import { launchBall } from "./utils/launchBall";
+import { playSound } from "./utils/playSound";
+import { generateRandomLevel } from "./utils/generateRandomLevel";
 
 export class App {
 	private readonly startDate = Date.now();
@@ -52,11 +53,11 @@ export class App {
 		),
 		distant: new DistantCameras(),
 	};
-	private activeCamera: PerspectiveCamera = this.cameras.aim; // todo - use this.manualOrbitCamera for flight
+	private activeCamera: PerspectiveCamera = this.cameras.autoRotatingOrbit; // todo - use this.manualOrbitCamera for flight
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
-	private readonly level = generateRandomLevel();
+	private readonly level = settings.simulationMode ? createTestLevel() : generateRandomLevel();
 	private balls: Ball[] = [];
 
 	// @ts-ignore
@@ -117,19 +118,21 @@ export class App {
 			);
 		},
 		listeners: () => {
-			addEventListener("keypress", (event) => {
-				if (event.key === " ") {
-					const ball = this.getCurrentBall();
-					if (ball.landedPlanet) {
-						const directionVector = this.getCurrentBall()
-							.position.clone()
-							.sub(this.cameras.aim.position.clone());
+			if (!settings.simulationMode) {
+				addEventListener("keypress", (event) => {
+					if (event.key === " ") {
+						const ball = this.getCurrentBall();
+						if (ball.landedPlanet) {
+							const directionVector = this.getCurrentBall()
+								.position.clone()
+								.sub(this.cameras.aim.position.clone());
 
-						launchBall(ball, directionVector);
-						this.activeCamera = this.cameras.autoRotatingOrbit;
+							launchBall(ball, directionVector);
+							this.activeCamera = this.cameras.autoRotatingOrbit;
+						}
 					}
-				}
-			});
+				});
+			}
 		},
 	};
 
@@ -196,6 +199,10 @@ export class App {
 						movingSphere: ball,
 					});
 
+					if (settings.simulationMode) {
+						console.log('## simulation', 'hit', ball.position.toArray().toString())
+					}
+
 					const hitSoundVolume = Math.min(1, ball.velocity.length() / 5);
 					playSound.ballHit(hitSoundVolume);
 
@@ -226,12 +233,14 @@ export class App {
 
 	private stopBall(ball: Ball, planet: Planet) {
 		ball.landedPlanet = planet;
-		this.activeCamera = this.cameras.landedBallTopDown
-		this.cameras.landedBallTopDown.reset(ball);
-		this.cameras.aim.reset(ball);
-		setTimeout(() => {
-			this.activeCamera = this.cameras.aim;
-		}, 1000)
+		if (!settings.simulationMode) {
+			this.activeCamera = this.cameras.landedBallTopDown
+			this.cameras.landedBallTopDown.reset(ball);
+			this.cameras.aim.reset(ball);
+			setTimeout(() => {
+				this.activeCamera = this.cameras.aim;
+			}, 1000)
+		}
 	}
 
 	private updateBallTrace() {
