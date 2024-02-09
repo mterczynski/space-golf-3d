@@ -27,7 +27,7 @@ export class AimCamera extends PerspectiveCamera {
 		const ballPos = ball.position.clone()
 		const planetPos = ball.landedPlanet?.position.clone()
 		const ballToPlanetVector = planetPos.sub(ballPos)
-		const camPosition = ballPos.clone().sub(ballToPlanetVector.normalize().multiplyScalar(100))
+		const camPosition = ballPos.clone().sub(ballToPlanetVector.normalize().multiplyScalar(1))
 
 		this.position.copy(camPosition)
 		this.lookAt(ballPos);
