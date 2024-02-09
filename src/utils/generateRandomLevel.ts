@@ -1,7 +1,7 @@
 import randomColor from 'randomcolor'
 import { Vector3 } from "three";
 import { settings } from "../settings";
-import * as _ from "lodash";
+import _ from "lodash";
 
 
 interface Sphere {
