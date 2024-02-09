@@ -92,17 +92,10 @@ export class App {
 			this.scene.add(light);
 		},
 		sound: () => {
-			const userInteractions = ["mousedown", "keypress", "touchstart"];
-			const playSoundOnUserInteraction = () => {
-				playSound.ambient();
-				userInteractions.forEach((interaction) =>
-					removeEventListener(interaction, playSoundOnUserInteraction)
-				);
-			};
-
-			userInteractions.forEach((interaction) =>
-				addEventListener(interaction, playSoundOnUserInteraction)
-			);
+			this.addListeners(() => playSound.ambient(), true)
+		},
+		cameraLock: () => {
+			this.addListeners(() => this.cameras.aim.setupLockControls(), false)
 		},
 		cameras: () => {
 			this.cameras.staticManualOrbit.position.set(400, 200, 40);
@@ -113,6 +106,7 @@ export class App {
 			this.scene.add(this.cameras.staticManualOrbit);
 			this.scene.add(this.cameras.landedBallTopDown);
 			this.scene.add(this.cameras.aim);
+			this.scene.add(this.cameras.aim.getControlsObject())
 		},
 		// skybox: () => this.scene.add(new Skybox()),
 		skybox: () => this.scene.add(new SphereSkybox()),
@@ -138,6 +132,23 @@ export class App {
 			});
 		},
 	};
+
+	private addListeners(callback: Function, shouldExecuteOnce: boolean) {
+		const events = ["mousedown", "keypress", "touchstart"];
+
+		const onUserInteraction = () => {
+			callback()
+			if (shouldExecuteOnce) {
+				events.forEach((interaction) =>
+					removeEventListener(interaction, onUserInteraction)
+				);
+			}
+		};
+
+		events.forEach((interaction) =>
+			addEventListener(interaction, onUserInteraction)
+		);
+	}
 
 	// to be changed for multiplayer mode with multiple balls
 	private getCurrentBall() {
@@ -232,7 +243,6 @@ export class App {
 		const delta = this.clock.getDelta();
 		this.renderer.render(this.scene, this.activeCamera);
 		this.stats.update();
-
 		this.adjustRendererSize();
 		this.updateCameras();
 		this.updateBalls(delta);
@@ -250,6 +260,7 @@ export class App {
 		this.setup.skybox();
 		this.setup.listeners();
 		this.setup.sound();
+		this.setup.cameraLock();
 		this.onNewAnimationFrame();
 		if (settings.showFPSCounter) {
 			document.body.appendChild(this.stats.dom);
