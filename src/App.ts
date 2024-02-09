@@ -6,7 +6,7 @@ import {
 	Vector3,
 	WebGLRenderer,
 } from "three";
-import { OrbitControls } from "three-orbitcontrols-ts";
+import { OrbitControls } from 'three/examples/jsm/Addons';
 import Stats from "three/examples/jsm/libs/stats.module";
 import { DistantCameras } from "./cameras/DistantCameras";
 import { ElementGetter } from "./ElementGetter";
