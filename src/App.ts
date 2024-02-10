@@ -29,7 +29,6 @@ import { playSound } from "./utils/playSound";
 import { generateRandomLevel } from "./utils/generateRandomLevel";
 
 export class App {
-	private readonly startDate = Date.now();
 	private readonly renderer = new WebGLRenderer({
 		antialias: true,
 		canvas: document.getElementById("mainCanvas") as HTMLCanvasElement,
@@ -163,7 +162,7 @@ export class App {
 	}
 
 	private updateCameras() {
-		const totalTimeElapsed = Date.now() - this.startDate;
+		const totalTimeElapsed = Date.now() - this.clock.getElapsedTime();
 		this.activeCamera.aspect = innerWidth / innerHeight;
 		this.activeCamera.updateProjectionMatrix();
 		this.cameras.autoRotatingOrbit.lookAt(this.getCurrentBall().position);
