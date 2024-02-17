@@ -52,7 +52,7 @@ export class App {
 		),
 		distant: new DistantCameras(),
 	};
-	private activeCamera: PerspectiveCamera = this.cameras.staticManualOrbit; // todo - use this.manualOrbitCamera for flight
+	private activeCamera: PerspectiveCamera = this.cameras.autoRotatingOrbit; // todo - use this.manualOrbitCamera for flight (?)
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
@@ -249,11 +249,14 @@ export class App {
 	}
 
 	private updateBallTrace() {
-		// this.eGetter.getLines().forEach((line) => this.scene.remove(line));
+		// simulation mode will show the whole flight trace ahead of time
+		if (!settings.simulationMode) {
+			this.eGetter.getLines().forEach((line) => this.scene.remove(line));
 
-		// this.balls.forEach((ball) => {
-		// 	this.scene.add(ball.createTrace());
-		// });
+			this.balls.forEach((ball) => {
+				this.scene.add(ball.createTrace());
+			});
+		}
 	}
 
 	private onNewAnimationFrame() {

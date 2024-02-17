@@ -26,9 +26,13 @@ import { ElementGetter } from '../ElementGetter';
 
 // todo - move somewhere else
 export type Flight = {
-	position: Vector3,
-	velocity: Vector3
-}[]
+	ticks: {
+		position: Vector3,
+		velocity: Vector3
+	}[],
+	/** indexes of ticks with collisions */
+	ticksWithCollisions: number[],
+}
 
 
 function createBallGeometry(ballRadius: number) {
@@ -183,14 +187,17 @@ export class Ball extends Mesh implements Tickable {
 					const launchVector = new Vector3(-0.8, 0.18, -0.72).normalize().multiplyScalar(settings.ball.launchForce)
 					// this.launch(new Vector3(-0.8, 0.18, -0.72));
 
+					const start = Date.now()
 					const flight = calculateFlight(launchVector, this, this.planets)
+					const end = Date.now()
+					console.log('## calculateFlight took', end - start)
 					this.currentFlight = flight
 
 					this.parent?.add(...this.createFullFlightTrace()!)
 
-					console.log('## flight result', calculateFlight(launchVector, this, this.planets).map(t => Math.floor(t.position.y)))
+					// console.log('## flight result', calculateFlight(launchVector, this, this.planets).ticks.map(t => Math.floor(t.position.y)))
 					// console.log('## flight result', calculateFlight(launchVector, this, this.planets))
-					this.launchBallTimeout = null;
+					// this.launchBallTimeout = null;
 				}, 3000) // todo - change to 1000
 			}
 		}

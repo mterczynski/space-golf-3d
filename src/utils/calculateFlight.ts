@@ -28,6 +28,7 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 			velocity: launchVector.clone(),
 		}
 	]
+	const ticksWithCollisions = []
 
 	let wasLastTickCollision = false
 
@@ -42,10 +43,11 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 		}, planets)
 
 
+
 		if (collisionResult && !wasLastTickCollision) {
+			ticksWithCollisions.push(tick)
 			wasLastTickCollision = true
 			console.log('## collisionResult, tick', + tick)
-			debugger
 			ticks.push({
 				velocity: collisionResult.newVelocity,
 				position: collisionResult.contactPoint.clone(),
@@ -64,7 +66,10 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 		}
 	}
 
-	return ticks
+	console.log('ticksWithCollisions', ticksWithCollisions)
+
+
+	return { ticks, ticksWithCollisions }
 }
 
 function callVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, planets: Planet[]) {
