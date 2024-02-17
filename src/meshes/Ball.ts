@@ -32,6 +32,7 @@ export type Flight = {
 	}[],
 	/** indexes of ticks with collisions */
 	ticksWithCollisions: number[],
+	startTime?: number
 }
 
 
@@ -201,18 +202,35 @@ export class Ball extends Mesh implements Tickable {
 				}, 3000) // todo - change to 1000
 			}
 		}
-		this.rotation.set(0, 0, 0);
-		this.position.add(this.velocity);
-		const velNorm = this.velocity.normalize();
-		this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
+		if (this.currentFlight) {
+			if (!this.currentFlight.startTime) {
+				this.currentFlight.startTime = Date.now()
+			}
+			const timeElapsed = Date.now() - this.currentFlight.startTime
+			const ticksElapsed = Math.floor(timeElapsed / 1000 * settings.ticksPerSecond)
+			if (ticksElapsed >= this.currentFlight.ticks.length) {
+				const newPosition = this.currentFlight.ticks.slice(-1)[0].position
+				this.position.set(newPosition.x, newPosition.y, newPosition.z)
+				return this.currentFlight = null
+			}
 
-		this.updateArrowHelper();
-		this.pathVertices.push(this.position.clone());
-		this.updateCameraPosition();
+			const newPosition = this.currentFlight.ticks[ticksElapsed].position
+			console.log('### tick', ticksElapsed)
+			this.position.set(newPosition.x, newPosition.y, newPosition.z)
+		}
 
-		setTimeout(() => {
-			this.pathVertices.shift();
-		}, settings.ball.traceDuration * 1000);
+		// this.rotation.set(0, 0, 0);
+		// this.position.add(this.velocity);
+		// const velNorm = this.velocity.normalize();
+		// this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
+
+		// this.updateArrowHelper();
+		// this.pathVertices.push(this.position.clone());
+		// this.updateCameraPosition();
+
+		// setTimeout(() => {
+		// 	this.pathVertices.shift();
+		// }, settings.ball.traceDuration * 1000);
 	}
 
 	private updateCameraPosition() {
