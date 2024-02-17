@@ -157,8 +157,8 @@ export class Ball extends Mesh implements Tickable {
 			transparent: true,
 		});
 
-		return this.currentFlight.map(t => t.position).slice(1).map((position, index) => {
-			const pointA = this.currentFlight![index].position;
+		return this.currentFlight.ticks.map(t => t.position).slice(1).map((position, index) => {
+			const pointA = this.currentFlight!.ticks[index].position;
 			const pointB = position;
 			const geometry = new BufferGeometry().setFromPoints([pointA, pointB])
 			return new Line(geometry, lineMaterial);
