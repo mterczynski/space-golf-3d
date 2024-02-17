@@ -13,8 +13,23 @@ import {
 import { settings } from '../settings';
 import { Tickable } from '../interfaces/Tickable';
 import { Planet } from './Planet';
-import { launchBall } from '../utils/launchBall';
 import randomColor from 'randomcolor'
+import { playSound } from '../utils/playSound';
+import { calculateFlight } from '../utils/calculateFlight';
+import { ElementGetter } from '../ElementGetter';
+
+// interface Flight {
+// 	durationInSeconds: number;
+// 	endedInLanding: boolean;
+// 	coordinates: Vector3[] // each item represents a position after each tick
+// }
+
+// todo - move somewhere else
+export type Flight = {
+	position: Vector3,
+	velocity: Vector3
+}[]
+
 
 function createBallGeometry(ballRadius: number) {
 	const quality = 32;
@@ -26,10 +41,12 @@ function createBallMaterial(color: string) {
 }
 
 export class Ball extends Mesh implements Tickable {
+	private readonly planets: Planet[] = []
 	private readonly light;
 	private _velocity = new Vector3(0, 0, 0);
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3());
 	private pathVertices: Vector3[] = [];
+	private currentFlight: Flight | null = null
 	readonly color;
 	readonly camera = new PerspectiveCamera(settings.camera.fov);
 	launchBallTimeout: number | null = null;
@@ -51,8 +68,23 @@ export class Ball extends Mesh implements Tickable {
 		this._velocity = newVelocity;
 	}
 
-	constructor({ radius = settings.ball.radius }: {
-		radius?: number
+	// launch(directionVector?: Vector3) {
+	// 	const launchVector = new Vector3(
+	// 		directionVector?.x || Math.random(),
+	// 		directionVector?.y || Math.random(),
+	// 		directionVector?.z || Math.random()
+	// 	).normalize().multiplyScalar(settings.ball.launchForce)
+
+	// 	this.landedPlanet = null;
+	// 	// this.velocity = launchVector;
+
+	// 	playSound.ballFlightStart()
+	// 	this.currentFlight = this.calculateFlight(launchVector, settings.ball.maxFlightDurationInSeconds)
+	// }
+
+	constructor({ radius = settings.ball.radius, planets }: {
+		radius?: number,
+		planets?: Planet[] // todo - refactor, planets shouldn't be passed here
 	} = {}) {
 		const color = randomColor({ luminosity: 'dark', alpha: 1 });
 		super(createBallGeometry(radius), createBallMaterial(color));
@@ -66,7 +98,35 @@ export class Ball extends Mesh implements Tickable {
 
 		this.add(this.camera);
 		this.add(this.light);
+		this.planets = planets || []
 	}
+
+	// calculateFlight(hitVector: Vector3, maxFlightDurationInSeconds: number): Flight {
+	// 	const ticks: any[] = []
+	// 	const startingPosition = this.position.clone();
+
+	// 	ticks.push({
+	// 		velocity: hitVector,
+	// 		position: startingPosition
+	// 	})
+
+	// 	for (let tick = 1; tick < settings.ticksPerSecond * maxFlightDurationInSeconds; tick++) {
+	// 		const lastTick = ticks[tick - 1]
+
+
+
+	// 		ticks.push({
+	// 			velocity: lastTick,
+	// 			position: startingPosition
+	// 		})
+
+	// 		if (landed) {
+	// 			break;
+	// 		}
+	// 	}
+
+	// 	return flight
+	// }
 
 	addVelocity(vector: Vector3) {
 		this._velocity.add(vector);
@@ -84,14 +144,54 @@ export class Ball extends Mesh implements Tickable {
 		return new Line(geometry, lineMaterial);
 	}
 
+	createFullFlightTrace(): Line[] {
+		if (!this.currentFlight) return [];
+
+		const lineMaterial = new LineBasicMaterial({
+			color: 0xffaa00,
+			opacity: settings.ball.traceTransparency,
+			transparent: true,
+		});
+
+		return this.currentFlight.map(t => t.position).slice(1).map((position, index) => {
+			const pointA = this.currentFlight![index].position;
+			const pointB = position;
+			const geometry = new BufferGeometry().setFromPoints([pointA, pointB])
+			return new Line(geometry, lineMaterial);
+		})
+
+
+		// return new Line(geometry, lineMaterial);
+	}
+
 	tick() {
 		if (this.landedPlanet !== null) {
 			this.velocity = new Vector3();
 			if (settings.simulationMode && !this.launchBallTimeout) {
+				// const launchVector = new Vector3(-0.8, 0.18, -0.72)
+				// // this.launch(new Vector3(-0.8, 0.18, -0.72));
+
+				// const flight = calculateFlight(launchVector, this, this.planets)
+				// this.currentFlight = flight
+
+				// this.parent?.add(this.createFullFlightTrace()!)
+
+				// console.log('## flight result', calculateFlight(launchVector, this, this.planets))
+				// this.launchBallTimeout = null;
+
 				this.launchBallTimeout = window.setTimeout(() => {
-					launchBall(this, new Vector3(-0.8, 0.18, -0.72));
+					const launchVector = new Vector3(-0.8, 0.18, -0.72).normalize().multiplyScalar(settings.ball.launchForce)
+					// this.launch(new Vector3(-0.8, 0.18, -0.72));
+
+					const flight = calculateFlight(launchVector, this, this.planets)
+					this.currentFlight = flight
+
+					this.parent?.add(...this.createFullFlightTrace()!)
+
+					console.log('## flight result', calculateFlight(launchVector, this, this.planets).map(t => Math.floor(t.position.y)))
+					// console.log('## flight result', calculateFlight(launchVector, this, this.planets))
 					this.launchBallTimeout = null;
-				}, 1000)
+				}, 3000) // todo - change to 1000
 			}
 		}
 		this.rotation.set(0, 0, 0);

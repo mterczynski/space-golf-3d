@@ -5,7 +5,7 @@ interface Gravitable {
 	position: Vector3
 }
 
-export function calcGravityForce({pulled, puller, timeDelta} : {
+export function calcGravityForce({ pulled, puller, timeDelta }: {
 	pulled: Gravitable,
 	puller: Gravitable,
 	timeDelta: number,
