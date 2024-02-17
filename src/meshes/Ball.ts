@@ -207,30 +207,37 @@ export class Ball extends Mesh implements Tickable {
 				this.currentFlight.startTime = Date.now()
 			}
 			const timeElapsed = Date.now() - this.currentFlight.startTime
-			const ticksElapsed = Math.floor(timeElapsed / 1000 * settings.ticksPerSecond)
+			const ticksElapsed = timeElapsed / 1000 * settings.ticksPerSecond
 			if (ticksElapsed >= this.currentFlight.ticks.length) {
 				const newPosition = this.currentFlight.ticks.slice(-1)[0].position
 				this.position.set(newPosition.x, newPosition.y, newPosition.z)
+				console.log('## flight end, currentFlight set to null')
 				return this.currentFlight = null
 			}
 
-			const newPosition = this.currentFlight.ticks[ticksElapsed].position
-			console.log('### tick', ticksElapsed)
-			this.position.set(newPosition.x, newPosition.y, newPosition.z)
+			const smoothPosition = this.smoothenMovement(ticksElapsed, this.currentFlight)
+			this.position.set(smoothPosition.x, smoothPosition.y, smoothPosition.z)
 		}
+	}
 
-		// this.rotation.set(0, 0, 0);
-		// this.position.add(this.velocity);
-		// const velNorm = this.velocity.normalize();
-		// this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
 
-		// this.updateArrowHelper();
-		// this.pathVertices.push(this.position.clone());
-		// this.updateCameraPosition();
+	/**
+	 * @description This function is used to reduce lagging effect when moving a ball across positions of full ticks
+	 */
+	private smoothenMovement(ticksElapsed: number, currentFlight: Flight) {
+		const fullTicksPassed = Math.floor(ticksElapsed)
+		/** "nextTickPart = 0.4" means "add 0.4 of next tick position to current tick's position"
+				example:
+					- nextTickPart = 0.4
+					- current tick's position: (100, 100, 100)
+					- next tick's position: (120, 130, 140)
+					- rendered position: (108, 112, 116)
+		*/
+		const nextTickPart = ticksElapsed - fullTicksPassed
+		const deltaBetweenTicks = currentFlight.ticks[fullTicksPassed + 1].position.clone().sub(currentFlight.ticks[fullTicksPassed].position.clone())
+		const newPosition = currentFlight.ticks[fullTicksPassed].position.clone().add(deltaBetweenTicks.clone().multiplyScalar(nextTickPart))
 
-		// setTimeout(() => {
-		// 	this.pathVertices.shift();
-		// }, settings.ball.traceDuration * 1000);
+		return newPosition
 	}
 
 	private updateCameraPosition() {
