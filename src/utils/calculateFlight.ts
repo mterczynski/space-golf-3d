@@ -17,7 +17,6 @@ interface CollisionResult {
 }
 
 export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Planet[]): Flight {
-	// todo
 	const ticksPerSecond = settings.ticksPerSecond
 	const maxFlightDurationInSeconds = settings.maxFlightDurationInSeconds
 	const startingPosition = ball.position.clone()
@@ -35,14 +34,11 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 	for (let tick = 1; tick < ticksPerSecond * maxFlightDurationInSeconds; tick++) {
 		const lastTick = ticks[tick - 1]
 
-		// todo call
 		const collisionResult = bounceBallOffPlanets({
 			position: lastTick.position.clone(),
 			radius: ball.radius,
 			velocity: lastTick.velocity.clone()
 		}, planets)
-
-
 
 		if (collisionResult && !wasLastTickCollision) {
 			ticksWithCollisions.push(tick)
@@ -54,20 +50,12 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 			})
 		} else {
 			wasLastTickCollision = false
-			// if (tick < 10) {
-			// 	console.log('## lastTick.velocity', + lastTick.velocity.clone().x, lastTick.velocity.clone().y, lastTick.velocity.clone().z)
-
-			// }
-
 			ticks.push({
 				velocity: lastTick.velocity.clone().add(callVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets)),
 				position: lastTick.position.clone().add(lastTick.velocity.clone().multiplyScalar(1))
 			})
 		}
 	}
-
-	console.log('ticksWithCollisions', ticksWithCollisions)
-
 
 	return { ticks, ticksWithCollisions }
 }

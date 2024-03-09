@@ -1,7 +1,7 @@
 export const settings = Object.freeze({
 	ball: Object.freeze({
 		bounciness: 0.8,
-		launchForce: 12.4,
+		launchForce: 10,
 		radius: 8,
 		showVelocityVector: false,
 		traceDuration: 5,
@@ -15,7 +15,7 @@ export const settings = Object.freeze({
 		near: 0.1,
 		far: Math.pow(10, 6),
 	},
-	defaultPlanetDensity: 0.00054,
+	defaultPlanetDensity: 0.00024,
 	maxPlanetOffset: 700,
 	showFPSCounter: true,
 	showInfoTab: false,
