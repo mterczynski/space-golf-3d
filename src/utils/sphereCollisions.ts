@@ -17,7 +17,6 @@ function isSphereAInsideB(sphereA: Sphere, sphereB: Sphere) {
 	return distance + sphereA.radius <= sphereB.radius;
 }
 
-
 export function isBallCollidingWithPlanet(ball: Sphere, planet: Sphere) {
 	return areSpheresColliding(ball, planet) || isSphereAInsideB(ball, planet)
 }
