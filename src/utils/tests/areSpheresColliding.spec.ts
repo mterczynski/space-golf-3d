@@ -1,5 +1,5 @@
-import { areSpheresColliding } from '../areSpheresColliding';
 import { Vector3 } from 'three';
+import { areSpheresColliding } from '../sphereCollisions';
 
 describe('areSpheresColliding', () => {
 	test('should return true if spheres are intersecting', () => {
