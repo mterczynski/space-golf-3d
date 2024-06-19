@@ -51,7 +51,7 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 		} else {
 			wasLastTickCollision = false
 			ticks.push({
-				velocity: lastTick.velocity.clone().add(callVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets)),
+				velocity: lastTick.velocity.clone().add(calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets)),
 				position: lastTick.position.clone().add(lastTick.velocity.clone().multiplyScalar(1))
 			})
 		}
@@ -60,7 +60,7 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 	return { ticks, ticksWithCollisions }
 }
 
-function callVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, planets: Planet[]) {
+function calcVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, planets: Planet[]) {
 	const tickDuration = 1000 / ticksPerSecond / 10000
 	const velocityChange = new Vector3(0, 0, 0)
 
