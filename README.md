@@ -40,7 +40,7 @@ Sounds:
 
 to do:
 
-- try pixi-react
-- move logic from /utils sto /core
+- try React Three Fiber
+- move core logic from /utils to /core
 - fix e2e tests
 - implement aim camera
