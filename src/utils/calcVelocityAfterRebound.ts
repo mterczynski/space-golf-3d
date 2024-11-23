@@ -13,15 +13,18 @@ interface MovingSphere extends Sphere {
 export function calcVelocityAfterRebound({
 	staticSphere,
 	movingSphere,
+	ticksPerSecond,
 	onBounceVelocityMultiplier = settings.ball.bounciness,
 }: {
 	staticSphere: Sphere,
 	movingSphere: MovingSphere,
+	ticksPerSecond: number
 	onBounceVelocityMultiplier?: number,
 }) {
 	const distanceAxis = movingSphere.position.clone().sub(staticSphere.position).normalize();
 	const dotProduct = distanceAxis.dot(movingSphere.velocity);
 	const reflectedVelocity = movingSphere.velocity.clone().sub(distanceAxis.clone().multiplyScalar(2 * dotProduct));
 
-	return reflectedVelocity.multiplyScalar(onBounceVelocityMultiplier);
+	debugger
+	return reflectedVelocity.multiplyScalar(onBounceVelocityMultiplier).multiplyScalar(1000 / ticksPerSecond)//.multiplyScalar(10000);
 }

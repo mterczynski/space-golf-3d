@@ -28,7 +28,8 @@ import { ElementGetter } from '../ElementGetter';
 export type Flight = {
 	ticks: {
 		position: Vector3,
-		velocity: Vector3
+		velocity: Vector3,
+		velocityChange: Vector3
 	}[],
 	/** indexes of ticks with collisions */
 	ticksWithCollisions: number[],
@@ -170,6 +171,7 @@ export class Ball extends Mesh implements Tickable {
 	}
 
 	tick() {
+		debugger
 		if (this.landedPlanet !== null) {
 			this.velocity = new Vector3();
 			if (settings.simulationMode && !this.launchBallTimeout) {
@@ -185,14 +187,22 @@ export class Ball extends Mesh implements Tickable {
 				// this.launchBallTimeout = null;
 
 				this.launchBallTimeout = window.setTimeout(() => {
-					const launchVector = new Vector3(-0.8, 0.18, -0.72).normalize().multiplyScalar(settings.ball.launchForce)
-					// this.launch(new Vector3(-0.8, 0.18, -0.72));
+					const launchVector = new Vector3(
+						Math.random() - 0.5,
+						Math.random() - 0.5,
+						Math.random() - 0.5
+					).normalize().multiplyScalar(settings.ball.launchForce)
+
+					// value for e2e tests:
+					// const launchVector = new Vector3(-0.8, 0.18, -0.72).normalize().multiplyScalar(settings.ball.launchForce)
 
 					const start = Date.now()
 					const flight = calculateFlight(launchVector, this, this.planets)
 					const end = Date.now()
 					console.log('## calculateFlight took', end - start)
 					this.currentFlight = flight
+
+					console.log('## flight: ', flight)
 
 					this.parent?.add(...this.createFullFlightTrace()!)
 
@@ -201,8 +211,8 @@ export class Ball extends Mesh implements Tickable {
 					// this.launchBallTimeout = null;
 				}, 3000) // todo - change to 1000
 			}
-		}
-		if (this.currentFlight) {
+		} else if (this.currentFlight) {
+			debugger
 			if (!this.currentFlight.startTime) {
 				this.currentFlight.startTime = Date.now()
 			}
@@ -217,6 +227,8 @@ export class Ball extends Mesh implements Tickable {
 
 			const smoothPosition = this.smoothenMovement(ticksElapsed, this.currentFlight)
 			this.position.set(smoothPosition.x, smoothPosition.y, smoothPosition.z)
+		} else {
+			// todo - handle ball in space somewhere
 		}
 	}
 

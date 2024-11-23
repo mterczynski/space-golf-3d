@@ -25,6 +25,7 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 		{
 			position: startingPosition.clone(),
 			velocity: launchVector.clone(),
+			velocityChange: new Vector3(0, 0, 0),
 		}
 	]
 	const ticksWithCollisions = []
@@ -37,8 +38,8 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 		const collisionResult = bounceBallOffPlanets({
 			position: lastTick.position.clone(),
 			radius: ball.radius,
-			velocity: lastTick.velocity.clone()
-		}, planets)
+			velocity: lastTick.velocity.clone(),
+		}, planets, ticksPerSecond)
 
 		if (collisionResult && !wasLastTickCollision) {
 			ticksWithCollisions.push(tick)
@@ -47,12 +48,17 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 			ticks.push({
 				velocity: collisionResult.newVelocity,
 				position: collisionResult.contactPoint.clone(),
+				velocityChange: lastTick.velocity.clone().sub(collisionResult.newVelocity.clone()) // todo - fix
 			})
 		} else {
 			wasLastTickCollision = false
+			const velocityChange = calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets).clone()
 			ticks.push({
-				velocity: lastTick.velocity.clone().add(calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets)),
-				position: lastTick.position.clone().add(lastTick.velocity.clone().multiplyScalar(1))
+				velocity: lastTick.velocity.clone().add(velocityChange),
+				position: lastTick.position.clone().add(lastTick.velocity.clone()
+					// .multiplyScalar(0.1)
+				),
+				velocityChange: velocityChange.clone()
 			})
 		}
 	}
@@ -61,8 +67,10 @@ export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Plan
 }
 
 function calcVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, planets: Planet[]) {
-	const tickDuration = 1000 / ticksPerSecond / 10000
+	const tickDuration = 1000 / ticksPerSecond /// 10000
 	const velocityChange = new Vector3(0, 0, 0)
+
+	// debugger
 
 	planets.forEach((planet: Planet) => {
 		velocityChange.add(
@@ -73,7 +81,7 @@ function calcVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, 
 	return velocityChange
 }
 
-function bounceBallOffPlanets(ball: Pick<Ball, 'velocity' | 'radius' | 'position'>, planets: Planet[]): CollisionResult | null {
+function bounceBallOffPlanets(ball: Pick<Ball, 'velocity' | 'radius' | 'position'>, planets: Planet[], ticksPerSecond: number): CollisionResult | null {
 	let collisionResult: CollisionResult | null = null;
 
 	planets.some((planet) => {
@@ -81,6 +89,7 @@ function bounceBallOffPlanets(ball: Pick<Ball, 'velocity' | 'radius' | 'position
 			const newVelocity = calcVelocityAfterRebound({
 				staticSphere: planet,
 				movingSphere: ball,
+				ticksPerSecond,
 			});
 
 			// if (settings.simulationMode) {

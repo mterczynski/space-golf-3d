@@ -189,18 +189,21 @@ export class App {
 	private updateBalls(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
 
-		this.bounceBallsOffPlanets(planets);
+
+
+		this.bounceBallsOffPlanets(planets, settings.ticksPerSecond);
 		this.gravitateBalls(timeDelta);
 		this.balls.forEach((ball) => ball.tick());
 	}
 
-	private bounceBallsOffPlanets(planets: Planet[]) {
+	private bounceBallsOffPlanets(planets: Planet[], ticksPerSecond: number) {
 		planets.forEach((planet) => {
 			this.balls.forEach((ball) => {
 				if (isBallCollidingWithPlanet(ball, planet)) {
 					const newVelocity = calcVelocityAfterBounce({
 						staticSphere: planet,
 						movingSphere: ball,
+						ticksPerSecond
 					});
 
 					if (settings.simulationMode) {

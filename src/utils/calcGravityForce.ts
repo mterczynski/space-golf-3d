@@ -17,6 +17,7 @@ export function calcGravityForce({ pulled, puller, timeDelta }: {
 		.normalize()
 		.multiplyScalar(puller.mass)
 		.multiplyScalar(pulled.mass)
-		.multiplyScalar(timeDelta * 100)
+		// .multiplyScalar(timeDelta / 1000000000000000000)
+		.multiplyScalar(timeDelta / 10)
 		.divideScalar(distance ** 2);
 }
