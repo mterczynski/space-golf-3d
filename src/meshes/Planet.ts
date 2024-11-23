@@ -1,5 +1,6 @@
-import { BackSide, Mesh, MeshBasicMaterial, MeshPhongMaterial, MeshToonMaterial, SphereGeometry } from 'three';
+import { BackSide, Mesh, MeshBasicMaterial, MeshLambertMaterial, MeshPhongMaterial, MeshToonMaterial, SphereGeometry, TextureLoader } from 'three';
 import { settings } from '../settings';
+import _ from 'lodash'
 
 function createBorderMesh(planetRadius: number) {
 	const borderMaterial = new MeshBasicMaterial({
@@ -21,6 +22,20 @@ function createBorderMesh(planetRadius: number) {
 	);
 }
 
+function getRandomTextureUrl() {
+	const logos = [
+		'ksborek.jfif',
+		'legia.jpg',
+		'puszcza.png',
+		'zaglebie.jfif',
+	]
+
+	const logo = _.sample(logos)
+
+	return `${document.baseURI}/assets/gfx/clubs/${logo}`;
+	// return `public/assets/gfx/clubs/legia.jpg`;
+}
+
 export class Planet extends Mesh {
 	get mass() {
 		// https://en.wikipedia.org/wiki/Sphere#Enclosed_volume
@@ -37,9 +52,22 @@ export class Planet extends Mesh {
 		density?: number
 		color?: string
 	}) {
-		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
+		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({}));
 		this.radius = radius;
 		this.density = density;
 		this.add(createBorderMesh(radius));
+
+		this.init();
+	}
+
+	async init() {
+		const textureLoader = new TextureLoader();
+		const texture = await textureLoader.loadAsync(getRandomTextureUrl());
+
+		if (this.material instanceof MeshPhongMaterial) {
+			this.material.map = texture
+		} else {
+			throw new Error('Invalid material instance');
+		}
 	}
 }
