@@ -1,13 +1,12 @@
 import { Vector3 } from "three";
 import { Ball, Flight } from "../meshes/Ball";
 import { Planet } from "../meshes/Planet";
-import { settings } from "../settings";
+import { settings as _settings, Settings } from "../settings";
 import { calcGravityForce } from "./calcGravityForce";
 import { calcVelocityAfterRebound } from "./calcVelocityAfterRebound";
 import { playSound } from "./playSound";
 import { adjustBallPositionAfterCollision } from "./adjustBallPositionAfterCollision";
 import { isBallCollidingWithPlanet } from "./sphereCollisions";
-import { last } from "lodash";
 
 interface CollisionResult {
 	/** will be (0,0,0) if stopsBall is true */
@@ -16,7 +15,12 @@ interface CollisionResult {
 	stopsBall: boolean
 }
 
-export function calculateFlight(launchVector: Vector3, ball: Ball, planets: Planet[]): Flight {
+export function calculateFlight(
+	launchVector: Vector3,
+	ball: Ball,
+	planets: Planet[],
+	settings: Pick<Settings, 'ticksPerSecond' | 'maxFlightDurationInSeconds'> = _settings
+): Flight {
 	const ticksPerSecond = settings.ticksPerSecond
 	const maxFlightDurationInSeconds = settings.maxFlightDurationInSeconds
 	const startingPosition = ball.position.clone()

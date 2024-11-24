@@ -1,5 +1,7 @@
-export const settings = Object.freeze({
-	ball: Object.freeze({
+import _ from "lodash";
+
+const _settings = {
+	ball: ({
 		bounciness: 0.8,
 		launchForce: 10,
 		radius: 8,
@@ -20,4 +22,13 @@ export const settings = Object.freeze({
 	showFPSCounter: true,
 	showInfoTab: false,
 	skyboxOpacity: 1,
+}
+
+// todo - use deepFreeze util?
+export const settings = Object.freeze({
+	..._settings,
+	ball: Object.freeze(_settings.ball),
+	camera: Object.freeze(_settings.camera),
 });
+
+export type Settings = typeof _settings
