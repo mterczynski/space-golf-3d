@@ -25,7 +25,7 @@ https://www.kongregate.com/games/funkypear/gravitee.
 
 ## Code quality checks
 
-https://codeclimate.com/github/mterczynski/gravitee/issues
+[https://codeclimate.com/github/mterczynski/space-golf-3d/issues](https://codeclimate.com/github/mterczynski/space-golf-3d/issues)
 
 ## Credits
 
