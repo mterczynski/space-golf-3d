@@ -1,3 +1,3 @@
-export * from './sphereCollisions';
+export * from './areSpheresColliding';
 export * from './calcGravityForce';
 export * from './calcVelocityAfterRebound';
