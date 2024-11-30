@@ -1,7 +1,7 @@
 export const settings = Object.freeze({
 	ball: Object.freeze({
 		bounciness: 0.8,
-		launchForce: 7.4,
+		launchForce: 6.3,
 		radius: 8,
 		showVelocityVector: false,
 		traceDuration: 5,
