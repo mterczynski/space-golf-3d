@@ -107,7 +107,7 @@ export class App {
 			this.scene.add(this.cameras.staticManualOrbit);
 			this.scene.add(this.cameras.landedBallTopDown);
 			this.scene.add(this.cameras.aim);
-			this.scene.add(this.cameras.aim.getControlsObject())
+			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
 		// skybox: () => this.scene.add(new Skybox()),
 		skybox: () => this.scene.add(new SphereSkybox()),

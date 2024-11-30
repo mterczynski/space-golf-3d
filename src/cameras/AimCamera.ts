@@ -4,18 +4,18 @@ import { Ball } from "../meshes/Ball";
 import { PointerLockControls } from 'three/examples/jsm/Addons';
 
 export class AimCamera extends PerspectiveCamera {
-	private readonly controls: PointerLockControls
+	// private readonly controls: PointerLockControls
 
 	constructor(domElement: HTMLElement) {
 		super(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far)
 
 		this.position.set(400, 200, 40);
-		this.controls = new PointerLockControls(this, domElement);
+		// this.controls = new PointerLockControls(this, domElement);
 		this.lookAt(new Vector3());
 	}
 
 	setupLockControls() {
-		this.controls.lock()
+		// this.controls.lock()
 	}
 
 	/**
@@ -34,6 +34,6 @@ export class AimCamera extends PerspectiveCamera {
 	}
 
 	getControlsObject() {
-		return this.controls.getObject()
+		// return this.controls.getObject()
 	}
 }
