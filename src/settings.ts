@@ -3,7 +3,7 @@ import _ from "lodash";
 const _settings = {
 	ball: ({
 		bounciness: 0.8,
-		launchForce: 10,
+		launchForce: 5.7,
 		radius: 8,
 		showVelocityVector: false,
 		traceDuration: 5,
