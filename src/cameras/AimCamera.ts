@@ -15,7 +15,7 @@ export class AimCamera extends PerspectiveCamera {
 	}
 
 	setupLockControls() {
-		// this.controls.lock()
+		this.controls.lock()
 	}
 
 	/**

@@ -14,11 +14,11 @@ describe('Planet', () => {
 
 			expect(mass).toBe(Math.PI * 4 / 3 * planetDensity * planetRadius ** 3);
 		});
-	})
+	}),
 
-	test('should take radius value from constructor', () => {
+test('should take radius value from constructor', () => {
 		const radius = 20;
-		const planet = new Planet({ radius });
+		const planet = new Planet({radius});
 
 		expect(planet.radius).toBe(radius);
 	});

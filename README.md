@@ -25,7 +25,7 @@ https://www.kongregate.com/games/funkypear/gravitee.
 
 ## Code quality checks
 
-[https://codeclimate.com/github/mterczynski/space-golf-3d/issues](https://codeclimate.com/github/mterczynski/space-golf-3d/issues)
+https://codeclimate.com/github/mterczynski/gravitee/issues
 
 ## Credits
 
@@ -37,10 +37,3 @@ Sounds:
 - https://freesound.org/people/DrMaysta/sounds/402994/
 - https://freesound.org/people/EminYILDIRIM/sounds/536104/
 - https://soundraw.io/edit_music?m=65c50b4a8fef3a0012ddd47c
-
-to do:
-
-- try React Three Fiber
-- move core logic from /utils to /core
-- fix e2e tests
-- implement aim camera
