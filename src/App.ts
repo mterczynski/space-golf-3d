@@ -56,7 +56,8 @@ export class App {
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
-	private readonly level = settings.simulationMode ? createTestLevel() : generateRandomLevel();
+	// private readonly level = settings.simulationMode ? createTestLevel() : generateRandomLevel();
+	private readonly level = generateRandomLevel();
 	private balls: Ball[] = [];
 
 	// @ts-ignore
