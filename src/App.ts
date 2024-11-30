@@ -18,13 +18,13 @@ import { Planet } from "./meshes/Planet";
 import { SphereSkybox } from "./meshes/SphereSkybox";
 import { settings } from "./settings";
 import {
-	areSpheresColliding,
 	calcGravityForce,
 	calcVelocityAfterRebound as calcVelocityAfterBounce,
+	isBallCollidingWithPlanet,
 } from "./utils";
 import { adjustBallPositionAfterCollision } from "./utils/adjustBallPositionAfterCollision";
 import { createTestLevel } from "./utils/createTestLevel";
-import { launchBall } from "./utils/launchBall";
+// import { launchBall } from "./utils/launchBall";
 import { playSound } from "./utils/playSound";
 import { generateRandomLevel } from "./utils/generateRandomLevel";
 
@@ -52,7 +52,7 @@ export class App {
 		),
 		distant: new DistantCameras(),
 	};
-	private activeCamera: PerspectiveCamera = this.cameras.autoRotatingOrbit; // todo - use this.manualOrbitCamera for flight
+	private activeCamera: PerspectiveCamera = this.cameras.autoRotatingOrbit; // todo - use this.manualOrbitCamera for flight (?)
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
@@ -78,7 +78,7 @@ export class App {
 				this.scene.add(planetInstance);
 			});
 
-			const ball = new Ball();
+			const ball = new Ball({ planets: this.eGetter.getPlanets() });
 			ball.position.set(
 				this.level.initialBallPosition.x,
 				this.level.initialBallPosition.y,
@@ -117,6 +117,11 @@ export class App {
 				this.renderer.domElement
 			);
 		},
+		devTools: () => {
+			(window as any)._gravitee = {
+				scene: this.scene
+			}
+		},
 		listeners: () => {
 			if (!settings.simulationMode) {
 				addEventListener("keypress", (event) => {
@@ -127,7 +132,7 @@ export class App {
 								.position.clone()
 								.sub(this.cameras.aim.position.clone());
 
-							launchBall(ball, directionVector);
+							// ball.launch(directionVector);
 							this.activeCamera = this.cameras.autoRotatingOrbit;
 						}
 					}
@@ -193,7 +198,7 @@ export class App {
 	private bounceBallsOffPlanets(planets: Planet[]) {
 		planets.forEach((planet) => {
 			this.balls.forEach((ball) => {
-				if (areSpheresColliding(planet, ball)) {
+				if (isBallCollidingWithPlanet(ball, planet)) {
 					const newVelocity = calcVelocityAfterBounce({
 						staticSphere: planet,
 						movingSphere: ball,
@@ -207,7 +212,8 @@ export class App {
 					playSound.ballHit(hitSoundVolume);
 
 					ball.velocity = newVelocity;
-					adjustBallPositionAfterCollision(ball, planet);
+					const newPosition = adjustBallPositionAfterCollision(ball, planet)
+					ball.position.set(newPosition.x, newPosition.y, newPosition.z);
 					if (ball.velocity.length() < 0.2 && !ball.landedPlanet) {
 						this.stopBall(ball, planet);
 					}
@@ -244,11 +250,14 @@ export class App {
 	}
 
 	private updateBallTrace() {
-		this.eGetter.getLines().forEach((line) => this.scene.remove(line));
+		// simulation mode will show the whole flight trace ahead of time
+		if (!settings.simulationMode) {
+			this.eGetter.getLines().forEach((line) => this.scene.remove(line));
 
-		this.balls.forEach((ball) => {
-			this.scene.add(ball.createTrace());
-		});
+			this.balls.forEach((ball) => {
+				this.scene.add(ball.createTrace());
+			});
+		}
 	}
 
 	private onNewAnimationFrame() {
@@ -273,6 +282,7 @@ export class App {
 		this.setup.listeners();
 		this.setup.sound();
 		this.setup.cameraLock();
+		this.setup.devTools();
 		this.onNewAnimationFrame();
 		if (settings.showFPSCounter) {
 			document.body.appendChild(this.stats.dom);
