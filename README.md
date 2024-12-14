@@ -38,6 +38,10 @@ Sounds:
 - https://freesound.org/people/EminYILDIRIM/sounds/536104/
 - https://soundraw.io/edit_music?m=65c50b4a8fef3a0012ddd47c
 
+Models:
+
+- https://free3d.com/3d-model/cartoon-rocket-878331.html
+
 to do:
 
 - try React Three Fiber
