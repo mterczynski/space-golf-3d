@@ -1,5 +1,7 @@
-export const settings = Object.freeze({
-	ball: Object.freeze({
+import _ from "lodash";
+
+const _settings = {
+	ball: ({
 		bounciness: 0.8,
 		launchForce: 4.3,
 		radius: 8,
@@ -8,15 +10,25 @@ export const settings = Object.freeze({
 		traceTransparency: 0.6,
 	}),
 	simulationMode: true,
-	ticksPerSecond: 500, // game calculations per second, FPS independent
+	maxFlightDurationInSeconds: 30, // after 30 seconds without landing, the flight will end, and the ball will return to pre-flight position
+	ticksPerSecond: 100, // flight calculations per second, not dependent on monitor's refresh rate
 	camera: {
 		fov: 30,
 		near: 0.1,
 		far: Math.pow(10, 6),
 	},
-	defaultPlanetDensity: 0.00014,
+	defaultPlanetDensity: 0.00024,
 	maxPlanetOffset: 700,
 	showFPSCounter: true,
 	showInfoTab: false,
 	skyboxOpacity: 1,
+}
+
+// todo - use deepFreeze util?
+export const settings = Object.freeze({
+	..._settings,
+	ball: Object.freeze(_settings.ball),
+	camera: Object.freeze(_settings.camera),
 });
+
+export type Settings = typeof _settings
