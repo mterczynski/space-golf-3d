@@ -1,14 +1,16 @@
+const useRandomLevel = true;
+
 export const settings = Object.freeze({
 	ball: Object.freeze({
 		bounciness: 0.8,
-		launchForce: 2.4,
+		launchForce: useRandomLevel ? 4.4 : 2.4,
 		radius: 8,
 		showVelocityVector: false,
 		traceDuration: 5,
 		traceTransparency: 0.6,
 	}),
 	simulationMode: true,
-	useRandomLevel: false,
+	useRandomLevel,
 	usePreCalculatedFlight: false, // Use deterministic pre-calculated flight trajectories
 	maxFlightDurationInSeconds: 30, // after 30 seconds without landing, the flight will end, and the ball will return to pre-flight position
 	ticksPerSecond: 128, // game calculations per second, FPS independent
