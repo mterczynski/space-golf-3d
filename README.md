@@ -29,7 +29,9 @@ https://codeclimate.com/github/mterczynski/gravitee/issues
 
 ## Credits
 
-Skybox: https://sketchfab.com/3d-models/inside-galaxy-skybox-hdri-360-panorama-96183eed1ae2425baddb75ca92103f87 - enhanced by https://letsenhance.io/
+Skybox: 
+
+- https://sketchfab.com/3d-models/inside-galaxy-skybox-hdri-360-panorama-96183eed1ae2425baddb75ca92103f87 - enhanced by https://letsenhance.io/
 
 Sounds:
 
@@ -37,3 +39,7 @@ Sounds:
 - https://freesound.org/people/DrMaysta/sounds/402994/
 - https://freesound.org/people/EminYILDIRIM/sounds/536104/
 - https://soundraw.io/edit_music?m=65c50b4a8fef3a0012ddd47c
+
+Planet textures:
+
+- https://www.solarsystemscope.com/textures/
