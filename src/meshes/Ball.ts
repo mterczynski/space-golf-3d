@@ -57,6 +57,8 @@ function createRocketGeometry(ballRadius: number) {
 	
 	// Rotate the entire rocket to point forward (along z-axis)
 	group.rotation.x = Math.PI / 2;
+
+	group.scale.set(3, 3, 3);
 	
 	return group;
 }
