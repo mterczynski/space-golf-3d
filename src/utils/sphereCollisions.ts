@@ -1,8 +1,8 @@
-import { Vector3 } from 'three';
+import { Vector3 } from "three";
 
 interface Sphere {
-	radius: number,
-	position: Vector3
+	radius: number;
+	position: Vector3;
 }
 
 export function areSpheresColliding(sphere1: Sphere, sphere2: Sphere) {
@@ -18,5 +18,5 @@ function isSphereAInsideB(sphereA: Sphere, sphereB: Sphere) {
 }
 
 export function isBallCollidingWithPlanet(ball: Sphere, planet: Sphere) {
-	return areSpheresColliding(ball, planet) || isSphereAInsideB(ball, planet)
+	return areSpheresColliding(ball, planet) || isSphereAInsideB(ball, planet);
 }

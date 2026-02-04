@@ -6,7 +6,7 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			// Use experimental Rolldown bundler (faster Rust-based alternative to Rollup)
-			// @ts-ignore - rolldown is experimental
+			// @ts-expect-error - rolldown is experimental
 			bundler: 'rolldown',
 		}
 	}

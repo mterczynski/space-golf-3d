@@ -1,17 +1,17 @@
-import { calcVelocityAfterRebound } from '../calcVelocityAfterRebound';
-import { Vector3 } from 'three';
+import { calcVelocityAfterRebound } from "../calcVelocityAfterRebound";
+import { Vector3 } from "three";
 
-describe('calcVelocityAfterRebound', () => {
-	test('case #1 - moving sphere falls vertically on a static sphere', () => {
+describe("calcVelocityAfterRebound", () => {
+	test("case #1 - moving sphere falls vertically on a static sphere", () => {
 		const staticSphere = {
 			radius: 5,
-			position: new Vector3(0, 0, 0)
+			position: new Vector3(0, 0, 0),
 		};
 
 		const movingSphere = {
 			radius: 3,
 			position: new Vector3(0, 8, 0),
-			velocity: new Vector3(0, -1, 0)
+			velocity: new Vector3(0, -1, 0),
 		};
 
 		const onBounceVelocityMultiplier = 0.6;
@@ -21,22 +21,22 @@ describe('calcVelocityAfterRebound', () => {
 		const result = calcVelocityAfterRebound({
 			staticSphere,
 			movingSphere,
-			onBounceVelocityMultiplier
+			onBounceVelocityMultiplier,
 		});
 
 		expect(result).toEqual(expectedVelocity);
 	});
 
-	test('case #2 - moving sphere comes at 45° angle to a static sphere', () => {
+	test("case #2 - moving sphere comes at 45° angle to a static sphere", () => {
 		const staticSphere = {
 			radius: 5,
-			position: new Vector3(0, 0, 0)
+			position: new Vector3(0, 0, 0),
 		};
 
 		const movingSphere = {
 			radius: 3,
 			position: new Vector3(0, 8, 0),
-			velocity: new Vector3(1, -1, 0)
+			velocity: new Vector3(1, -1, 0),
 		};
 
 		const onBounceVelocityMultiplier = 0.6;
@@ -46,7 +46,7 @@ describe('calcVelocityAfterRebound', () => {
 		const result = calcVelocityAfterRebound({
 			staticSphere,
 			movingSphere,
-			onBounceVelocityMultiplier
+			onBounceVelocityMultiplier,
 		});
 
 		expect(result).toEqual(expectedVelocity);
@@ -55,13 +55,13 @@ describe('calcVelocityAfterRebound', () => {
 	test(`case #3 - moving sphere falls vertically on a static sphere, moving sphere is slightly inside the static sphere`, () => {
 		const staticSphere = {
 			radius: 5,
-			position: new Vector3(0, 0, 0)
+			position: new Vector3(0, 0, 0),
 		};
 
 		const movingSphere = {
 			radius: 3,
 			position: new Vector3(0, 7.8, 0),
-			velocity: new Vector3(0, -1, 0)
+			velocity: new Vector3(0, -1, 0),
 		};
 
 		const onBounceVelocityMultiplier = 0.6;
@@ -71,13 +71,13 @@ describe('calcVelocityAfterRebound', () => {
 		const result = calcVelocityAfterRebound({
 			staticSphere,
 			movingSphere,
-			onBounceVelocityMultiplier
+			onBounceVelocityMultiplier,
 		});
 
 		expect(result).toEqual(expectedVelocity);
 	});
 
-	describe('immutability tests', () => {
+	describe("immutability tests", () => {
 		const onBounceVelocityMultiplier = 0.6;
 		let staticSphere: any;
 		let movingSphere: any;
@@ -85,13 +85,13 @@ describe('calcVelocityAfterRebound', () => {
 		function reset() {
 			staticSphere = {
 				radius: 5,
-				position: new Vector3(2, 3, 4)
+				position: new Vector3(2, 3, 4),
 			};
 
 			movingSphere = {
 				radius: 3,
 				position: new Vector3(5, 6, 7),
-				velocity: new Vector3(1, 2, 3)
+				velocity: new Vector3(1, 2, 3),
 			};
 		}
 
@@ -101,7 +101,7 @@ describe('calcVelocityAfterRebound', () => {
 			calcVelocityAfterRebound({
 				staticSphere,
 				movingSphere,
-				onBounceVelocityMultiplier
+				onBounceVelocityMultiplier,
 			});
 
 			expect(staticSphere.position).toEqual(new Vector3(2, 3, 4));
@@ -111,7 +111,7 @@ describe('calcVelocityAfterRebound', () => {
 			calcVelocityAfterRebound({
 				staticSphere,
 				movingSphere,
-				onBounceVelocityMultiplier
+				onBounceVelocityMultiplier,
 			});
 
 			expect(movingSphere.position).toEqual(new Vector3(5, 6, 7));
@@ -121,7 +121,7 @@ describe('calcVelocityAfterRebound', () => {
 			calcVelocityAfterRebound({
 				staticSphere,
 				movingSphere,
-				onBounceVelocityMultiplier
+				onBounceVelocityMultiplier,
 			});
 
 			expect(movingSphere.velocity).toEqual(new Vector3(1, 2, 3));

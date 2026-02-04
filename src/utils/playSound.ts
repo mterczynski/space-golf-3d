@@ -22,10 +22,7 @@ interface AudioTrackOptions {
 	stopTimeMS?: number;
 }
 
-function playAudioTrack(
-	soundName: SoundName,
-	{ volume = 1, startTimeMS = 0, stopTimeMS }: AudioTrackOptions
-) {
+function playAudioTrack(soundName: SoundName, { volume = 1, startTimeMS = 0, stopTimeMS }: AudioTrackOptions) {
 	const audio = document.getElementById(soundName) as HTMLAudioElement;
 	if (!audio) {
 		throw new Error(`Audio not found: ${soundName}`);

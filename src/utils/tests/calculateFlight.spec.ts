@@ -5,7 +5,7 @@ import { Planet } from "../../meshes/Planet";
 
 // todo: uncomment and finish this test file
 
-describe('calculateFlight', () => {
+describe("calculateFlight", () => {
 	// test('should calculate the flight ahead', () => {
 	// 	const launchVector = new Vector3(0, 10, 0);
 	// 	const ballRadius = 5;
@@ -25,7 +25,7 @@ describe('calculateFlight', () => {
 	// 	expect(result.ticksWithCollisions).toEqual(expectedTicksWithCollisions);
 	// });
 
-	test('should cut the flight if it exceeds the time limit', () => {
+	test("should cut the flight if it exceeds the time limit", () => {
 		// todo
-	})
-})
+	});
+});

@@ -1,11 +1,4 @@
-import {
-	Clock,
-	PerspectiveCamera,
-	PointLight,
-	Scene,
-	Vector3,
-	WebGLRenderer,
-} from "three";
+import { Clock, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { ElementGetter } from "./ElementGetter";
@@ -17,11 +10,7 @@ import { Ball } from "./meshes/Ball";
 import { Planet } from "./meshes/Planet";
 import { SphereSkybox } from "./meshes/SphereSkybox";
 import { settings } from "./settings";
-import {
-	areSpheresColliding,
-	calcGravityForce,
-	calcVelocityAfterRebound as calcVelocityAfterBounce,
-} from "./utils";
+import { areSpheresColliding, calcGravityForce, calcVelocityAfterRebound as calcVelocityAfterBounce } from "./utils";
 import { adjustBallPositionAfterCollision } from "./utils/adjustBallPositionAfterCollision";
 import { createTestLevel } from "./utils/createTestLevel";
 import { launchBall } from "./utils/launchBall";
@@ -60,7 +49,7 @@ export class App {
 	private readonly level = generateRandomLevel();
 	private balls: Ball[] = [];
 
-	// @ts-ignore
+	// @ts-expect-error - Stats type issue
 	private stats = Stats();
 
 	private setup = {
@@ -70,11 +59,7 @@ export class App {
 					radius: planet.radius,
 					color: planet.color,
 				});
-				planetInstance.position.set(
-					planet.position.x,
-					planet.position.y,
-					planet.position.z
-				);
+				planetInstance.position.set(planet.position.x, planet.position.y, planet.position.z);
 				this.scene.add(planetInstance);
 			});
 
@@ -93,10 +78,10 @@ export class App {
 			this.scene.add(light);
 		},
 		sound: () => {
-			this.addListeners(() => playSound.ambient(), true)
+			this.addListeners(() => playSound.ambient(), true);
 		},
 		cameraLock: () => {
-			this.addListeners(() => this.cameras.aim.setupLockControls(), false)
+			this.addListeners(() => this.cameras.aim.setupLockControls(), false);
 		},
 		cameras: () => {
 			this.cameras.staticManualOrbit.position.set(400, 200, 40);
@@ -112,10 +97,7 @@ export class App {
 		// skybox: () => this.scene.add(new Skybox()),
 		skybox: () => this.scene.add(new SphereSkybox()),
 		orbitControls: () => {
-			new OrbitControls(
-				this.cameras.staticManualOrbit,
-				this.renderer.domElement
-			);
+			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
 		},
 		listeners: () => {
 			if (!settings.simulationMode) {
@@ -123,9 +105,7 @@ export class App {
 					if (event.key === " ") {
 						const ball = this.getCurrentBall();
 						if (ball.landedPlanet) {
-							const directionVector = this.getCurrentBall()
-								.position.clone()
-								.sub(this.cameras.aim.position.clone());
+							const directionVector = this.getCurrentBall().position.clone().sub(this.cameras.aim.position.clone());
 
 							launchBall(ball, directionVector);
 							this.activeCamera = this.cameras.autoRotatingOrbit;
@@ -136,21 +116,17 @@ export class App {
 		},
 	};
 
-	private addListeners(callback: Function, shouldExecuteOnce: boolean) {
+	private addListeners(callback: () => void, shouldExecuteOnce: boolean) {
 		const events = ["mousedown", "keypress", "touchstart"];
 
 		const onUserInteraction = () => {
-			callback()
+			callback();
 			if (shouldExecuteOnce) {
-				events.forEach((interaction) =>
-					removeEventListener(interaction, onUserInteraction)
-				);
+				events.forEach((interaction) => removeEventListener(interaction, onUserInteraction));
 			}
 		};
 
-		events.forEach((interaction) =>
-			addEventListener(interaction, onUserInteraction)
-		);
+		events.forEach((interaction) => addEventListener(interaction, onUserInteraction));
 	}
 
 	// to be changed for multiplayer mode with multiple balls
@@ -170,14 +146,9 @@ export class App {
 		const autoRotatingOrbitCameraOffset = 2e3;
 		const autoRotatingOrbitCameraSpeed = 0.000064;
 		this.cameras.autoRotatingOrbit.position.set(
-			Math.sin(totalTimeElapsed * autoRotatingOrbitCameraSpeed) *
-			autoRotatingOrbitCameraOffset,
-			Math.abs(
-				Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) *
-				autoRotatingOrbitCameraOffset
-			),
-			Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) *
-			autoRotatingOrbitCameraOffset
+			Math.sin(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset,
+			Math.abs(Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
+			Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset
 		);
 		this.cameras.distant.update(this.getCurrentBall().position);
 	}
@@ -200,7 +171,14 @@ export class App {
 					});
 
 					if (settings.simulationMode) {
-						console.log('## simulation', 'hit', ball.position.toArray().map(i => Math.floor(i)).toString())
+						console.log(
+							"## simulation",
+							"hit",
+							ball.position
+								.toArray()
+								.map((i) => Math.floor(i))
+								.toString()
+						);
 					}
 
 					const hitSoundVolume = Math.min(1, ball.velocity.length() / 5);
@@ -224,9 +202,7 @@ export class App {
 
 		planets.forEach((planet: Planet) => {
 			this.balls.forEach((ball) => {
-				ball.addVelocity(
-					calcGravityForce({ puller: planet, pulled: ball, timeDelta })
-				);
+				ball.addVelocity(calcGravityForce({ puller: planet, pulled: ball, timeDelta }));
 			});
 		});
 	}
@@ -234,12 +210,12 @@ export class App {
 	private stopBall(ball: Ball, planet: Planet) {
 		ball.landedPlanet = planet;
 		if (!settings.simulationMode) {
-			this.activeCamera = this.cameras.landedBallTopDown
+			this.activeCamera = this.cameras.landedBallTopDown;
 			this.cameras.landedBallTopDown.reset(ball);
 			this.cameras.aim.reset(ball);
 			setTimeout(() => {
 				this.activeCamera = this.cameras.aim;
-			}, 1000)
+			}, 1000);
 		}
 	}
 

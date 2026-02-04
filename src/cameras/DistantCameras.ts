@@ -2,7 +2,8 @@ import { Group, PerspectiveCamera, Vector3 } from "three";
 import { Tickable } from "../interfaces/Tickable";
 import { settings } from "../settings";
 
-const createCamera = () => new PerspectiveCamera(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far);
+const createCamera = () =>
+	new PerspectiveCamera(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far);
 
 export class DistantCameras extends Group {
 	private readonly cameras = [
@@ -48,9 +49,7 @@ export class DistantCameras extends Group {
 		}
 
 		const newActiveCameraIndex =
-			Number((ballPosition.x > 0)) * 4 +
-			Number((ballPosition.y > 0)) * 2 +
-			Number((ballPosition.z > 0)) * 1;
+			Number(ballPosition.x > 0) * 4 + Number(ballPosition.y > 0) * 2 + Number(ballPosition.z > 0) * 1;
 
 		this.lastSwitchDate = Date.now();
 		this.activeCamera = this.cameras[newActiveCameraIndex];

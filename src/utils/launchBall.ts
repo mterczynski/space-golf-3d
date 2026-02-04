@@ -8,10 +8,12 @@ export function launchBall(ball: Ball, directionVector?: Vector3) {
 		directionVector?.x || Math.random(),
 		directionVector?.y || Math.random(),
 		directionVector?.z || Math.random()
-	).normalize().multiplyScalar(settings.ball.launchForce)
+	)
+		.normalize()
+		.multiplyScalar(settings.ball.launchForce);
 
 	ball.landedPlanet = null;
 	ball.velocity = launchVector;
 
-	playSound.ballFlightStart()
+	playSound.ballFlightStart();
 }

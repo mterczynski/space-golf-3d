@@ -9,12 +9,12 @@ import {
 	PointLight,
 	SphereGeometry,
 	Vector3,
-} from 'three';
-import { settings } from '../settings';
-import { Tickable } from '../interfaces/Tickable';
-import { Planet } from './Planet';
-import { launchBall } from '../utils/launchBall';
-import randomColor from 'randomcolor'
+} from "three";
+import { settings } from "../settings";
+import { Tickable } from "../interfaces/Tickable";
+import { Planet } from "./Planet";
+import { launchBall } from "../utils/launchBall";
+import randomColor from "randomcolor";
 
 function createBallGeometry(ballRadius: number) {
 	const quality = 32;
@@ -51,10 +51,12 @@ export class Ball extends Mesh implements Tickable {
 		this._velocity = newVelocity;
 	}
 
-	constructor({ radius = settings.ball.radius }: {
-		radius?: number
+	constructor({
+		radius = settings.ball.radius,
+	}: {
+		radius?: number;
 	} = {}) {
-		const color = randomColor({ luminosity: 'dark', alpha: 1 });
+		const color = randomColor({ luminosity: "dark", alpha: 1 });
 		super(createBallGeometry(radius), createBallMaterial(color));
 		this.light = new PointLight(color, 16_000, 10000);
 		this.color = color;
@@ -91,7 +93,7 @@ export class Ball extends Mesh implements Tickable {
 				this.launchBallTimeout = window.setTimeout(() => {
 					launchBall(this, new Vector3(-0.8, 0.18, -0.72));
 					this.launchBallTimeout = null;
-				}, 1000)
+				}, 1000);
 			}
 		}
 		this.rotation.set(0, 0, 0);

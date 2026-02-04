@@ -1,13 +1,13 @@
-import { Vector3 } from 'three';
-import { settings } from '../settings';
+import { Vector3 } from "three";
+import { settings } from "../settings";
 
 interface Sphere {
-	radius: number,
-	position: Vector3,
+	radius: number;
+	position: Vector3;
 }
 
 interface MovingSphere extends Sphere {
-	velocity: Vector3
+	velocity: Vector3;
 }
 
 export function calcVelocityAfterRebound({
@@ -15,9 +15,9 @@ export function calcVelocityAfterRebound({
 	movingSphere,
 	onBounceVelocityMultiplier = settings.ball.bounciness,
 }: {
-	staticSphere: Sphere,
-	movingSphere: MovingSphere,
-	onBounceVelocityMultiplier?: number,
+	staticSphere: Sphere;
+	movingSphere: MovingSphere;
+	onBounceVelocityMultiplier?: number;
 }) {
 	const distanceAxis = movingSphere.position.clone().sub(staticSphere.position).normalize();
 	const dotProduct = distanceAxis.dot(movingSphere.velocity);

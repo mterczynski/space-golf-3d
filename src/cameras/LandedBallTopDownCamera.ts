@@ -4,10 +4,10 @@ import { Ball } from "../meshes/Ball";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export class LandedBallTopDownCamera extends PerspectiveCamera {
-	private readonly orbitControls: OrbitControls
+	private readonly orbitControls: OrbitControls;
 
 	constructor(domElement: HTMLElement) {
-		super(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far)
+		super(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far);
 
 		this.position.set(400, 200, 40);
 		this.orbitControls = new OrbitControls(this, domElement);
@@ -18,15 +18,15 @@ export class LandedBallTopDownCamera extends PerspectiveCamera {
 	 * Resets the camera position based on position of the ball and its planet
 	 */
 	reset(ball: Ball) {
-		if (!ball.landedPlanet) return
+		if (!ball.landedPlanet) return;
 
-		const ballPos = ball.position.clone()
-		const planetPos = ball.landedPlanet?.position.clone()
-		const ballToPlanetVector = planetPos.sub(ballPos)
-		const camPosition = ballPos.clone().sub(ballToPlanetVector.normalize().multiplyScalar(2000))
+		const ballPos = ball.position.clone();
+		const planetPos = ball.landedPlanet?.position.clone();
+		const ballToPlanetVector = planetPos.sub(ballPos);
+		const camPosition = ballPos.clone().sub(ballToPlanetVector.normalize().multiplyScalar(2000));
 
-		this.orbitControls.target = ballPos // or planetPos
-		this.position.copy(camPosition)
+		this.orbitControls.target = ballPos; // or planetPos
+		this.position.copy(camPosition);
 		this.lookAt(ballPos);
 	}
 }
