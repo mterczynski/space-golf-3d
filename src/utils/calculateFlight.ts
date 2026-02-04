@@ -102,7 +102,7 @@ export function calculateFlight(
 
 function calcVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, planets: Planet[]) {
 	// Deterministic tick duration derived from ticksPerSecond (not real-time delta).
-	// Convert to seconds: 1000ms / ticksPerSecond / 1000 = 1 / ticksPerSecond seconds
+	// Tick duration in seconds = 1 / ticks per second
 	const tickDuration = 1 / ticksPerSecond;
 	const velocityChange = new Vector3(0, 0, 0);
 

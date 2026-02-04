@@ -64,10 +64,11 @@ describe("calculateFlight", () => {
 		const finalPos500 = result500.ticks[result500.ticks.length - 1].position;
 		
 		// Positions should be reasonably close (allowing ~2% variance due to integration step differences)
-		// Using precision -1 means tolerance of 5 units
-		expect(finalPos60.x).toBeCloseTo(finalPos500.x, -1);
-		expect(finalPos60.y).toBeCloseTo(finalPos500.y, -1);
-		expect(finalPos60.z).toBeCloseTo(finalPos500.z, -1);
+		// toBeCloseTo with precision 0 means tolerance of ~0.5 units, which is too strict
+		// We use a manual check instead to allow ~5 units of difference
+		expect(Math.abs(finalPos60.x - finalPos500.x)).toBeLessThan(5);
+		expect(Math.abs(finalPos60.y - finalPos500.y)).toBeLessThan(5);
+		expect(Math.abs(finalPos60.z - finalPos500.z)).toBeLessThan(5);
 	});
 
 	test("should cut the flight if it exceeds the time limit", () => {
