@@ -44,7 +44,6 @@ function createRocketGeometry(ballRadius: number) {
 	
 	// Rocket fins (4 triangular fins)
 	const finHeight = ballRadius * 0.8;
-	const finWidth = ballRadius * 0.6;
 	for (let i = 0; i < 4; i++) {
 		const finGeometry = new ConeGeometry(0, finHeight, 3);
 		const fin = new Mesh(finGeometry);
@@ -100,18 +99,24 @@ export class Ball extends Mesh implements Tickable {
 		const color = randomColor({ luminosity: "dark", alpha: 1 });
 		
 		// Create geometry based on setting
-		let meshGeometry: SphereGeometry;
+		const INVISIBLE_SPHERE_RADIUS = 0.1;
+		const INVISIBLE_SPHERE_SEGMENTS = 4;
+		let baseGeometry: SphereGeometry;
 		let rocketModel: Group | null = null;
 		
 		if (settings.ball.useRocketModel) {
-			// Use a tiny invisible sphere as the base mesh
-			meshGeometry = new SphereGeometry(0.1, 4, 4);
+			// Use a tiny invisible sphere as the base mesh when using rocket model
+			baseGeometry = new SphereGeometry(
+				INVISIBLE_SPHERE_RADIUS,
+				INVISIBLE_SPHERE_SEGMENTS,
+				INVISIBLE_SPHERE_SEGMENTS
+			);
 			rocketModel = createRocketGeometry(radius) as Group;
 		} else {
-			meshGeometry = createBallGeometry(radius);
+			baseGeometry = createBallGeometry(radius);
 		}
 		
-		super(meshGeometry, createBallMaterial(color));
+		super(baseGeometry, createBallMaterial(color));
 		
 		// Add rocket model if using rocket
 		if (rocketModel) {
