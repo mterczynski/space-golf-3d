@@ -45,9 +45,9 @@ export class App {
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
-	// private readonly level = settings.simulationMode ? createTestLevel() : generateRandomLevel();
-	private readonly level = generateRandomLevel();
+	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
+	private accumulatedTime = 0;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
@@ -71,7 +71,13 @@ export class App {
 			);
 			this.balls.push(ball);
 			this.scene.add(ball);
-		},
+			// Find and set the initial landed planet
+			const planets = this.eGetter.getPlanets();
+			planets.forEach((planet) => {
+				if (areSpheresColliding(planet, ball)) {
+					ball.landedPlanet = planet;
+				}
+			});		},
 		light: () => {
 			const light = new PointLight(0xffffff, 50_000_000);
 			light.position.set(0, 100, 5000);
@@ -106,8 +112,8 @@ export class App {
 						const ball = this.getCurrentBall();
 						if (ball.landedPlanet) {
 							const directionVector = this.getCurrentBall().position.clone().sub(this.cameras.aim.position.clone());
-
-							launchBall(ball, directionVector);
+							const planets = this.eGetter.getPlanets();
+							launchBall(ball, directionVector, planets);
 							this.activeCamera = this.cameras.autoRotatingOrbit;
 						}
 					}
@@ -144,7 +150,7 @@ export class App {
 		this.activeCamera.updateProjectionMatrix();
 		this.cameras.autoRotatingOrbit.lookAt(this.getCurrentBall().position);
 		const autoRotatingOrbitCameraOffset = 2e3;
-		const autoRotatingOrbitCameraSpeed = 0.000064;
+		const autoRotatingOrbitCameraSpeed = 0.000064 * settings.camera.rotationSpeed;
 		this.cameras.autoRotatingOrbit.position.set(
 			Math.sin(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset,
 			Math.abs(Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
@@ -155,10 +161,22 @@ export class App {
 
 	private updateBalls(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
+		const fixedTimeDelta = 1 / settings.ticksPerSecond;
 
-		this.bounceBallsOffPlanets(planets);
-		this.gravitateBalls(timeDelta);
-		this.balls.forEach((ball) => ball.tick());
+		// Accumulate real time and update physics at fixed intervals
+		this.accumulatedTime += timeDelta;
+
+		// Skip real-time physics when using pre-calculated flight
+		if (!settings.usePreCalculatedFlight) {
+			// Process all accumulated physics steps
+			while (this.accumulatedTime >= fixedTimeDelta) {
+				this.bounceBallsOffPlanets(planets);
+				this.gravitateBalls(fixedTimeDelta);
+				this.accumulatedTime -= fixedTimeDelta;
+			}
+		}
+
+		this.balls.forEach((ball) => ball.tick(planets));
 	}
 
 	private bounceBallsOffPlanets(planets: Planet[]) {
