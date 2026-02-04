@@ -50,7 +50,7 @@ const defaultSettings: Settings = {
 
 // Deep clone helper
 function deepClone<T>(obj: T): T {
-	return JSON.parse(JSON.stringify(obj));
+	return structuredClone(obj);
 }
 
 // Load settings from localStorage or use defaults

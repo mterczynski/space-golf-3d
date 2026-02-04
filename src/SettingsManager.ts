@@ -56,10 +56,10 @@ export class SettingsManager {
 		this.gui.add({ reset: () => this.handleReset() }, 'reset').name('Reset to Defaults');
 	}
 
-	private addControl(
+	private addControl<T extends Record<string, any>>(
 		folder: dat.GUI,
-		object: any,
-		property: string,
+		object: T,
+		property: keyof T,
 		min: number | null,
 		max: number | null,
 		step: number | null,
@@ -68,14 +68,14 @@ export class SettingsManager {
 		let controller: dat.GUIController;
 
 		if (typeof object[property] === 'boolean') {
-			controller = folder.add(object, property);
+			controller = folder.add(object, property as string);
 		} else if (min !== null && max !== null) {
-			controller = folder.add(object, property, min, max);
+			controller = folder.add(object, property as string, min, max);
 			if (step !== null) {
 				controller.step(step);
 			}
 		} else {
-			controller = folder.add(object, property);
+			controller = folder.add(object, property as string);
 		}
 
 		controller.onChange(() => {
