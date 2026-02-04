@@ -14,6 +14,7 @@ import { settings } from "../settings";
 import { Tickable } from "../interfaces/Tickable";
 import { Planet } from "./Planet";
 import { launchBall } from "../utils/launchBall";
+import { Flight } from "../utils/calculateFlight";
 import randomColor from "randomcolor";
 
 function createBallGeometry(ballRadius: number) {
@@ -34,6 +35,9 @@ export class Ball extends Mesh implements Tickable {
 	readonly camera = new PerspectiveCamera(settings.camera.fov);
 	launchBallTimeout: number | null = null;
 	landedPlanet: null | Planet = null; // planet on which the ball has landed
+	private preCalculatedFlight: Flight | null = null;
+	private currentFlightTick = 0;
+	private flightStartTime: number | null = null;
 
 	private updateArrowHelper() {
 		this.arrowHelper.setDirection(this.velocity.normalize());
@@ -74,6 +78,18 @@ export class Ball extends Mesh implements Tickable {
 		this._velocity.add(vector);
 	}
 
+	setPreCalculatedFlight(flight: Flight) {
+		this.preCalculatedFlight = flight;
+		this.currentFlightTick = 0;
+		this.flightStartTime = Date.now();
+	}
+
+	clearPreCalculatedFlight() {
+		this.preCalculatedFlight = null;
+		this.currentFlightTick = 0;
+		this.flightStartTime = null;
+	}
+
 	createTrace() {
 		const lineMaterial = new LineBasicMaterial({
 			color: 0xffaa00,
@@ -86,20 +102,42 @@ export class Ball extends Mesh implements Tickable {
 		return new Line(geometry, lineMaterial);
 	}
 
-	tick() {
+	tick(planets: Planet[] = []) {
 		if (this.landedPlanet !== null) {
 			this.velocity = new Vector3();
 			if (settings.simulationMode && !this.launchBallTimeout) {
 				this.launchBallTimeout = window.setTimeout(() => {
-					launchBall(this, new Vector3(-0.8, 0.18, -0.72));
+					launchBall(this, new Vector3(-0.8, 0.18, -0.72), planets);
 					this.launchBallTimeout = null;
 				}, 1000);
 			}
 		}
-		this.rotation.set(0, 0, 0);
-		this.position.add(this.velocity);
-		const velNorm = this.velocity.normalize();
-		this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
+
+		// Use pre-calculated flight if available
+		if (settings.usePreCalculatedFlight && this.preCalculatedFlight && this.flightStartTime !== null) {
+			// Calculate which tick we should be on based on elapsed time
+			const elapsedSeconds = (Date.now() - this.flightStartTime) / 1000;
+			const targetTick = Math.floor(elapsedSeconds * settings.ticksPerSecond);
+			
+			if (targetTick < this.preCalculatedFlight.ticks.length) {
+				const tickData = this.preCalculatedFlight.ticks[targetTick];
+				this.position.copy(tickData.position);
+				this.velocity = tickData.velocity.clone();
+				this.currentFlightTick = targetTick;
+			} else {
+				// Flight has ended
+				const lastTick = this.preCalculatedFlight.ticks[this.preCalculatedFlight.ticks.length - 1];
+				this.position.copy(lastTick.position);
+				this.velocity = lastTick.velocity.clone();
+				this.clearPreCalculatedFlight();
+			}
+		} else if (!settings.usePreCalculatedFlight || !this.preCalculatedFlight) {
+			// Original real-time flight logic
+			this.rotation.set(0, 0, 0);
+			this.position.add(this.velocity);
+			const velNorm = this.velocity.normalize();
+			this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
+		}
 
 		this.updateArrowHelper();
 		this.pathVertices.push(this.position.clone());

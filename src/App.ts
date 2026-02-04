@@ -70,7 +70,13 @@ export class App {
 			);
 			this.balls.push(ball);
 			this.scene.add(ball);
-		},
+			// Find and set the initial landed planet
+			const planets = this.eGetter.getPlanets();
+			planets.forEach((planet) => {
+				if (areSpheresColliding(planet, ball)) {
+					ball.landedPlanet = planet;
+				}
+			});		},
 		light: () => {
 			const light = new PointLight(0xffffff, 50_000_000);
 			light.position.set(0, 100, 5000);
@@ -105,8 +111,8 @@ export class App {
 						const ball = this.getCurrentBall();
 						if (ball.landedPlanet) {
 							const directionVector = this.getCurrentBall().position.clone().sub(this.cameras.aim.position.clone());
-
-							launchBall(ball, directionVector);
+							const planets = this.eGetter.getPlanets();
+							launchBall(ball, directionVector, planets);
 							this.activeCamera = this.cameras.autoRotatingOrbit;
 						}
 					}
@@ -155,9 +161,12 @@ export class App {
 	private updateBalls(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
 
-		this.bounceBallsOffPlanets(planets);
-		this.gravitateBalls(timeDelta);
-		this.balls.forEach((ball) => ball.tick());
+		// Skip real-time physics when using pre-calculated flight
+		if (!settings.usePreCalculatedFlight) {
+			this.bounceBallsOffPlanets(planets);
+			this.gravitateBalls(timeDelta);
+		}
+		this.balls.forEach((ball) => ball.tick(planets));
 	}
 
 	private bounceBallsOffPlanets(planets: Planet[]) {
