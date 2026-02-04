@@ -1,4 +1,4 @@
-import { BackSide, Mesh, MeshBasicMaterial, MeshPhongMaterial, MeshToonMaterial, SphereGeometry } from "three";
+import { BackSide, Mesh, MeshBasicMaterial, MeshPhongMaterial, MeshToonMaterial, SphereGeometry, TextureLoader } from "three";
 import { settings } from "../settings";
 
 function createBorderMesh(planetRadius: number) {
@@ -29,14 +29,27 @@ export class Planet extends Mesh {
 		radius,
 		color = "rgb(255,0,0)",
 		density = settings.defaultPlanetDensity,
+		textureUrl,
 	}: {
 		radius: number;
 		density?: number;
 		color?: string;
+		textureUrl?: string;
 	}) {
 		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
 		this.radius = radius;
 		this.density = density;
 		this.add(createBorderMesh(radius));
+		
+		if (textureUrl) {
+			this.loadTexture(textureUrl);
+		}
+	}
+
+	private async loadTexture(textureUrl: string) {
+		const textureLoader = new TextureLoader();
+		const texture = await textureLoader.loadAsync(textureUrl);
+		(this.material as MeshPhongMaterial).map = texture;
+		(this.material as MeshPhongMaterial).needsUpdate = true;
 	}
 }
