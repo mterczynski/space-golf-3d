@@ -8,5 +8,10 @@ export function getRandomPlanetTexture(): string {
 }
 
 export function getPlanetTexture(textureNumber: number): string {
+	// Validate texture number is within valid range
+	if (textureNumber < 1 || textureNumber > PLANET_TEXTURE_COUNT) {
+		console.warn(`Invalid texture number ${textureNumber}. Using default texture 1.`);
+		textureNumber = 1;
+	}
 	return `${document.baseURI}assets/gfx/planets/${textureNumber}.jpg`;
 }

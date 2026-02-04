@@ -45,6 +45,10 @@ export class Planet extends Mesh {
 		this.add(createBorderMesh(radius));
 		
 		if (textureUrl) {
+			// Note: Textures are loaded asynchronously for this PoC.
+			// This may cause a brief visual flash as planets initially render with their color
+			// before the texture loads. For production, consider preloading textures or implementing
+			// a loading strategy.
 			this.loadTexture(textureUrl);
 		}
 	}
