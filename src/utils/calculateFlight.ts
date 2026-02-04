@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
-import { Ball, Flight } from "../meshes/Ball";
+import { Ball } from "../meshes/Ball";
 import { Planet } from "../meshes/Planet";
-import { settings as _settings, Settings } from "../settings";
+import { settings as _settings } from "../settings";
 import { calcGravityForce } from "./calcGravityForce";
 import { calcVelocityAfterRebound } from "./calcVelocityAfterRebound";
 import { playSound } from "./playSound";
@@ -15,11 +15,28 @@ interface CollisionResult {
 	stopsBall: boolean
 }
 
+export type Flight = {
+	ticks: {
+		position: Vector3,
+		velocity: Vector3
+	}[],
+	/** indexes of ticks with collisions */
+	ticksWithCollisions: number[],
+}
+
+type FlightSettings = {
+	ticksPerSecond: number,
+	maxFlightDurationInSeconds: number
+}
+
 export function calculateFlight(
 	launchVector: Vector3,
 	ball: Ball,
 	planets: Planet[],
-	settings: Pick<Settings, 'ticksPerSecond' | 'maxFlightDurationInSeconds'> = _settings
+	settings: FlightSettings = {
+		ticksPerSecond: _settings.ticksPerSecond,
+		maxFlightDurationInSeconds: _settings.maxFlightDurationInSeconds ?? 30,
+	}
 ): Flight {
 	const ticksPerSecond = settings.ticksPerSecond
 	const maxFlightDurationInSeconds = settings.maxFlightDurationInSeconds
