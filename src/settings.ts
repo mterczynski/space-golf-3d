@@ -6,6 +6,7 @@ export const settings = Object.freeze({
 		showVelocityVector: false,
 		traceDuration: 5,
 		traceTransparency: 0.6,
+		useRocketModel: false,
 	}),
 	simulationMode: true,
 	maxFlightDurationInSeconds: 30, // after 30 seconds without landing, the flight will end, and the ball will return to pre-flight position
