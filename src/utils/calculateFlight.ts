@@ -32,6 +32,7 @@ type FlightSettings = {
 /**
  * Deterministic flight calculation.
  * Given the same inputs, this returns the same trajectory (independent of frame rate).
+ * NOTE: Currently unused; planned to be enabled behind a setting/feature flag.
  */
 export function calculateFlight(
 	launchVector: Vector3,
