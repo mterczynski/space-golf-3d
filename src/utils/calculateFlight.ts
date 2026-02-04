@@ -79,9 +79,20 @@ export function calculateFlight(
 			});
 		} else {
 			wasLastTickCollision = false;
+			// Calculate new velocity by adding gravity acceleration
+			const newVelocity = lastTick.velocity.clone().add(calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets));
+			
+			// Update position: velocity is calibrated for ~60 FPS, so scale by tick duration
+			// At 60 FPS, timeDelta ~ 1/60 = 0.0167s
+			// At current ticksPerSecond, timeDelta = 1/ticksPerSecond
+			// Scale factor = (1/ticksPerSecond) / (1/60) = 60/ticksPerSecond
+			const referenceFPS = 60;
+			const positionScaleFactor = referenceFPS / ticksPerSecond;
+			const newPosition = lastTick.position.clone().add(lastTick.velocity.clone().multiplyScalar(positionScaleFactor));
+			
 			ticks.push({
-				velocity: lastTick.velocity.clone().add(calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets)),
-				position: lastTick.position.clone().add(lastTick.velocity.clone().multiplyScalar(1)),
+				velocity: newVelocity,
+				position: newPosition,
 			});
 		}
 	}
@@ -91,7 +102,8 @@ export function calculateFlight(
 
 function calcVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, planets: Planet[]) {
 	// Deterministic tick duration derived from ticksPerSecond (not real-time delta).
-	const tickDuration = 1000 / ticksPerSecond / 10000;
+	// Convert to seconds: 1000ms / ticksPerSecond / 1000 = 1 / ticksPerSecond seconds
+	const tickDuration = 1 / ticksPerSecond;
 	const velocityChange = new Vector3(0, 0, 0);
 
 	planets.forEach((planet: Planet) => {
