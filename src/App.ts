@@ -164,7 +164,9 @@ export class App {
 		// Skip real-time physics when using pre-calculated flight
 		if (!settings.usePreCalculatedFlight) {
 			this.bounceBallsOffPlanets(planets);
-			this.gravitateBalls(timeDelta);
+			// Use fixed time step for deterministic physics
+			const fixedTimeDelta = 1 / settings.ticksPerSecond;
+			this.gravitateBalls(fixedTimeDelta);
 		}
 		this.balls.forEach((ball) => ball.tick(planets));
 	}
