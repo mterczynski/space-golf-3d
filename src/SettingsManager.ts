@@ -4,6 +4,7 @@ import { settings, saveSettings, resetSettings } from './settings';
 export class SettingsManager {
 	private gui: dat.GUI;
 	private restartCallback: (() => void) | null = null;
+	private skyboxOpacityCallback: ((opacity: number) => void) | null = null;
 
 	// Settings that require app restart when changed
 	private readonly restartRequiredSettings = new Set([
@@ -22,6 +23,10 @@ export class SettingsManager {
 
 	setRestartCallback(callback: () => void): void {
 		this.restartCallback = callback;
+	}
+
+	setSkyboxOpacityCallback(callback: (opacity: number) => void): void {
+		this.skyboxOpacityCallback = callback;
 	}
 
 	private setupGUI(): void {
@@ -80,18 +85,22 @@ export class SettingsManager {
 
 		controller.onChange(() => {
 			saveSettings();
+			
+			// Handle skybox opacity change immediately
+			if (settingKey === 'skyboxOpacity' && this.skyboxOpacityCallback) {
+				this.skyboxOpacityCallback(settings.skyboxOpacity);
+			}
+			
+			// Auto-restart for settings that require it
 			if (this.restartRequiredSettings.has(settingKey)) {
-				this.promptRestart();
+				this.autoRestart();
 			}
 		});
 	}
 
-	private promptRestart(): void {
+	private autoRestart(): void {
 		if (this.restartCallback) {
-			const restart = confirm('This setting change requires an app restart. Restart now?');
-			if (restart) {
-				this.restartCallback();
-			}
+			this.restartCallback();
 		}
 	}
 
@@ -102,12 +111,8 @@ export class SettingsManager {
 		this.gui = new dat.GUI({ width: 300 });
 		this.setupGUI();
 		
-		if (this.restartCallback) {
-			const restart = confirm('Settings have been reset. Restart the app to apply changes?');
-			if (restart) {
-				this.restartCallback();
-			}
-		}
+		// Auto-restart after reset
+		this.autoRestart();
 	}
 
 	show(): void {

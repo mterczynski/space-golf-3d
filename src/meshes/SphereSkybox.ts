@@ -23,4 +23,10 @@ export class SphereSkybox extends Mesh {
 		this.geometry = geometry;
 		this.material = material;
 	}
+
+	updateOpacity(opacity: number): void {
+		if (this.material instanceof MeshBasicMaterial) {
+			this.material.opacity = opacity;
+		}
+	}
 }

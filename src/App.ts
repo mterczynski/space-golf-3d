@@ -54,6 +54,7 @@ export class App {
 	private stats = Stats();
 
 	private settingsManager = new SettingsManager();
+	private skybox: SphereSkybox | null = null;
 
 	private setup = {
 		level: () => {
@@ -98,7 +99,10 @@ export class App {
 			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
 		// skybox: () => this.scene.add(new Skybox()),
-		skybox: () => this.scene.add(new SphereSkybox()),
+		skybox: () => {
+			this.skybox = new SphereSkybox();
+			this.scene.add(this.skybox);
+		},
 		orbitControls: () => {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
 		},
@@ -135,6 +139,10 @@ export class App {
 	// to be changed for multiplayer mode with multiple balls
 	private getCurrentBall() {
 		return this.balls[0];
+	}
+
+	getSkybox(): SphereSkybox | null {
+		return this.skybox;
 	}
 
 	private adjustRendererSize() {
@@ -260,6 +268,13 @@ export class App {
 		// Setup settings manager with restart callback
 		this.settingsManager.setRestartCallback(() => {
 			window.location.reload();
+		});
+		
+		// Setup skybox opacity callback for real-time updates
+		this.settingsManager.setSkyboxOpacityCallback((opacity: number) => {
+			if (this.skybox) {
+				this.skybox.updateOpacity(opacity);
+			}
 		});
 	}
 }
