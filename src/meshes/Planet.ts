@@ -1,6 +1,9 @@
 import { BackSide, Mesh, MeshBasicMaterial, MeshPhongMaterial, MeshToonMaterial, SphereGeometry, TextureLoader } from "three";
 import { settings } from "../settings";
 
+// Shared texture loader instance for better performance and caching
+const textureLoader = new TextureLoader();
+
 function createBorderMesh(planetRadius: number) {
 	const borderMaterial = new MeshBasicMaterial({
 		color: "rgb(0,0,0)",
@@ -47,9 +50,13 @@ export class Planet extends Mesh {
 	}
 
 	private async loadTexture(textureUrl: string) {
-		const textureLoader = new TextureLoader();
-		const texture = await textureLoader.loadAsync(textureUrl);
-		(this.material as MeshPhongMaterial).map = texture;
-		(this.material as MeshPhongMaterial).needsUpdate = true;
+		try {
+			const texture = await textureLoader.loadAsync(textureUrl);
+			(this.material as MeshPhongMaterial).map = texture;
+			(this.material as MeshPhongMaterial).needsUpdate = true;
+		} catch (error) {
+			console.warn(`Failed to load planet texture from ${textureUrl}:`, error);
+			// Planet will continue to use its color fallback
+		}
 	}
 }
