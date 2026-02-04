@@ -29,6 +29,10 @@ type FlightSettings = {
 	maxFlightDurationInSeconds: number
 }
 
+/**
+ * Deterministic flight calculation.
+ * Given the same inputs, this returns the same trajectory (independent of frame rate).
+ */
 export function calculateFlight(
 	launchVector: Vector3,
 	ball: Ball,
@@ -82,6 +86,7 @@ export function calculateFlight(
 }
 
 function calcVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, planets: Planet[]) {
+	// Deterministic tick duration derived from ticksPerSecond (not real-time delta).
 	const tickDuration = 1000 / ticksPerSecond / 10000
 	const velocityChange = new Vector3(0, 0, 0)
 
