@@ -6,7 +6,7 @@ export const settings = Object.freeze({
 		showVelocityVector: false,
 		traceDuration: 5,
 		traceTransparency: 0.6,
-		useRocketModel: true, // When true, replaces the ball with a 3D rocket model (body, nose cone, and fins)
+		useRocketModel: false, // When true, replaces the ball with a 3D rocket model (body, nose cone, and fins)
 	}),
 	simulationMode: true,
 	maxFlightDurationInSeconds: 30, // after 30 seconds without landing, the flight will end, and the ball will return to pre-flight position

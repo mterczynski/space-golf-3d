@@ -11,6 +11,7 @@ import {
 	MeshBasicMaterial,
 	PerspectiveCamera,
 	PointLight,
+	Quaternion,
 	SphereGeometry,
 	Vector3,
 } from "three";
@@ -28,40 +29,78 @@ function createBallGeometry(ballRadius: number) {
 function createRocketGeometry(ballRadius: number) {
 	const group = new Group();
 	
-	// Rocket body (cylinder)
-	const bodyHeight = ballRadius * 2.5;
-	const bodyRadius = ballRadius * 0.4;
+	// Rocket body (cylinder) - made slightly wider and shorter
+	const bodyHeight = ballRadius * 2.2;
+	const bodyRadius = ballRadius * 0.45;
 	const bodyGeometry = new CylinderGeometry(bodyRadius, bodyRadius, bodyHeight, 16);
 	const body = new Mesh(bodyGeometry);
 	body.position.y = 0;
 	group.add(body);
 	
-	// Rocket nose cone
-	const noseHeight = ballRadius * 0.8;
+	// Rocket nose cone - made more pointed
+	const noseHeight = ballRadius * 1.0;
 	const noseGeometry = new ConeGeometry(bodyRadius, noseHeight, 16);
 	const nose = new Mesh(noseGeometry);
 	nose.position.y = bodyHeight / 2 + noseHeight / 2;
 	group.add(nose);
 	
-	// Rocket fins (4 triangular fins)
-	const finHeight = ballRadius * 0.8;
+	// Rocket fins (4 triangular fins) - RED and properly sized
+	const finWidth = ballRadius * 1.2;
+	const finHeight = ballRadius * 1.0;
+	const redMaterial = new MeshBasicMaterial({ color: 0xff0000 }); // Red color
+	
 	for (let i = 0; i < 4; i++) {
-		const finGeometry = new ConeGeometry(0, finHeight, 3);
-		const fin = new Mesh(finGeometry);
-		fin.rotation.z = Math.PI / 2;
+		const finGeometry = createTriangularFinGeometry(finWidth, finHeight);
+		const fin = new Mesh(finGeometry, redMaterial);
+		
 		const angle = (i * Math.PI) / 2;
 		fin.position.x = Math.cos(angle) * bodyRadius;
 		fin.position.z = Math.sin(angle) * bodyRadius;
-		fin.position.y = -bodyHeight / 2 + finHeight / 2;
+		fin.position.y = -bodyHeight / 2;
+		
+		// Rotate fin to point outward
+		fin.rotation.y = angle;
+		
 		group.add(fin);
 	}
 	
 	// Rotate the entire rocket to point forward (along z-axis)
 	group.rotation.x = Math.PI / 2;
-
-	group.scale.set(3, 3, 3);
 	
 	return group;
+}
+
+function createTriangularFinGeometry(width: number, height: number): BufferGeometry {
+	// Create a triangular fin using BufferGeometry
+	const geometry = new BufferGeometry();
+	
+	// Define vertices for a triangular fin (pyramid with triangular base)
+	const vertices = new Float32Array([
+		// Front face (triangle)
+		0, height, 0,           // top point
+		-width/2, 0, width/2,   // bottom left
+		width/2, 0, width/2,    // bottom right
+		
+		// Back face (triangle)
+		0, height, 0,           // top point
+		width/2, 0, -width/2,   // bottom right back
+		-width/2, 0, -width/2,  // bottom left back
+		
+		// Left face (triangle)
+		0, height, 0,           // top point
+		-width/2, 0, -width/2,  // bottom left back
+		-width/2, 0, width/2,   // bottom left front
+		
+		// Right face (triangle)
+		0, height, 0,           // top point
+		width/2, 0, width/2,    // bottom right front
+		width/2, 0, -width/2,   // bottom right back
+	]);
+	
+	geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+	geometry.computeVertexNormals();
+	
+	return geometry;
 }
 
 function createBallMaterial(color: string) {
@@ -125,7 +164,10 @@ export class Ball extends Mesh implements Tickable {
 		if (rocketModel) {
 			rocketModel.traverse((child) => {
 				if (child instanceof Mesh) {
-					child.material = createBallMaterial(color);
+					// Keep red material for fins, apply ball color to body and nose
+					if (!child.material || !(child.material instanceof MeshBasicMaterial) || (child.material as MeshBasicMaterial).color.getHex() !== 0xff0000) {
+						child.material = createBallMaterial(color);
+					}
 				}
 			});
 			this.add(rocketModel);
@@ -169,10 +211,26 @@ export class Ball extends Mesh implements Tickable {
 				}, 1000);
 			}
 		}
-		this.rotation.set(0, 0, 0);
+		
 		this.position.add(this.velocity);
-		const velNorm = this.velocity.normalize();
-		this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
+		
+		// Handle rotation differently for rocket vs ball
+		if (settings.ball.useRocketModel && this.velocity.length() > 0.001) {
+			// For rocket: orient to face the velocity direction
+			// The rocket is built pointing along +Z axis, so we need to rotate it to point along velocity
+			const up = new Vector3(0, 1, 0);
+			const velocityDirection = this.velocity.clone().normalize();
+			
+			// Create a quaternion that rotates from the rocket's default direction (z-axis) to velocity direction
+			const quaternion = new Quaternion();
+			quaternion.setFromUnitVectors(new Vector3(0, 0, 1), velocityDirection);
+			this.quaternion.copy(quaternion);
+		} else {
+			// For ball: use the original rotation logic
+			this.rotation.set(0, 0, 0);
+			const velNorm = this.velocity.normalize();
+			this.rotation.set(velNorm.x, velNorm.y, velNorm.z);
+		}
 
 		this.updateArrowHelper();
 		this.pathVertices.push(this.position.clone());
