@@ -45,8 +45,7 @@ export class App {
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
-	// private readonly level = settings.simulationMode ? createTestLevel() : generateRandomLevel();
-	private readonly level = generateRandomLevel();
+	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
 
 	// @ts-expect-error - Stats type issue
@@ -144,7 +143,7 @@ export class App {
 		this.activeCamera.updateProjectionMatrix();
 		this.cameras.autoRotatingOrbit.lookAt(this.getCurrentBall().position);
 		const autoRotatingOrbitCameraOffset = 2e3;
-		const autoRotatingOrbitCameraSpeed = 0.000064;
+		const autoRotatingOrbitCameraSpeed = 0.000064 * settings.camera.rotationSpeed;
 		this.cameras.autoRotatingOrbit.position.set(
 			Math.sin(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset,
 			Math.abs(Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
