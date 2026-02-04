@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Vector3 } from "three";
 import { settings } from "../settings";
 import { Ball } from "../meshes/Ball";
-import { PointerLockControls } from 'three/examples/jsm/Addons';
+import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
 
 export class AimCamera extends PerspectiveCamera {
 	// private readonly controls: PointerLockControls

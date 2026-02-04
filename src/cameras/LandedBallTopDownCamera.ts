@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Vector3 } from "three";
 import { settings } from "../settings";
 import { Ball } from "../meshes/Ball";
-import { OrbitControls } from 'three/examples/jsm/Addons';
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export class LandedBallTopDownCamera extends PerspectiveCamera {
 	private readonly orbitControls: OrbitControls
