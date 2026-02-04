@@ -47,6 +47,7 @@ export class App {
 	private readonly clock = new Clock();
 	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
+	private accumulatedTime = 0;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
@@ -160,14 +161,21 @@ export class App {
 
 	private updateBalls(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
+		const fixedTimeDelta = 1 / settings.ticksPerSecond;
+
+		// Accumulate real time and update physics at fixed intervals
+		this.accumulatedTime += timeDelta;
 
 		// Skip real-time physics when using pre-calculated flight
 		if (!settings.usePreCalculatedFlight) {
-			this.bounceBallsOffPlanets(planets);
-			// Use fixed time step for deterministic physics
-			const fixedTimeDelta = 1 / settings.ticksPerSecond;
-			this.gravitateBalls(fixedTimeDelta);
+			// Process all accumulated physics steps
+			while (this.accumulatedTime >= fixedTimeDelta) {
+				this.bounceBallsOffPlanets(planets);
+				this.gravitateBalls(fixedTimeDelta);
+				this.accumulatedTime -= fixedTimeDelta;
+			}
 		}
+
 		this.balls.forEach((ball) => ball.tick(planets));
 	}
 
