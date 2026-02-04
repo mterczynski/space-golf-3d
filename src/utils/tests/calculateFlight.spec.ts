@@ -57,8 +57,6 @@ describe("calculateFlight", () => {
 			maxFlightDurationInSeconds: 1
 		});
 		
-		// At 60 TPS, we have 60 ticks per second
-		// At 500 TPS, we have 500 ticks per second
 		// After 1 second, positions should be similar
 		const finalPos60 = result60.ticks[result60.ticks.length - 1].position;
 		const finalPos500 = result500.ticks[result500.ticks.length - 1].position;
