@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { ElementGetter } from "./ElementGetter";
 import { InfoTab } from "./InfoTab";
+import { SettingsManager } from "./SettingsManager";
 import { AimCamera } from "./cameras/AimCamera";
 import { DistantCameras } from "./cameras/DistantCameras";
 import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
@@ -51,6 +52,8 @@ export class App {
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
+
+	private settingsManager = new SettingsManager();
 
 	private setup = {
 		level: () => {
@@ -253,5 +256,10 @@ export class App {
 		if (settings.showFPSCounter) {
 			document.body.appendChild(this.stats.dom);
 		}
+		
+		// Setup settings manager with restart callback
+		this.settingsManager.setRestartCallback(() => {
+			window.location.reload();
+		});
 	}
 }
