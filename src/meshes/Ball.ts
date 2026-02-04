@@ -3,6 +3,7 @@ import {
 	BufferGeometry,
 	ConeGeometry,
 	CylinderGeometry,
+	Float32BufferAttribute,
 	Group,
 	Line,
 	LineBasicMaterial,
