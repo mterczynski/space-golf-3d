@@ -28,6 +28,7 @@ export class App {
 	});
 	private readonly scene = new Scene();
 	private readonly composer: EffectComposer;
+	private readonly renderPass: RenderPass;
 
 	private cameras = {
 		aim: new AimCamera(this.renderer.domElement),
@@ -160,9 +161,8 @@ export class App {
 		this.activeCamera.aspect = innerWidth / innerHeight;
 		this.activeCamera.updateProjectionMatrix();
 		
-		// Update the render pass camera
-		const renderPass = this.composer.passes[0] as RenderPass;
-		renderPass.camera = this.activeCamera;
+		// Update the render pass camera when active camera changes
+		this.renderPass.camera = this.activeCamera;
 		
 		this.cameras.autoRotatingOrbit.lookAt(this.getCurrentBall().position);
 		const autoRotatingOrbitCameraOffset = 2e3;
@@ -277,8 +277,8 @@ export class App {
 	constructor() {
 		// Setup post-processing with bloom effect
 		this.composer = new EffectComposer(this.renderer);
-		const renderPass = new RenderPass(this.scene, this.activeCamera);
-		this.composer.addPass(renderPass);
+		this.renderPass = new RenderPass(this.scene, this.activeCamera);
+		this.composer.addPass(this.renderPass);
 		
 		const bloomPass = new UnrealBloomPass(
 			new Vector2(window.innerWidth, window.innerHeight),
