@@ -282,9 +282,9 @@ export class App {
 		
 		const bloomPass = new UnrealBloomPass(
 			new Vector2(window.innerWidth, window.innerHeight),
-			1.5,  // strength
-			0.4,  // radius
-			0.85  // threshold
+			1.8,  // strength
+			0.5,  // radius
+			0.6   // threshold
 		);
 		this.composer.addPass(bloomPass);
 		
