@@ -2,6 +2,7 @@ import randomColor from "randomcolor";
 import { Vector3 } from "three";
 import { settings } from "../settings";
 import _ from "lodash";
+import { getRandomPlanetTexture } from "./getRandomPlanetTexture";
 
 interface Sphere {
 	position: Vector3;
@@ -10,6 +11,7 @@ interface Sphere {
 
 interface Planet extends Sphere {
 	color: string;
+	textureUrl: string;
 }
 
 interface Level {
@@ -51,6 +53,7 @@ export function generateRandomLevel(): Level {
 			radius,
 			position,
 			color: randomColor(),
+			textureUrl: getRandomPlanetTexture(),
 		};
 
 		if (!planets.some((_planet) => isMinimumDistanceBetweenSpheres(planet, _planet, minimumDistanceBetweenPlanets))) {

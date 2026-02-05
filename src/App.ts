@@ -58,6 +58,7 @@ export class App {
 				const planetInstance = new Planet({
 					radius: planet.radius,
 					color: planet.color,
+					textureUrl: planet.textureUrl,
 				});
 				planetInstance.position.set(planet.position.x, planet.position.y, planet.position.z);
 				this.scene.add(planetInstance);
