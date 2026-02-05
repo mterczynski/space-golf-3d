@@ -104,7 +104,7 @@ export class App {
 		},
 		skybox: () =>
 			this.scene.add(
-				settings.useSphereSkybox
+				settings.skybox.useSphereSkybox
 					? new SphereSkybox()
 					: new Skybox()
 			),

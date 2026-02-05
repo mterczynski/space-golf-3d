@@ -12,7 +12,7 @@ function createBorderMesh(planetRadius: number) {
 
 	const widthSegments = 32;
 	const heightSegments = 32;
-	const borderThickness = settings.planetBorderThickness;
+	const borderThickness = settings.planet.borderThickness;
 
 	return new Mesh(new SphereGeometry(planetRadius + borderThickness, widthSegments, heightSegments), borderMaterial);
 }
@@ -31,7 +31,7 @@ export class Planet extends Mesh {
 	constructor({
 		radius,
 		color = "rgb(255,0,0)",
-		density = settings.defaultPlanetDensity,
+		density = settings.planet.defaultDensity,
 		textureUrl,
 	}: {
 		radius: number;

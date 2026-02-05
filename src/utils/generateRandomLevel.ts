@@ -44,9 +44,9 @@ export function generateRandomLevel(): Level {
 	while (planets.length < planetCount) {
 		const radius = _.random(20, 100);
 		const position = new Vector3(
-			_.random(-settings.maxPlanetOffset, settings.maxPlanetOffset),
-			_.random(-settings.maxPlanetOffset, settings.maxPlanetOffset),
-			_.random(-settings.maxPlanetOffset, settings.maxPlanetOffset)
+			_.random(-settings.planet.maxOffset, settings.planet.maxOffset),
+			_.random(-settings.planet.maxOffset, settings.planet.maxOffset),
+			_.random(-settings.planet.maxOffset, settings.planet.maxOffset)
 		);
 
 		const planet = {
