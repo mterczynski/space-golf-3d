@@ -4,17 +4,19 @@ import { Planet } from "../meshes/Planet";
 
 /**
  * Generates a random launch vector that is guaranteed to point away from the landed planet.
- * The vector will be in the hemisphere defined by the outward normal from the planet center to the ball position.
  * 
  * @param ball - The ball to launch
  * @param landedPlanet - The planet the ball is currently on
- * @param alphaAngle - The maximum angle deviation from the outward normal (in radians). Default is Math.PI (180 degrees).
+ * @param maxAngleRange - The full angular range in radians for possible launch directions.
+ *                        Math.PI (180 degrees) allows the full hemisphere away from the planet.
+ *                        Smaller values constrain the launch to a narrower cone around the outward normal.
+ *                        Default is Math.PI (full hemisphere).
  * @returns A normalized direction vector pointing away from the planet
  */
 export function generateLaunchVector(
 	ball: Ball,
 	landedPlanet: Planet,
-	alphaAngle: number = Math.PI
+	maxAngleRange: number = Math.PI
 ): Vector3 {
 	// Calculate the outward normal from planet center to ball position
 	const outwardNormal = ball.position.clone().sub(landedPlanet.position).normalize();
@@ -40,9 +42,9 @@ export function generateLaunchVector(
 		);
 	}
 	
-	// Optionally constrain within the alpha angle from the outward normal
-	// For now, we're using the full hemisphere (alpha = Math.PI / 2 would be a cone)
-	// This is already achieved by the reflection above
+	// Note: For the initial implementation, we use the full hemisphere (maxAngleRange = Math.PI).
+	// If a narrower cone is needed in the future, additional constraint logic could be added here
+	// to reject and regenerate vectors that exceed the maxAngle from the outward normal.
 	
 	return launchDirection.normalize();
 }

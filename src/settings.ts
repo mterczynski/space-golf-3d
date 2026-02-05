@@ -9,8 +9,9 @@ export const settings = Object.freeze({
 		traceDuration: 5,
 		traceTransparency: 0.6,
 		/**
-		 * Maximum angle deviation from the outward normal when launching in simulation mode (in radians).
-		 * Math.PI (180 degrees) means the launch can be anywhere in the hemisphere away from the planet.
+		 * Full angular range for possible launch directions in simulation mode (in radians).
+		 * Math.PI (180 degrees) allows launches in the full hemisphere away from the planet.
+		 * Smaller values would constrain launches to a narrower cone around the outward normal.
 		 */
 		launchAlphaAngle: Math.PI,
 	}),
