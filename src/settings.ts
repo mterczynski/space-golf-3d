@@ -13,7 +13,10 @@ export const settings = Object.freeze({
 		fov: 30,
 		near: 0.1,
 		far: Math.pow(10, 6),
-		rotationSpeed: 0, // Set to 0 to disable rotation, or use values like 1 for normal speed
+		/**
+		 * Set to 0 to disable rotation, or use values like 1 for normal speed.
+		 */
+		rotationSpeed: 0,
 	},
 	planet: {
 		defaultDensity: 0.00014,
@@ -26,9 +29,18 @@ export const settings = Object.freeze({
 	},
 	simulationMode: true,
 	useRandomLevel,
-	usePreCalculatedFlight: false, // Use deterministic pre-calculated flight trajectories
-	maxFlightDurationInSeconds: 30, // after 30 seconds without landing, the flight will end, and the ball will return to pre-flight position
-	ticksPerSecond: 128, // game calculations per second, FPS independent
+	/**
+	 * Use deterministic pre-calculated flight trajectories. Doesn't work correctly as of yet.
+	 */
+	usePreCalculatedFlight: false,
+	/**
+	 * After 30 seconds without landing, the flight will end, and the ball will return to pre-flight position.
+	 */
+	maxFlightDurationInSeconds: 30,
+	/**
+	 * Game calculations per second, FPS independent.
+	 */
+	ticksPerSecond: 128,
 	showFPSCounter: true,
 	showInfoTab: false,
 });
