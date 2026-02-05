@@ -1,7 +1,10 @@
+import eslint from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import parser from '@typescript-eslint/parser';
+import globals from 'globals';
 
 export default [
+  eslint.configs.recommended,
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -11,28 +14,29 @@ export default [
         sourceType: 'module',
       },
       globals: {
-        // Browser globals
-        console: 'readonly',
-        window: 'readonly',
-        document: 'readonly',
-        navigator: 'readonly',
-        // ES2020 globals
-        globalThis: 'readonly',
-        BigInt: 'readonly',
-        Promise: 'readonly',
+        ...globals.browser,
+        ...globals.es2020,
       },
     },
     plugins: {
       '@typescript-eslint': tseslint,
     },
     rules: {
-      // ESLint recommended rules
+      // TypeScript ESLint recommended rules
       ...tseslint.configs.recommended.rules,
       
       // Custom rules from .eslintrc.json
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-console': 'off',
+    },
+  },
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts', '**/tests/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
     },
   },
   {
