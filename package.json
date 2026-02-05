@@ -11,14 +11,16 @@
     "lint:fix": "eslint . --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "test": "jest",
-		"test:e2e": "playwright test",
+    "test:e2e": "playwright test",
     "test:watch": "jest --watch"
   },
   "author": "mterczynski",
   "dependencies": {
+    "@types/dat.gui": "^0.7.13",
     "@types/lodash": "^4.17.23",
     "@types/randomcolor": "^0.5.9",
     "@types/three": "~0.182",
+    "dat.gui": "^0.7.9",
     "lodash": "^4.17.23",
     "randomcolor": "^0.6.2",
     "three": "~0.182",
