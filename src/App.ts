@@ -16,6 +16,7 @@ import { createTestLevel } from "./utils/createTestLevel";
 import { launchBall } from "./utils/launchBall";
 import { playSound } from "./utils/playSound";
 import { generateRandomLevel } from "./utils/generateRandomLevel";
+import { Skybox } from "./meshes/Skybox";
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -101,8 +102,12 @@ export class App {
 			this.scene.add(this.cameras.aim);
 			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
-		// skybox: () => this.scene.add(new Skybox()),
-		skybox: () => this.scene.add(new SphereSkybox()),
+		skybox: () =>
+			this.scene.add(
+				settings.useSphereSkybox
+					? new SphereSkybox()
+					: new Skybox()
+			),
 		orbitControls: () => {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
 		},

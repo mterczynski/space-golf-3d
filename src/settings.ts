@@ -1,4 +1,5 @@
 const useRandomLevel = true;
+const useSphereSkybox = true;
 
 export const settings = Object.freeze({
 	ball: Object.freeze({
@@ -11,6 +12,7 @@ export const settings = Object.freeze({
 	}),
 	simulationMode: true,
 	useRandomLevel,
+	useSphereSkybox,
 	usePreCalculatedFlight: false, // Use deterministic pre-calculated flight trajectories
 	maxFlightDurationInSeconds: 30, // after 30 seconds without landing, the flight will end, and the ball will return to pre-flight position
 	ticksPerSecond: 128, // game calculations per second, FPS independent
