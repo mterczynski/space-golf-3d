@@ -40,6 +40,15 @@ export default [
     },
   },
   {
-    ignores: ['node_modules/**', 'dist/**', 'build/**', '**/*.config.js', '**/*.config.ts'],
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'build/**',
+      '*.config.js',
+      '*.config.ts',
+      'vite.config.ts',
+      'jest.config.js',
+      'playwright.config.ts',
+    ],
   },
 ];
