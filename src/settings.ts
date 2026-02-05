@@ -1,7 +1,35 @@
-const useRandomLevel = true;
-const useSphereSkybox = true;
+import { SkyboxType } from "./types/SkyboxType";
 
-export const settings = Object.freeze({
+const useRandomLevel = true;
+
+export const settings: {
+	ball: {
+		bounciness: number;
+		launchForce: number;
+		radius: number;
+		showVelocityVector: boolean;
+		traceDuration: number;
+		traceTransparency: number;
+	};
+	simulationMode: boolean;
+	useRandomLevel: boolean;
+	skyboxType: SkyboxType;
+	usePreCalculatedFlight: boolean;
+	maxFlightDurationInSeconds: number;
+	ticksPerSecond: number;
+	camera: {
+		fov: number;
+		near: number;
+		far: number;
+		rotationSpeed: number;
+	};
+	defaultPlanetDensity: number;
+	planetBorderThickness: number;
+	maxPlanetOffset: number;
+	showFPSCounter: boolean;
+	showInfoTab: boolean;
+	skyboxOpacity: number;
+} = Object.freeze({
 	ball: Object.freeze({
 		bounciness: 0.8,
 		launchForce: useRandomLevel ? 3.6 : 2.4,
@@ -12,7 +40,7 @@ export const settings = Object.freeze({
 	}),
 	simulationMode: true,
 	useRandomLevel,
-	useSphereSkybox,
+	skyboxType: SkyboxType.PROCEDURAL,
 	usePreCalculatedFlight: false, // Use deterministic pre-calculated flight trajectories
 	maxFlightDurationInSeconds: 30, // after 30 seconds without landing, the flight will end, and the ball will return to pre-flight position
 	ticksPerSecond: 128, // game calculations per second, FPS independent
