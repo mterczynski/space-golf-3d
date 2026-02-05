@@ -110,7 +110,11 @@ export class Ball extends Mesh implements Tickable {
 				this.launchBallTimeout = window.setTimeout(() => {
 					// Generate a random launch vector that never points towards the landed planet
 					if (this.landedPlanet !== null) {
-						const launchDirection = generateLaunchVector(this, this.landedPlanet);
+						const launchDirection = generateLaunchVector(
+							this,
+							this.landedPlanet,
+							settings.ball.launchAlphaAngle
+						);
 						launchBall(this, launchDirection, planets);
 					}
 					this.launchBallTimeout = null;
