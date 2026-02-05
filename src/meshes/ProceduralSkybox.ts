@@ -15,6 +15,15 @@ import {
 import { settings } from "../settings";
 
 export class ProceduralSkybox extends Group {
+	// Skybox radius - using 10^5.8 to match the scale of the game world
+	// This ensures the skybox encompasses all game objects while remaining performant
+	private static readonly SKYBOX_RADIUS_EXPONENT = 5.8;
+	
+	// Sun animation parameters
+	private static readonly SUN_PULSE_SPEED = 2; // Oscillations per second
+	private static readonly SUN_MIN_INTENSITY = 0.2;
+	private static readonly SUN_MAX_INTENSITY = 0.5;
+	
 	private sun!: PointLight;
 	private sunMesh!: Mesh;
 	private animationTime: number = 0;
@@ -26,7 +35,7 @@ export class ProceduralSkybox extends Group {
 
 	init() {
 		// Create background sphere with gradient
-		const skyboxRadius = 10 ** 5.8;
+		const skyboxRadius = 10 ** ProceduralSkybox.SKYBOX_RADIUS_EXPONENT;
 		const skyGeometry = new SphereGeometry(skyboxRadius, 64, 64);
 		
 		// Create gradient material - darker at top, lighter at horizon
@@ -136,12 +145,10 @@ export class ProceduralSkybox extends Group {
 	update(deltaTime: number) {
 		this.animationTime += deltaTime;
 		
-		// Pulsing effect: oscillate between 0.2 and 0.5 intensity
-		const pulseSpeed = 2; // Speed of pulsing
-		const minIntensity = 0.2;
-		const maxIntensity = 0.5;
-		const intensity = minIntensity + (maxIntensity - minIntensity) * 
-			(Math.sin(this.animationTime * pulseSpeed) * 0.5 + 0.5);
+		// Pulsing effect: oscillate between min and max intensity
+		const intensity = ProceduralSkybox.SUN_MIN_INTENSITY + 
+			(ProceduralSkybox.SUN_MAX_INTENSITY - ProceduralSkybox.SUN_MIN_INTENSITY) * 
+			(Math.sin(this.animationTime * ProceduralSkybox.SUN_PULSE_SPEED) * 0.5 + 0.5);
 		
 		this.sun.intensity = intensity;
 		

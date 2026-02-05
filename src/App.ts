@@ -50,7 +50,7 @@ export class App {
 	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
 	private accumulatedTime = 0;
-	private skybox: ProceduralSkybox | null = null;
+	private skybox!: ProceduralSkybox;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
@@ -259,9 +259,7 @@ export class App {
 		this.updateCameras();
 		this.updateBalls(delta);
 		this.updateBallTrace();
-		if (this.skybox) {
-			this.skybox.update(delta);
-		}
+		this.skybox.update(delta);
 		InfoTab.updateText(this.getCurrentBall());
 
 		requestAnimationFrame(this.onNewAnimationFrame.bind(this));
