@@ -82,7 +82,8 @@ export class App {
 				if (areSpheresColliding(planet, ball)) {
 					ball.landedPlanet = planet;
 				}
-			});		},
+			});
+		},
 		light: () => {
 			const light = new PointLight(0xffffff, 50_000_000);
 			light.position.set(0, 100, 5000);

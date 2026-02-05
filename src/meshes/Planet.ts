@@ -1,4 +1,12 @@
-import { BackSide, Mesh, MeshBasicMaterial, MeshPhongMaterial, MeshToonMaterial, SphereGeometry, TextureLoader } from "three";
+import {
+	BackSide,
+	Mesh,
+	MeshBasicMaterial,
+	MeshPhongMaterial,
+	MeshToonMaterial,
+	SphereGeometry,
+	TextureLoader,
+} from "three";
 import { settings } from "../settings";
 
 // Shared texture loader instance for better performance and caching
@@ -43,7 +51,7 @@ export class Planet extends Mesh {
 		this.radius = radius;
 		this.density = density;
 		this.add(createBorderMesh(radius));
-		
+
 		if (textureUrl) {
 			// Note: Textures are loaded asynchronously for this PoC.
 			// This may cause a brief visual flash as planets initially render with their color

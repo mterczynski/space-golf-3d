@@ -18,12 +18,12 @@ export class ProceduralSkybox extends Group {
 	// Skybox radius - using 10^5.8 to match the scale of the game world
 	// This ensures the skybox encompasses all game objects while remaining performant
 	private static readonly SKYBOX_RADIUS_EXPONENT = 5.8;
-	
+
 	// Sun animation parameters
 	private static readonly SUN_PULSE_SPEED = 2; // Oscillations per second
 	private static readonly SUN_MIN_INTENSITY = 0.2;
 	private static readonly SUN_MAX_INTENSITY = 0.5;
-	
+
 	private sun!: PointLight;
 	private sunMesh!: Mesh;
 	private animationTime: number = 0;
@@ -37,7 +37,7 @@ export class ProceduralSkybox extends Group {
 		// Create background sphere with gradient
 		const skyboxRadius = 10 ** ProceduralSkybox.SKYBOX_RADIUS_EXPONENT;
 		const skyGeometry = new SphereGeometry(skyboxRadius, 64, 64);
-		
+
 		// Create gradient material - darker at top, lighter at horizon
 		const skyMaterial = new MeshBasicMaterial({
 			side: BackSide,
@@ -45,7 +45,7 @@ export class ProceduralSkybox extends Group {
 			opacity: settings.skybox.opacity,
 			transparent: true,
 		});
-		
+
 		const skyMesh = new Mesh(skyGeometry, skyMaterial);
 		this.add(skyMesh);
 
@@ -66,7 +66,7 @@ export class ProceduralSkybox extends Group {
 			// Random position on sphere
 			const theta = Math.random() * Math.PI * 2;
 			const phi = Math.acos(2 * Math.random() - 1);
-			
+
 			const x = radius * Math.sin(phi) * Math.cos(theta);
 			const y = radius * Math.sin(phi) * Math.sin(theta);
 			const z = radius * Math.cos(phi);
@@ -99,9 +99,9 @@ export class ProceduralSkybox extends Group {
 		}
 
 		const starsGeometry = new BufferGeometry();
-		starsGeometry.setAttribute('position', new BufferAttribute(positions, 3));
-		starsGeometry.setAttribute('color', new BufferAttribute(colors, 3));
-		starsGeometry.setAttribute('size', new BufferAttribute(sizes, 1));
+		starsGeometry.setAttribute("position", new BufferAttribute(positions, 3));
+		starsGeometry.setAttribute("color", new BufferAttribute(colors, 3));
+		starsGeometry.setAttribute("size", new BufferAttribute(sizes, 1));
 
 		const starsMaterial = new PointsMaterial({
 			size: 50,
@@ -129,7 +129,7 @@ export class ProceduralSkybox extends Group {
 			transparent: true,
 			opacity: 0.8,
 		});
-		
+
 		this.sunMesh = new Mesh(sunGeometry, sunMaterial);
 		this.sunMesh.position.set(sunX, sunY, sunZ);
 		this.add(this.sunMesh);
@@ -144,14 +144,15 @@ export class ProceduralSkybox extends Group {
 	// Call this from the game loop
 	update(deltaTime: number) {
 		this.animationTime += deltaTime;
-		
+
 		// Pulsing effect: oscillate between min and max intensity
-		const intensity = ProceduralSkybox.SUN_MIN_INTENSITY + 
-			(ProceduralSkybox.SUN_MAX_INTENSITY - ProceduralSkybox.SUN_MIN_INTENSITY) * 
-			(Math.sin(this.animationTime * ProceduralSkybox.SUN_PULSE_SPEED) * 0.5 + 0.5);
-		
+		const intensity =
+			ProceduralSkybox.SUN_MIN_INTENSITY +
+			(ProceduralSkybox.SUN_MAX_INTENSITY - ProceduralSkybox.SUN_MIN_INTENSITY) *
+				(Math.sin(this.animationTime * ProceduralSkybox.SUN_PULSE_SPEED) * 0.5 + 0.5);
+
 		this.sun.intensity = intensity;
-		
+
 		// Also pulse the sun mesh opacity slightly
 		const material = this.sunMesh.material as MeshBasicMaterial;
 		material.opacity = 0.6 + intensity * 0.4;

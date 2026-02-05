@@ -118,7 +118,7 @@ export class Ball extends Mesh implements Tickable {
 			// Calculate which tick we should be on based on elapsed time
 			const elapsedSeconds = (Date.now() - this.flightStartTime) / 1000;
 			const targetTick = Math.floor(elapsedSeconds * settings.ticksPerSecond);
-			
+
 			if (targetTick < this.preCalculatedFlight.ticks.length) {
 				const tickData = this.preCalculatedFlight.ticks[targetTick];
 				this.position.copy(tickData.position);
