@@ -26,7 +26,7 @@ export const settings = Object.freeze({
 		maxOffset: 700,
 	},
 	skybox: {
-		type: SkyboxType.PROCEDURAL as SkyboxType,
+		type: SkyboxType.PROCEDURAL,
 		opacity: 1,
 	},
 	simulationMode: true,
