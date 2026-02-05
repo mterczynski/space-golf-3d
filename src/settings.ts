@@ -17,7 +17,7 @@ export const settings = Object.freeze({
 	},
 	planet: {
 		defaultDensity: 0.00014,
-		borderThickness: 3,
+		borderThickness: 2,
 		maxOffset: 700,
 	},
 	skybox: {
