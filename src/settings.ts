@@ -23,6 +23,7 @@ export const settings = Object.freeze({
 		rotationSpeed: 0, // Set to 0 to disable rotation, or use values like 1 for normal speed
 	},
 	defaultPlanetDensity: 0.00014,
+	planetBorderThickness: 1,
 	maxPlanetOffset: 700,
 	showFPSCounter: true,
 	showInfoTab: false,

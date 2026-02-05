@@ -12,7 +12,7 @@ function createBorderMesh(planetRadius: number) {
 
 	const widthSegments = 32;
 	const heightSegments = 32;
-	const borderThickness = 1;
+	const borderThickness = settings.planetBorderThickness;
 
 	return new Mesh(new SphereGeometry(planetRadius + borderThickness, widthSegments, heightSegments), borderMaterial);
 }
