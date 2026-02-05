@@ -5,6 +5,7 @@ import {
 	LineBasicMaterial,
 	Mesh,
 	MeshBasicMaterial,
+	MeshStandardMaterial,
 	PerspectiveCamera,
 	PointLight,
 	SphereGeometry,
@@ -23,7 +24,12 @@ function createBallGeometry(ballRadius: number) {
 }
 
 function createBallMaterial(color: string) {
-	return new MeshBasicMaterial({ color });
+	return new MeshStandardMaterial({ 
+		color,
+		emissive: color,
+		emissiveIntensity: 1,
+		toneMapped: false
+	});
 }
 
 export class Ball extends Mesh implements Tickable {

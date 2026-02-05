@@ -1,5 +1,8 @@
-import { Clock, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from "three";
+import { Clock, PerspectiveCamera, PointLight, Scene, Vector2, Vector3, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { ElementGetter } from "./ElementGetter";
 import { InfoTab } from "./InfoTab";
@@ -24,6 +27,7 @@ export class App {
 		canvas: document.getElementById("mainCanvas") as HTMLCanvasElement,
 	});
 	private readonly scene = new Scene();
+	private readonly composer: EffectComposer;
 
 	private cameras = {
 		aim: new AimCamera(this.renderer.domElement),
@@ -148,12 +152,18 @@ export class App {
 
 	private adjustRendererSize() {
 		this.renderer.setSize(innerWidth, innerHeight);
+		this.composer.setSize(innerWidth, innerHeight);
 	}
 
 	private updateCameras() {
 		const totalTimeElapsed = Date.now() - this.clock.getElapsedTime();
 		this.activeCamera.aspect = innerWidth / innerHeight;
 		this.activeCamera.updateProjectionMatrix();
+		
+		// Update the render pass camera
+		const renderPass = this.composer.passes[0] as RenderPass;
+		renderPass.camera = this.activeCamera;
+		
 		this.cameras.autoRotatingOrbit.lookAt(this.getCurrentBall().position);
 		const autoRotatingOrbitCameraOffset = 2e3;
 		const autoRotatingOrbitCameraSpeed = 0.000064 * settings.camera.rotationSpeed;
@@ -253,7 +263,7 @@ export class App {
 
 	private onNewAnimationFrame() {
 		const delta = this.clock.getDelta();
-		this.renderer.render(this.scene, this.activeCamera);
+		this.composer.render();
 		this.stats.update();
 		this.adjustRendererSize();
 		this.updateCameras();
@@ -265,6 +275,19 @@ export class App {
 	}
 
 	constructor() {
+		// Setup post-processing with bloom effect
+		this.composer = new EffectComposer(this.renderer);
+		const renderPass = new RenderPass(this.scene, this.activeCamera);
+		this.composer.addPass(renderPass);
+		
+		const bloomPass = new UnrealBloomPass(
+			new Vector2(window.innerWidth, window.innerHeight),
+			1.5,  // strength
+			0.4,  // radius
+			0.85  // threshold
+		);
+		this.composer.addPass(bloomPass);
+		
 		this.setup.orbitControls();
 		this.setup.level();
 		this.setup.light();
