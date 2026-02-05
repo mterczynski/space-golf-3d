@@ -17,6 +17,7 @@ import { launchBall } from "./utils/launchBall";
 import { playSound } from "./utils/playSound";
 import { generateRandomLevel } from "./utils/generateRandomLevel";
 import { Skybox } from "./meshes/Skybox";
+import { ProceduralSkybox } from "./meshes/ProceduralSkybox";
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -49,6 +50,7 @@ export class App {
 	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
 	private accumulatedTime = 0;
+	private skybox: ProceduralSkybox | null = null;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
@@ -102,12 +104,10 @@ export class App {
 			this.scene.add(this.cameras.aim);
 			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
-		skybox: () =>
-			this.scene.add(
-				settings.useSphereSkybox
-					? new SphereSkybox()
-					: new Skybox()
-			),
+		skybox: () => {
+			this.skybox = new ProceduralSkybox();
+			this.scene.add(this.skybox);
+		},
 		orbitControls: () => {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
 		},
@@ -259,6 +259,9 @@ export class App {
 		this.updateCameras();
 		this.updateBalls(delta);
 		this.updateBallTrace();
+		if (this.skybox) {
+			this.skybox.update(delta);
+		}
 		InfoTab.updateText(this.getCurrentBall());
 
 		requestAnimationFrame(this.onNewAnimationFrame.bind(this));
