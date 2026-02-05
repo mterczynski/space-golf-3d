@@ -7,6 +7,7 @@ import { AimCamera } from "./cameras/AimCamera";
 import { DistantCameras } from "./cameras/DistantCameras";
 import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
 import { Ball } from "./meshes/Ball";
+import { Flag } from "./meshes/Flag";
 import { Planet } from "./meshes/Planet";
 import { SphereSkybox } from "./meshes/SphereSkybox";
 import { settings } from "./settings";
@@ -76,6 +77,16 @@ export class App {
 			);
 			this.balls.push(ball);
 			this.scene.add(ball);
+			
+			// Add flag at designated position
+			const holeMarker = new Flag();
+			holeMarker.position.set(
+				this.level.flagPosition.x,
+				this.level.flagPosition.y,
+				this.level.flagPosition.z
+			);
+			this.scene.add(holeMarker);
+			
 			// Find and set the initial landed planet
 			const planets = this.eGetter.getPlanets();
 			planets.forEach((planet) => {
