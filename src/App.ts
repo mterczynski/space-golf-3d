@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { ElementGetter } from "./ElementGetter";
 import { InfoTab } from "./InfoTab";
+import { SettingsManager } from "./SettingsManager";
 import { AimCamera } from "./cameras/AimCamera";
 import { DistantCameras } from "./cameras/DistantCameras";
 import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
@@ -53,6 +54,9 @@ export class App {
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
 
+	private settingsManager = new SettingsManager();
+	private skybox: SphereSkybox | Skybox | null = null;
+
 	private setup = {
 		level: () => {
 			this.level.planets.forEach((planet) => {
@@ -102,12 +106,12 @@ export class App {
 			this.scene.add(this.cameras.aim);
 			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
-		skybox: () =>
-			this.scene.add(
-				settings.skybox.useSphereSkybox
-					? new SphereSkybox()
-					: new Skybox()
-			),
+		skybox: () => {
+			this.skybox = settings.skybox.useSphereSkybox
+				? new SphereSkybox()
+				: new Skybox();
+			this.scene.add(this.skybox);
+		},
 		orbitControls: () => {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
 		},
@@ -277,5 +281,17 @@ export class App {
 		if (settings.showFPSCounter) {
 			document.body.appendChild(this.stats.dom);
 		}
+		
+		// Setup settings manager with restart callback
+		this.settingsManager.setRestartCallback(() => {
+			window.location.reload();
+		});
+		
+		// Setup skybox opacity callback for real-time updates
+		this.settingsManager.setSkyboxOpacityCallback((opacity: number) => {
+			if (this.skybox && this.skybox instanceof SphereSkybox) {
+				this.skybox.updateOpacity(opacity);
+			}
+		});
 	}
 }
