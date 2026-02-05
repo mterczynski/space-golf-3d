@@ -3,7 +3,7 @@ const useRandomLevel = true;
 export const settings = Object.freeze({
 	ball: Object.freeze({
 		bounciness: 0.8,
-		launchForce: useRandomLevel ? 4.4 : 2.4,
+		launchForce: useRandomLevel ? 3.6 : 2.4,
 		radius: 8,
 		showVelocityVector: false,
 		traceDuration: 5,
