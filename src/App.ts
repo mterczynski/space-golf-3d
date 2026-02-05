@@ -106,9 +106,9 @@ export class App {
 			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
 		skybox: () => {
-			if (settings.skyboxType === SkyboxType.SPHERE) {
+			if (settings.skybox.type === SkyboxType.SPHERE) {
 				this.skybox = new SphereSkybox();
-			} else if (settings.skyboxType === SkyboxType.BOX) {
+			} else if (settings.skybox.type === SkyboxType.BOX) {
 				this.skybox = new Skybox();
 			} else {
 				this.skybox = new ProceduralSkybox();

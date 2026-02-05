@@ -25,12 +25,12 @@ export class Skybox extends Mesh {
 		]);
 
 		const materials = [
-			new MeshBasicMaterial({ side: BackSide, map: textures[3], opacity: settings.skyboxOpacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[1], opacity: settings.skyboxOpacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[0], opacity: settings.skyboxOpacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[5], opacity: settings.skyboxOpacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[2], opacity: settings.skyboxOpacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[4], opacity: settings.skyboxOpacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[3], opacity: settings.skybox.opacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[1], opacity: settings.skybox.opacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[0], opacity: settings.skybox.opacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[5], opacity: settings.skybox.opacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[2], opacity: settings.skybox.opacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[4], opacity: settings.skybox.opacity, transparent: true }),
 		];
 		const skyboxWidth = 10 ** 5;
 		const geometry = new BoxGeometry(skyboxWidth, skyboxWidth, skyboxWidth);

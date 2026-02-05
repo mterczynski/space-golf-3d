@@ -27,7 +27,7 @@ export class DistantCameras extends Group {
 	}
 
 	private initializeCameraPositions() {
-		const cameraOffset = settings.maxPlanetOffset + 900;
+		const cameraOffset = settings.planet.maxOffset + 900;
 		const n = -cameraOffset;
 		const p = cameraOffset;
 

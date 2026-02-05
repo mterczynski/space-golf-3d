@@ -42,7 +42,7 @@ export class ProceduralSkybox extends Group {
 		const skyMaterial = new MeshBasicMaterial({
 			side: BackSide,
 			color: new Color(0, 0, 0.015), // Red background
-			opacity: settings.skyboxOpacity,
+			opacity: settings.skybox.opacity,
 			transparent: true,
 		});
 		
