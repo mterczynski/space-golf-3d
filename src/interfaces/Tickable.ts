@@ -1,3 +1,5 @@
+import { Planet } from "../meshes/Planet";
+
 export interface Tickable {
-	tick: () => void;
+	tick: (planets?: Planet[]) => void;
 }

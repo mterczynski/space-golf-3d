@@ -13,7 +13,7 @@ export class SphereSkybox extends Mesh {
 		const material = new MeshBasicMaterial({
 			side: DoubleSide,
 			map: texture,
-			opacity: settings.skyboxOpacity,
+			opacity: settings.skybox.opacity,
 			transparent: true,
 			color: new Color(0.15, 0.2, 0.4),
 		});
@@ -22,11 +22,5 @@ export class SphereSkybox extends Mesh {
 
 		this.geometry = geometry;
 		this.material = material;
-	}
-
-	updateOpacity(opacity: number): void {
-		if (this.material instanceof MeshBasicMaterial) {
-			this.material.opacity = opacity;
-		}
 	}
 }

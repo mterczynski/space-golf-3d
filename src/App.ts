@@ -3,7 +3,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { ElementGetter } from "./ElementGetter";
 import { InfoTab } from "./InfoTab";
-import { SettingsManager } from "./SettingsManager";
 import { AimCamera } from "./cameras/AimCamera";
 import { DistantCameras } from "./cameras/DistantCameras";
 import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
@@ -17,6 +16,7 @@ import { createTestLevel } from "./utils/createTestLevel";
 import { launchBall } from "./utils/launchBall";
 import { playSound } from "./utils/playSound";
 import { generateRandomLevel } from "./utils/generateRandomLevel";
+import { Skybox } from "./meshes/Skybox";
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -46,15 +46,12 @@ export class App {
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
-	// private readonly level = settings.simulationMode ? createTestLevel() : generateRandomLevel();
-	private readonly level = generateRandomLevel();
+	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
+	private accumulatedTime = 0;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
-
-	private settingsManager = new SettingsManager();
-	private skybox: SphereSkybox | null = null;
 
 	private setup = {
 		level: () => {
@@ -62,6 +59,7 @@ export class App {
 				const planetInstance = new Planet({
 					radius: planet.radius,
 					color: planet.color,
+					textureUrl: planet.textureUrl,
 				});
 				planetInstance.position.set(planet.position.x, planet.position.y, planet.position.z);
 				this.scene.add(planetInstance);
@@ -75,7 +73,13 @@ export class App {
 			);
 			this.balls.push(ball);
 			this.scene.add(ball);
-		},
+			// Find and set the initial landed planet
+			const planets = this.eGetter.getPlanets();
+			planets.forEach((planet) => {
+				if (areSpheresColliding(planet, ball)) {
+					ball.landedPlanet = planet;
+				}
+			});		},
 		light: () => {
 			const light = new PointLight(0xffffff, 50_000_000);
 			light.position.set(0, 100, 5000);
@@ -98,11 +102,12 @@ export class App {
 			this.scene.add(this.cameras.aim);
 			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
-		// skybox: () => this.scene.add(new Skybox()),
-		skybox: () => {
-			this.skybox = new SphereSkybox();
-			this.scene.add(this.skybox);
-		},
+		skybox: () =>
+			this.scene.add(
+				settings.skybox.useSphereSkybox
+					? new SphereSkybox()
+					: new Skybox()
+			),
 		orbitControls: () => {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
 		},
@@ -113,8 +118,8 @@ export class App {
 						const ball = this.getCurrentBall();
 						if (ball.landedPlanet) {
 							const directionVector = this.getCurrentBall().position.clone().sub(this.cameras.aim.position.clone());
-
-							launchBall(ball, directionVector);
+							const planets = this.eGetter.getPlanets();
+							launchBall(ball, directionVector, planets);
 							this.activeCamera = this.cameras.autoRotatingOrbit;
 						}
 					}
@@ -141,10 +146,6 @@ export class App {
 		return this.balls[0];
 	}
 
-	getSkybox(): SphereSkybox | null {
-		return this.skybox;
-	}
-
 	private adjustRendererSize() {
 		this.renderer.setSize(innerWidth, innerHeight);
 	}
@@ -155,7 +156,7 @@ export class App {
 		this.activeCamera.updateProjectionMatrix();
 		this.cameras.autoRotatingOrbit.lookAt(this.getCurrentBall().position);
 		const autoRotatingOrbitCameraOffset = 2e3;
-		const autoRotatingOrbitCameraSpeed = 0.000064;
+		const autoRotatingOrbitCameraSpeed = 0.000064 * settings.camera.rotationSpeed;
 		this.cameras.autoRotatingOrbit.position.set(
 			Math.sin(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset,
 			Math.abs(Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset),
@@ -166,10 +167,22 @@ export class App {
 
 	private updateBalls(timeDelta: number) {
 		const planets = this.eGetter.getPlanets();
+		const fixedTimeDelta = 1 / settings.ticksPerSecond;
 
-		this.bounceBallsOffPlanets(planets);
-		this.gravitateBalls(timeDelta);
-		this.balls.forEach((ball) => ball.tick());
+		// Accumulate real time and update physics at fixed intervals
+		this.accumulatedTime += timeDelta;
+
+		// Skip real-time physics when using pre-calculated flight
+		if (!settings.usePreCalculatedFlight) {
+			// Process all accumulated physics steps
+			while (this.accumulatedTime >= fixedTimeDelta) {
+				this.bounceBallsOffPlanets(planets);
+				this.gravitateBalls(fixedTimeDelta);
+				this.accumulatedTime -= fixedTimeDelta;
+			}
+		}
+
+		this.balls.forEach((ball) => ball.tick(planets));
 	}
 
 	private bounceBallsOffPlanets(planets: Planet[]) {
@@ -264,17 +277,5 @@ export class App {
 		if (settings.showFPSCounter) {
 			document.body.appendChild(this.stats.dom);
 		}
-		
-		// Setup settings manager with restart callback
-		this.settingsManager.setRestartCallback(() => {
-			window.location.reload();
-		});
-		
-		// Setup skybox opacity callback for real-time updates
-		this.settingsManager.setSkyboxOpacityCallback((opacity: number) => {
-			if (this.skybox) {
-				this.skybox.updateOpacity(opacity);
-			}
-		});
 	}
 }

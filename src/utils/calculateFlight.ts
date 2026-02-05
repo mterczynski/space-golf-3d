@@ -72,16 +72,24 @@ export function calculateFlight(
 		if (collisionResult && !wasLastTickCollision) {
 			ticksWithCollisions.push(tick);
 			wasLastTickCollision = true;
-			console.log("## collisionResult, tick", +tick);
 			ticks.push({
 				velocity: collisionResult.newVelocity,
 				position: collisionResult.contactPoint.clone(),
 			});
 		} else {
 			wasLastTickCollision = false;
+			// Calculate new velocity by adding gravity acceleration
+			const newVelocity = lastTick.velocity.clone().add(calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets));
+			
+			// Update position: the real-time version adds velocity directly once per frame (~60fps)
+			// To maintain the same physics at different tick rates, we need to scale velocity by tick duration
+			// This ensures the ball travels the same distance per second regardless of tick rate
+			const tickDuration = 1 / ticksPerSecond;
+			const newPosition = lastTick.position.clone().add(lastTick.velocity.clone().multiplyScalar(tickDuration * 60));
+			
 			ticks.push({
-				velocity: lastTick.velocity.clone().add(calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets)),
-				position: lastTick.position.clone().add(lastTick.velocity.clone().multiplyScalar(1)),
+				velocity: newVelocity,
+				position: newPosition,
 			});
 		}
 	}
@@ -91,7 +99,8 @@ export function calculateFlight(
 
 function calcVelocityChangeAfterGravityTick(ticksPerSecond: number, ball: Ball, planets: Planet[]) {
 	// Deterministic tick duration derived from ticksPerSecond (not real-time delta).
-	const tickDuration = 1000 / ticksPerSecond / 10000;
+	// Tick duration in seconds = 1 / ticks per second
+	const tickDuration = 1 / ticksPerSecond;
 	const velocityChange = new Vector3(0, 0, 0);
 
 	planets.forEach((planet: Planet) => {
