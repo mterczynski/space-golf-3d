@@ -41,7 +41,7 @@ export class ProceduralSkybox extends Group {
 		// Create gradient material - darker at top, lighter at horizon
 		const skyMaterial = new MeshBasicMaterial({
 			side: BackSide,
-			color: new Color(0.05, 0.08, 0.15), // Deep space blue
+			color: new Color(0, 0, 0.015), // Red background
 			opacity: settings.skyboxOpacity,
 			transparent: true,
 		});
