@@ -3,7 +3,6 @@ import {
 	Mesh,
 	MeshBasicMaterial,
 	MeshPhongMaterial,
-	MeshToonMaterial,
 	SphereGeometry,
 	TextureLoader,
 } from "three";
