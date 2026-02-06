@@ -21,9 +21,21 @@ https://www.kongregate.com/games/funkypear/gravitee.
 
     npm run build
 
-### Running Jest tests
+### Running unit tests
 
     npm test
+
+### Running Playwright E2E tests
+
+    npm run test:e2e
+
+### Formatting code
+
+    npm run format
+
+### Auto-fixing lint issues
+
+    npm run lint:fix
 
 ## Code quality checks
 
