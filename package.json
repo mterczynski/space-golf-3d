@@ -12,6 +12,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "test": "jest",
 		"test:e2e": "playwright test",
+    "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
   },
   "author": "mterczynski",

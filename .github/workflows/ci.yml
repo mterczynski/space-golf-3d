@@ -8,6 +8,8 @@ on:
 jobs:
   build-test-lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -25,14 +27,22 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Test
-        run: npm run test
+      - name: Test (Unit + Coverage)
+        run: npm run test:coverage
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
       - name: Test (E2E)
         run: npm run test:e2e
+
+      - name: Deploy coverage to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage
+          force_orphan: true
 
       - name: Lint
         run: npm run lint
