@@ -36,13 +36,5 @@ jobs:
       - name: Test (E2E)
         run: npm run test:e2e
 
-      - name: Deploy coverage to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./coverage
-          force_orphan: true
-
       - name: Lint
         run: npm run lint
