@@ -1,5 +1,7 @@
 # Space Golf 3D
 
+[![CI](https://github.com/mterczynski/space-golf-3d/actions/workflows/ci.yml/badge.svg)](https://github.com/mterczynski/space-golf-3d/actions/workflows/ci.yml)
+
 I started this project to make a 3D remake of one my favorite games from Kongregate:
 https://www.kongregate.com/games/funkypear/gravitee.
 
