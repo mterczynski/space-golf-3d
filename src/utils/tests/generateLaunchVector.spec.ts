@@ -144,7 +144,7 @@ describe("generateLaunchVector", () => {
 		}
 	});
 	
-	test("specific scenario: planet at (10,10,10) radius 5, ball at (10,15,10), angle=0 should launch toward (10,20,10)", () => {
+	test("planet at (10,10,10), ball at (10,15,10), angle=0 launches in +Y direction", () => {
 		const ball = new Ball({ radius: 8 });
 		ball.position.set(10, 15, 10);
 		
@@ -163,14 +163,5 @@ describe("generateLaunchVector", () => {
 		expect(launchVector.x).toBeCloseTo(expectedDirection.x, 10);
 		expect(launchVector.y).toBeCloseTo(expectedDirection.y, 10);
 		expect(launchVector.z).toBeCloseTo(expectedDirection.z, 10);
-		
-		// Verify it points toward (10, 20, 10) by checking the direction
-		// If we start at (10, 15, 10) and move in direction (0, 1, 0), we'll reach (10, 20, 10)
-		const targetPoint = new Vector3(10, 20, 10);
-		const directionToTarget = targetPoint.clone().sub(ball.position).normalize();
-		
-		expect(launchVector.x).toBeCloseTo(directionToTarget.x, 10);
-		expect(launchVector.y).toBeCloseTo(directionToTarget.y, 10);
-		expect(launchVector.z).toBeCloseTo(directionToTarget.z, 10);
 	});
 });

@@ -11,8 +11,9 @@ export const settings = Object.freeze({
 		/**
 		 * Maximum angle deviation from the outward normal when launching in simulation mode (in radians).
 		 * 0 = vertical launch (exactly along outward normal from planet center to ball)
-		 * Math.PI/2 (90°) = allows launches up to 90 degrees from vertical
-		 * Math.PI (180°) = allows launches in the full hemisphere away from the planet
+		 * Math.PI/2 (90°) = allows launches up to 90 degrees from vertical (full hemisphere)
+		 * Math.PI (180°) = clamped to Math.PI/2 internally, same as 90 degrees
+		 * Note: Values greater than Math.PI/2 are automatically clamped to prevent pointing toward planet.
 		 */
 		launchAlphaAngle: Math.PI,
 	}),
