@@ -37,10 +37,6 @@ https://www.kongregate.com/games/funkypear/gravitee.
 
     npm run lint:fix
 
-## Code quality checks
-
-https://codeclimate.com/github/mterczynski/gravitee/issues
-
 ## Credits
 
 Skybox: 
