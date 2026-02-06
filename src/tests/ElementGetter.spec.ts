@@ -16,7 +16,7 @@ describe("ElementGetter", () => {
 			expect(elementGetter.getPlanets()).toEqual([planet1, planet2]);
 		});
 	});
-	
+
 	describe("getLines", () => {
 		test("should return all lines in the scene", () => {
 			const scene = new Scene();
