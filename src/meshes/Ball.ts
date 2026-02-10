@@ -16,6 +16,7 @@ import { Planet } from "./Planet";
 import { launchBall } from "../utils/launchBall";
 import { Flight } from "../utils/calculateFlight";
 import randomColor from "randomcolor";
+import { generateLaunchVector } from "../utils/generateLaunchVector";
 
 function createBallGeometry(ballRadius: number) {
 	const quality = 32;
@@ -107,7 +108,15 @@ export class Ball extends Mesh implements Tickable {
 			this.velocity = new Vector3();
 			if (settings.simulationMode && !this.launchBallTimeout) {
 				this.launchBallTimeout = window.setTimeout(() => {
-					launchBall(this, new Vector3(-0.8, 0.18, -0.72), planets);
+					// Generate a random launch vector that never points towards the landed planet
+					if (this.landedPlanet !== null) {
+						const launchDirection = generateLaunchVector(
+							this,
+							this.landedPlanet,
+							settings.ball.launchAlphaAngle
+						);
+						launchBall(this, launchDirection, planets);
+					}
 					this.launchBallTimeout = null;
 				}, 1000);
 			}
