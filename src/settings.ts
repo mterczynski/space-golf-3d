@@ -11,7 +11,7 @@ export const settings = Object.freeze({
 		traceDuration: 5,
 		traceTransparency: 0.6,
 		outline: Object.freeze({
-			enabled: false,
+			enabled: true,
 			edgeStrength: 3,
 			edgeGlow: 0,
 			color: "#00bfff",
