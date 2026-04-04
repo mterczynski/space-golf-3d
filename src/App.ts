@@ -59,7 +59,7 @@ export class App {
 
 	private readonly composer: EffectComposer;
 	private readonly renderPass: RenderPass;
-	private readonly outlinePass: OutlinePass;
+	private outlinePass!: OutlinePass;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
@@ -126,6 +126,14 @@ export class App {
 		},
 		orbitControls: () => {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
+		},
+		outlinePass: () => {
+			this.outlinePass = new OutlinePass(new Vector2(innerWidth, innerHeight), this.scene, this.activeCamera);
+			this.outlinePass.edgeStrength = settings.outline.edgeStrength;
+			this.outlinePass.edgeGlow = settings.outline.edgeGlow;
+			this.outlinePass.visibleEdgeColor.set(settings.outline.color);
+			this.outlinePass.hiddenEdgeColor.set(settings.outline.color);
+			this.outlinePass.selectedObjects = this.balls;
 		},
 		listeners: () => {
 			if (!settings.simulationMode) {
@@ -289,12 +297,7 @@ export class App {
 
 	constructor() {
 		this.renderPass = new RenderPass(this.scene, this.activeCamera);
-		this.outlinePass = new OutlinePass(new Vector2(innerWidth, innerHeight), this.scene, this.activeCamera);
-		this.outlinePass.edgeStrength = settings.outline.edgeStrength;
-		this.outlinePass.edgeGlow = settings.outline.edgeGlow;
-		this.outlinePass.visibleEdgeColor.set(settings.outline.color);
-		this.outlinePass.hiddenEdgeColor.set(settings.outline.color);
-		this.outlinePass.selectedObjects = this.balls;
+		this.setup.outlinePass();
 		this.composer = new EffectComposer(this.renderer);
 		this.composer.addPass(this.renderPass);
 		this.composer.addPass(this.outlinePass);
