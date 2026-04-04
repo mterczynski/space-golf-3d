@@ -59,7 +59,7 @@ export class App {
 
 	private composer!: EffectComposer;
 	private readonly renderPass: RenderPass;
-	private outlinePass!: OutlinePass;
+	private outlinePass?: OutlinePass;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
@@ -128,17 +128,24 @@ export class App {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
 		},
 		outlinePass: () => {
+			if (!settings.ball.outline.enabled) {
+				this.outlinePass = undefined;
+				return;
+			}
+
 			this.outlinePass = new OutlinePass(new Vector2(innerWidth, innerHeight), this.scene, this.activeCamera);
-			this.outlinePass.edgeStrength = settings.outline.edgeStrength;
-			this.outlinePass.edgeGlow = settings.outline.edgeGlow;
-			this.outlinePass.visibleEdgeColor.set(settings.outline.color);
-			this.outlinePass.hiddenEdgeColor.set(settings.outline.color);
+			this.outlinePass.edgeStrength = settings.ball.outline.edgeStrength;
+			this.outlinePass.edgeGlow = settings.ball.outline.edgeGlow;
+			this.outlinePass.visibleEdgeColor.set(settings.ball.outline.color);
+			this.outlinePass.hiddenEdgeColor.set(settings.ball.outline.color);
 			this.outlinePass.selectedObjects = this.balls;
 		},
 		composer: () => {
 			this.composer = new EffectComposer(this.renderer);
 			this.composer.addPass(this.renderPass);
-			this.composer.addPass(this.outlinePass);
+			if (this.outlinePass) {
+				this.composer.addPass(this.outlinePass);
+			}
 			this.composer.addPass(new OutputPass());
 		},
 		listeners: () => {
@@ -285,7 +292,9 @@ export class App {
 	private onNewAnimationFrame() {
 		const delta = this.clock.getDelta();
 		this.renderPass.camera = this.activeCamera;
-		this.outlinePass.renderCamera = this.activeCamera;
+		if (this.outlinePass) {
+			this.outlinePass.renderCamera = this.activeCamera;
+		}
 		this.composer.render();
 		this.stats.update();
 		this.adjustRendererSize();

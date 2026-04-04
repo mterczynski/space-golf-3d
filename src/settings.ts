@@ -10,6 +10,12 @@ export const settings = Object.freeze({
 		showVelocityVector: false,
 		traceDuration: 5,
 		traceTransparency: 0.6,
+		outline: Object.freeze({
+			enabled: false,
+			edgeStrength: 3,
+			edgeGlow: 0,
+			color: "#00bfff",
+		}),
 	}),
 	camera: {
 		fov: 30,
@@ -43,11 +49,6 @@ export const settings = Object.freeze({
 	 * Game calculations per second, FPS independent.
 	 */
 	ticksPerSecond: 128,
-	outline: Object.freeze({
-		edgeStrength: 3,
-		edgeGlow: 0,
-		color: "#00bfff",
-	}),
 	showFPSCounter: true,
 	showInfoTab: false,
 });
