@@ -43,6 +43,11 @@ export const settings = Object.freeze({
 	 * Game calculations per second, FPS independent.
 	 */
 	ticksPerSecond: 128,
+	outline: Object.freeze({
+		edgeStrength: 3,
+		edgeGlow: 0,
+		color: "#00bfff",
+	}),
 	showFPSCounter: true,
 	showInfoTab: false,
 });

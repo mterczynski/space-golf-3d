@@ -1,4 +1,8 @@
-import { Clock, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from "three";
+import { Clock, PerspectiveCamera, PointLight, Scene, Vector2, Vector3, WebGLRenderer } from "three";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
+import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { ElementGetter } from "./ElementGetter";
@@ -52,6 +56,10 @@ export class App {
 	private balls: Ball[] = [];
 	private accumulatedTime = 0;
 	private skybox!: SphereSkybox | Skybox | ProceduralSkybox;
+
+	private readonly composer: EffectComposer;
+	private readonly renderPass: RenderPass;
+	private readonly outlinePass: OutlinePass;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
@@ -156,6 +164,7 @@ export class App {
 
 	private adjustRendererSize() {
 		this.renderer.setSize(innerWidth, innerHeight);
+		this.composer.setSize(innerWidth, innerHeight);
 	}
 
 	private updateCameras() {
@@ -261,7 +270,9 @@ export class App {
 
 	private onNewAnimationFrame() {
 		const delta = this.clock.getDelta();
-		this.renderer.render(this.scene, this.activeCamera);
+		this.renderPass.camera = this.activeCamera;
+		this.outlinePass.renderCamera = this.activeCamera;
+		this.composer.render();
 		this.stats.update();
 		this.adjustRendererSize();
 		this.updateCameras();
@@ -277,6 +288,18 @@ export class App {
 	}
 
 	constructor() {
+		this.renderPass = new RenderPass(this.scene, this.activeCamera);
+		this.outlinePass = new OutlinePass(new Vector2(innerWidth, innerHeight), this.scene, this.activeCamera);
+		this.outlinePass.edgeStrength = settings.outline.edgeStrength;
+		this.outlinePass.edgeGlow = settings.outline.edgeGlow;
+		this.outlinePass.visibleEdgeColor.set(settings.outline.color);
+		this.outlinePass.hiddenEdgeColor.set(settings.outline.color);
+		this.outlinePass.selectedObjects = this.balls;
+		this.composer = new EffectComposer(this.renderer);
+		this.composer.addPass(this.renderPass);
+		this.composer.addPass(this.outlinePass);
+		this.composer.addPass(new OutputPass());
+
 		this.setup.orbitControls();
 		this.setup.level();
 		this.setup.light();
