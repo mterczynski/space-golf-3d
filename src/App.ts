@@ -57,7 +57,7 @@ export class App {
 	private accumulatedTime = 0;
 	private skybox!: SphereSkybox | Skybox | ProceduralSkybox;
 
-	private readonly composer: EffectComposer;
+	private composer!: EffectComposer;
 	private readonly renderPass: RenderPass;
 	private outlinePass!: OutlinePass;
 
@@ -134,6 +134,12 @@ export class App {
 			this.outlinePass.visibleEdgeColor.set(settings.outline.color);
 			this.outlinePass.hiddenEdgeColor.set(settings.outline.color);
 			this.outlinePass.selectedObjects = this.balls;
+		},
+		composer: () => {
+			this.composer = new EffectComposer(this.renderer);
+			this.composer.addPass(this.renderPass);
+			this.composer.addPass(this.outlinePass);
+			this.composer.addPass(new OutputPass());
 		},
 		listeners: () => {
 			if (!settings.simulationMode) {
@@ -298,10 +304,7 @@ export class App {
 	constructor() {
 		this.renderPass = new RenderPass(this.scene, this.activeCamera);
 		this.setup.outlinePass();
-		this.composer = new EffectComposer(this.renderer);
-		this.composer.addPass(this.renderPass);
-		this.composer.addPass(this.outlinePass);
-		this.composer.addPass(new OutputPass());
+		this.setup.composer();
 
 		this.setup.orbitControls();
 		this.setup.level();
