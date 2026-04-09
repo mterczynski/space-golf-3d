@@ -60,6 +60,17 @@ export class DistantCameras extends Group {
 		this.activeCamera.lookAt(ballPosition);
 	}
 
+	applySettings() {
+		this.initializeCameraPositions();
+		this.cameras.forEach((camera) => {
+			camera.fov = settings.camera.fov;
+			camera.near = settings.camera.near;
+			camera.far = settings.camera.far;
+			camera.aspect = innerWidth / innerHeight;
+			camera.updateProjectionMatrix();
+		});
+	}
+
 	getActiveCamera() {
 		return this.activeCamera;
 	}

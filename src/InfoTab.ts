@@ -20,10 +20,11 @@ export const InfoTab = {
 	}
 }`;
 
-		infoTabText.innerHTML = content;
+		infoTabText.textContent = content;
+	},
+	setVisible(visible: boolean) {
+		infoTab.style.display = visible ? 'block' : 'none';
 	},
 };
 
-if (!settings.showInfoTab) {
-	infoTab.style.display = "none";
-}
+InfoTab.setVisible(settings.showInfoTab);

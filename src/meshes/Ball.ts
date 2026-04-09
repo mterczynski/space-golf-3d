@@ -44,6 +44,14 @@ export class Ball extends Mesh implements Tickable {
 		this.arrowHelper.setLength(this.velocity.length() * 20);
 	}
 
+	setVelocityVectorVisible(visible: boolean) {
+		if (!this.children.includes(this.arrowHelper)) {
+			this.add(this.arrowHelper);
+		}
+
+		this.arrowHelper.visible = visible;
+	}
+
 	readonly radius: number;
 	readonly mass = 3;
 
@@ -65,10 +73,7 @@ export class Ball extends Mesh implements Tickable {
 		this.light = new PointLight(color, 16_000, 10000);
 		this.color = color;
 		this.radius = radius;
-
-		if (settings.ball.showVelocityVector) {
-			this.add(this.arrowHelper);
-		}
+		this.setVelocityVectorVisible(settings.ball.showVelocityVector);
 
 		this.add(this.camera);
 		this.add(this.light);

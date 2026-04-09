@@ -25,6 +25,8 @@ function createBorderMesh(planetRadius: number) {
 }
 
 export class Planet extends Mesh {
+	private borderMesh: Mesh;
+
 	get mass() {
 		// https://en.wikipedia.org/wiki/Sphere#Enclosed_volume
 		const sphereVolumeMultiplier = (Math.PI * 4) / 3;
@@ -49,7 +51,8 @@ export class Planet extends Mesh {
 		super(new SphereGeometry(radius, 32, 32), new MeshPhongMaterial({ color }));
 		this.radius = radius;
 		this.density = density;
-		this.add(createBorderMesh(radius));
+		this.borderMesh = createBorderMesh(radius);
+		this.add(this.borderMesh);
 
 		if (textureUrl) {
 			// Note: Textures are loaded asynchronously for this PoC.
@@ -58,6 +61,14 @@ export class Planet extends Mesh {
 			// a loading strategy.
 			this.loadTexture(textureUrl);
 		}
+	}
+
+	refreshBorder() {
+		this.remove(this.borderMesh);
+		this.borderMesh.geometry.dispose();
+		this.borderMesh.material.dispose();
+		this.borderMesh = createBorderMesh(this.radius);
+		this.add(this.borderMesh);
 	}
 
 	private async loadTexture(textureUrl: string) {

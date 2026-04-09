@@ -56,17 +56,15 @@ export class App {
 	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
 	private accumulatedTime = 0;
-	private skybox!: SphereSkybox | Skybox | ProceduralSkybox;
+	private skybox: SphereSkybox | Skybox | ProceduralSkybox | null = null;
 
 	private composer!: EffectComposer;
 	private readonly renderPass: RenderPass;
 	private outlinePass?: OutlinePass;
 
-	// @ts-expect-error - Stats type issue
 	private stats = Stats();
 
 	private settingsManager = new SettingsManager();
-	private skybox: SphereSkybox | Skybox | null = null;
 
 	private setup = {
 		level: () => {
@@ -293,6 +291,102 @@ export class App {
 		});
 	}
 
+	private applyCameraSettings() {
+		[
+			this.cameras.aim,
+			this.cameras.landedBallTopDown,
+			this.cameras.staticManualOrbit,
+			this.cameras.autoRotatingOrbit,
+		].forEach((camera) => {
+			camera.fov = settings.camera.fov;
+			camera.near = settings.camera.near;
+			camera.far = settings.camera.far;
+			camera.updateProjectionMatrix();
+		});
+
+		this.cameras.distant.applySettings();
+	}
+
+	private updateVelocityVectorVisibility() {
+		this.balls.forEach((ball) => ball.setVelocityVectorVisible(settings.ball.showVelocityVector));
+	}
+
+	private updatePlanetBorders() {
+		this.eGetter.getPlanets().forEach((planet) => planet.refreshBorder());
+	}
+
+	private updateStatsVisibility() {
+		if (!document.body.contains(this.stats.dom)) {
+			document.body.appendChild(this.stats.dom);
+		}
+
+		this.stats.dom.style.display = settings.showFPSCounter ? 'block' : 'none';
+	}
+
+	private updateSkyboxOpacity(opacity: number) {
+		if (!this.skybox) {
+			return;
+		}
+
+		(this.skybox as any).traverse((child: any) => {
+			const material = (child as {
+				material?:
+					| { opacity?: number; transparent?: boolean; needsUpdate?: boolean }
+					| Array<{ opacity?: number; transparent?: boolean; needsUpdate?: boolean }>;
+			}).material;
+
+			if (Array.isArray(material)) {
+				material.forEach((entry) => {
+					entry.opacity = opacity;
+					entry.transparent = opacity < 1;
+					entry.needsUpdate = true;
+				});
+			} else if (material) {
+				material.opacity = opacity;
+				material.transparent = opacity < 1;
+				material.needsUpdate = true;
+			}
+		});
+	}
+
+	private recreateSkybox() {
+		if (this.skybox) {
+			this.scene.remove(this.skybox);
+		}
+
+		this.setup.skybox();
+		this.updateSkyboxOpacity(settings.skybox.opacity);
+	}
+
+	private handleSettingChange(settingKey: string) {
+		switch (settingKey) {
+			case 'ball.showVelocityVector':
+				this.updateVelocityVectorVisibility();
+				break;
+			case 'camera.fov':
+			case 'camera.near':
+			case 'camera.far':
+			case 'camera.rotationSpeed':
+				this.applyCameraSettings();
+				break;
+			case 'planet.borderThickness':
+				this.updatePlanetBorders();
+				break;
+			case 'skybox.useSphereSkybox':
+				this.recreateSkybox();
+				break;
+			case 'skybox.opacity':
+				this.updateSkyboxOpacity(settings.skybox.opacity);
+				break;
+			case 'showFPSCounter':
+				this.updateStatsVisibility();
+				break;
+			case 'showInfoTab':
+				InfoTab.setVisible(settings.showInfoTab);
+				break;
+		}
+	}
+
 	private onNewAnimationFrame() {
 		const delta = this.clock.getDelta();
 		this.renderPass.camera = this.activeCamera;
@@ -327,21 +421,17 @@ export class App {
 		this.setup.listeners();
 		this.setup.sound();
 		this.setup.cameraLock();
-		this.onNewAnimationFrame();
-		if (settings.showFPSCounter) {
-			document.body.appendChild(this.stats.dom);
-		}
-		
-		// Setup settings manager with restart callback
+		this.updateVelocityVectorVisibility();
+		this.updateStatsVisibility();
+		InfoTab.setVisible(settings.showInfoTab);
+
 		this.settingsManager.setRestartCallback(() => {
 			window.location.reload();
 		});
-		
-		// Setup skybox opacity callback for real-time updates
-		this.settingsManager.setSkyboxOpacityCallback((opacity: number) => {
-			if (this.skybox && this.skybox instanceof SphereSkybox) {
-				this.skybox.updateOpacity(opacity);
-			}
+		this.settingsManager.setSettingChangeCallback((settingKey: string) => {
+			this.handleSettingChange(settingKey);
 		});
+
+		this.onNewAnimationFrame();
 	}
 }
