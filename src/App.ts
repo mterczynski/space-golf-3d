@@ -1,4 +1,8 @@
-import { Clock, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from "three";
+import { Clock, PerspectiveCamera, PointLight, Scene, Vector2, Vector3, WebGLRenderer } from "three";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
+import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { ElementGetter } from "./ElementGetter";
@@ -18,6 +22,8 @@ import { launchBall } from "./utils/launchBall";
 import { playSound } from "./utils/playSound";
 import { generateRandomLevel } from "./utils/generateRandomLevel";
 import { Skybox } from "./meshes/Skybox";
+import { ProceduralSkybox } from "./meshes/ProceduralSkybox";
+import { SkyboxType } from "./types/SkyboxType";
 
 export class App {
 	private readonly renderer = new WebGLRenderer({
@@ -50,6 +56,11 @@ export class App {
 	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
 	private accumulatedTime = 0;
+	private skybox!: SphereSkybox | Skybox | ProceduralSkybox;
+
+	private composer!: EffectComposer;
+	private readonly renderPass: RenderPass;
+	private outlinePass?: OutlinePass;
 
 	// @ts-expect-error - Stats type issue
 	private stats = Stats();
@@ -83,7 +94,8 @@ export class App {
 				if (areSpheresColliding(planet, ball)) {
 					ball.landedPlanet = planet;
 				}
-			});		},
+			});
+		},
 		light: () => {
 			const light = new PointLight(0xffffff, 50_000_000);
 			light.position.set(0, 100, 5000);
@@ -107,13 +119,38 @@ export class App {
 			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
 		skybox: () => {
-			this.skybox = settings.skybox.useSphereSkybox
-				? new SphereSkybox()
-				: new Skybox();
+			if (settings.skybox.type === SkyboxType.SPHERE) {
+				this.skybox = new SphereSkybox();
+			} else if (settings.skybox.type === SkyboxType.BOX) {
+				this.skybox = new Skybox();
+			} else {
+				this.skybox = new ProceduralSkybox();
+			}
 			this.scene.add(this.skybox);
 		},
 		orbitControls: () => {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
+		},
+		outlinePass: () => {
+			if (!settings.ball.outline.enabled) {
+				this.outlinePass = undefined;
+				return;
+			}
+
+			this.outlinePass = new OutlinePass(new Vector2(innerWidth, innerHeight), this.scene, this.activeCamera);
+			this.outlinePass.edgeStrength = settings.ball.outline.edgeStrength;
+			this.outlinePass.edgeGlow = settings.ball.outline.edgeGlow;
+			this.outlinePass.visibleEdgeColor.set(settings.ball.outline.color);
+			this.outlinePass.hiddenEdgeColor.set(settings.ball.outline.color);
+			this.outlinePass.selectedObjects = this.balls;
+		},
+		composer: () => {
+			this.composer = new EffectComposer(this.renderer);
+			this.composer.addPass(this.renderPass);
+			if (this.outlinePass) {
+				this.composer.addPass(this.outlinePass);
+			}
+			this.composer.addPass(new OutputPass());
 		},
 		listeners: () => {
 			if (!settings.simulationMode) {
@@ -152,6 +189,7 @@ export class App {
 
 	private adjustRendererSize() {
 		this.renderer.setSize(innerWidth, innerHeight);
+		this.composer.setSize(innerWidth, innerHeight);
 	}
 
 	private updateCameras() {
@@ -257,18 +295,30 @@ export class App {
 
 	private onNewAnimationFrame() {
 		const delta = this.clock.getDelta();
-		this.renderer.render(this.scene, this.activeCamera);
+		this.renderPass.camera = this.activeCamera;
+		if (this.outlinePass) {
+			this.outlinePass.renderCamera = this.activeCamera;
+		}
+		this.composer.render();
 		this.stats.update();
 		this.adjustRendererSize();
 		this.updateCameras();
 		this.updateBalls(delta);
 		this.updateBallTrace();
+		// Only update skybox if it has an update method (ProceduralSkybox)
+		if (this.skybox instanceof ProceduralSkybox) {
+			this.skybox.update(delta);
+		}
 		InfoTab.updateText(this.getCurrentBall());
 
 		requestAnimationFrame(this.onNewAnimationFrame.bind(this));
 	}
 
 	constructor() {
+		this.renderPass = new RenderPass(this.scene, this.activeCamera);
+		this.setup.outlinePass();
+		this.setup.composer();
+
 		this.setup.orbitControls();
 		this.setup.level();
 		this.setup.light();

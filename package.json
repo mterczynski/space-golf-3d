@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "test": "jest",
-    "test:e2e": "playwright test",
+		"test:e2e": "playwright test",
+    "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
   },
   "author": "mterczynski",

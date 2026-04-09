@@ -79,14 +79,16 @@ export function calculateFlight(
 		} else {
 			wasLastTickCollision = false;
 			// Calculate new velocity by adding gravity acceleration
-			const newVelocity = lastTick.velocity.clone().add(calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets));
-			
+			const newVelocity = lastTick.velocity
+				.clone()
+				.add(calcVelocityChangeAfterGravityTick(ticksPerSecond, ball, planets));
+
 			// Update position: the real-time version adds velocity directly once per frame (~60fps)
 			// To maintain the same physics at different tick rates, we need to scale velocity by tick duration
 			// This ensures the ball travels the same distance per second regardless of tick rate
 			const tickDuration = 1 / ticksPerSecond;
 			const newPosition = lastTick.position.clone().add(lastTick.velocity.clone().multiplyScalar(tickDuration * 60));
-			
+
 			ticks.push({
 				velocity: newVelocity,
 				position: newPosition,

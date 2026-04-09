@@ -1,5 +1,4 @@
 import { Group, PerspectiveCamera, Vector3 } from "three";
-import { Tickable } from "../interfaces/Tickable";
 import { settings } from "../settings";
 
 const createCamera = () =>
