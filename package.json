@@ -11,7 +11,7 @@
     "lint:fix": "eslint . --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "test": "jest",
-		"test:e2e": "playwright test",
+    "test:e2e": "playwright test",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
   },
@@ -36,6 +36,7 @@
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
     "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.3.0",
     "prettier": "^3.8.1",
     "ts-jest": "^29.4.6"
   }

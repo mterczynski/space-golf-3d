@@ -1,14 +1,11 @@
 import * as dat from 'dat.gui';
+import cloneDeep from 'lodash/cloneDeep';
 import { defaultSettings, type Settings } from './settings';
 import { LocalStorageService } from './services/LocalStorageService';
 import { SkyboxType } from './types/SkyboxType';
 
-function deepClone<T>(obj: T): T {
-	return structuredClone(obj);
-}
-
 function getDefaultSettings(): Settings {
-	return deepClone(defaultSettings);
+	return cloneDeep(defaultSettings);
 }
 
 /**
@@ -18,7 +15,7 @@ function getDefaultSettings(): Settings {
  * without mutating the input object passed by the caller.
  */
 function normalizeSettings(currentSettings: Readonly<Settings>): Settings {
-	const normalizedSettings = deepClone(currentSettings);
+	const normalizedSettings = cloneDeep(currentSettings);
 
 	if (normalizedSettings.skybox.useSphereSkybox && normalizedSettings.skybox.type !== SkyboxType.SPHERE) {
 		normalizedSettings.skybox.type = SkyboxType.SPHERE;
