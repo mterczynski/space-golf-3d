@@ -24,6 +24,15 @@ function createBorderMesh(planetRadius: number) {
 	return new Mesh(new SphereGeometry(planetRadius + borderThickness, widthSegments, heightSegments), borderMaterial);
 }
 
+function disposeMaterial(material: Mesh["material"]) {
+	if (Array.isArray(material)) {
+		material.forEach((entry) => entry.dispose());
+		return;
+	}
+
+	material.dispose();
+}
+
 export class Planet extends Mesh {
 	private borderMesh: Mesh;
 
@@ -66,7 +75,7 @@ export class Planet extends Mesh {
 	refreshBorder() {
 		this.remove(this.borderMesh);
 		this.borderMesh.geometry.dispose();
-		this.borderMesh.material.dispose();
+		disposeMaterial(this.borderMesh.material);
 		this.borderMesh = createBorderMesh(this.radius);
 		this.add(this.borderMesh);
 	}

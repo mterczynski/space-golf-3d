@@ -62,7 +62,7 @@ export class App {
 	private readonly renderPass: RenderPass;
 	private outlinePass?: OutlinePass;
 
-	private stats = Stats();
+	private stats = new Stats();
 
 	private settingsManager = new SettingsManager();
 
