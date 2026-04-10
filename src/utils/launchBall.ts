@@ -1,11 +1,12 @@
 import { Vector3 } from "three";
 import { Ball } from "../meshes/Ball";
 import { Planet } from "../meshes/Planet";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 import { playSound } from "./playSound";
 import { calculateFlight } from "./calculateFlight";
 
 export function launchBall(ball: Ball, directionVector: Vector3, planets: Planet[] = []) {
+	const settings = getSettings();
 	const launchVector = new Vector3(directionVector.x, directionVector.y, directionVector.z)
 		.normalize()
 		.multiplyScalar(settings.ball.launchForce);

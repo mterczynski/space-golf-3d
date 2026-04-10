@@ -6,7 +6,7 @@ import {
 	SphereGeometry,
 	TextureLoader,
 } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 
 // Shared texture loader instance for better performance and caching
 const textureLoader = new TextureLoader();
@@ -19,7 +19,7 @@ function createBorderMesh(planetRadius: number) {
 
 	const widthSegments = 32;
 	const heightSegments = 32;
-	const borderThickness = settings.planet.borderThickness;
+	const borderThickness = getSettings().planet.borderThickness;
 
 	return new Mesh(new SphereGeometry(planetRadius + borderThickness, widthSegments, heightSegments), borderMaterial);
 }
@@ -49,7 +49,7 @@ export class Planet extends Mesh {
 	constructor({
 		radius,
 		color = "rgb(255,0,0)",
-		density = settings.planet.defaultDensity,
+		density = getSettings().planet.defaultDensity,
 		textureUrl,
 	}: {
 		radius: number;

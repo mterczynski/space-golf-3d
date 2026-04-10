@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 
 interface Sphere {
 	radius: number;
@@ -13,7 +13,7 @@ interface MovingSphere extends Sphere {
 export function calcVelocityAfterRebound({
 	staticSphere,
 	movingSphere,
-	onBounceVelocityMultiplier = settings.ball.bounciness,
+	onBounceVelocityMultiplier = getSettings().ball.bounciness,
 }: {
 	staticSphere: Sphere;
 	movingSphere: MovingSphere;

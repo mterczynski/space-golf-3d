@@ -1,5 +1,5 @@
 import { BackSide, BoxGeometry, Mesh, MeshBasicMaterial, TextureLoader } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 
 function buildSkyboxUrl(part: number) {
 	return `${document.baseURI}assets/gfx/box-skybox/sky${part}.png`;
@@ -14,6 +14,7 @@ export class Skybox extends Mesh {
 
 	async init() {
 		const textureLoader = new TextureLoader();
+		const skyboxOpacity = getSettings().skybox.opacity;
 
 		const textures = await Promise.all([
 			textureLoader.loadAsync(buildSkyboxUrl(1)),
@@ -25,12 +26,12 @@ export class Skybox extends Mesh {
 		]);
 
 		const materials = [
-			new MeshBasicMaterial({ side: BackSide, map: textures[3], opacity: settings.skybox.opacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[1], opacity: settings.skybox.opacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[0], opacity: settings.skybox.opacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[5], opacity: settings.skybox.opacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[2], opacity: settings.skybox.opacity, transparent: true }),
-			new MeshBasicMaterial({ side: BackSide, map: textures[4], opacity: settings.skybox.opacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[3], opacity: skyboxOpacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[1], opacity: skyboxOpacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[0], opacity: skyboxOpacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[5], opacity: skyboxOpacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[2], opacity: skyboxOpacity, transparent: true }),
+			new MeshBasicMaterial({ side: BackSide, map: textures[4], opacity: skyboxOpacity, transparent: true }),
 		];
 		const skyboxWidth = 10 ** 5;
 		const geometry = new BoxGeometry(skyboxWidth, skyboxWidth, skyboxWidth);

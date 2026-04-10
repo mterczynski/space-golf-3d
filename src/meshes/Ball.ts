@@ -10,7 +10,7 @@ import {
 	SphereGeometry,
 	Vector3,
 } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 import { Tickable } from "../interfaces/Tickable";
 import { Planet } from "./Planet";
 import { launchBall } from "../utils/launchBall";
@@ -32,7 +32,7 @@ export class Ball extends Mesh implements Tickable {
 	private arrowHelper = new ArrowHelper(new Vector3(), new Vector3());
 	private pathVertices: Vector3[] = [];
 	readonly color;
-	readonly camera = new PerspectiveCamera(settings.camera.fov);
+	readonly camera = new PerspectiveCamera(getSettings().camera.fov);
 	launchBallTimeout: number | null = null;
 	landedPlanet: null | Planet = null; // planet on which the ball has landed
 	private preCalculatedFlight: Flight | null = null;
@@ -64,7 +64,7 @@ export class Ball extends Mesh implements Tickable {
 	}
 
 	constructor({
-		radius = settings.ball.radius,
+		radius = getSettings().ball.radius,
 	}: {
 		radius?: number;
 	} = {}) {
@@ -73,7 +73,7 @@ export class Ball extends Mesh implements Tickable {
 		this.light = new PointLight(color, 16_000, 10000);
 		this.color = color;
 		this.radius = radius;
-		this.setVelocityVectorVisible(settings.ball.showVelocityVector);
+		this.setVelocityVectorVisible(getSettings().ball.showVelocityVector);
 
 		this.add(this.camera);
 		this.add(this.light);
@@ -96,6 +96,7 @@ export class Ball extends Mesh implements Tickable {
 	}
 
 	createTrace() {
+		const settings = getSettings();
 		const lineMaterial = new LineBasicMaterial({
 			color: 0xffaa00,
 			opacity: settings.ball.traceTransparency,
@@ -108,6 +109,8 @@ export class Ball extends Mesh implements Tickable {
 	}
 
 	tick(planets: Planet[] = []) {
+		const settings = getSettings();
+
 		if (this.landedPlanet !== null) {
 			this.velocity = new Vector3();
 			if (settings.simulationMode && !this.launchBallTimeout) {

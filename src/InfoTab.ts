@@ -1,5 +1,5 @@
 import { Ball } from "./meshes/Ball";
-import { settings } from "./settings";
+import { getSettings } from "./SettingsManager";
 
 const infoTab = document.getElementById("infoTab") as HTMLPreElement;
 const infoTabText = document.getElementById("infoTab__text") as HTMLPreElement;
@@ -27,4 +27,4 @@ export const InfoTab = {
 	},
 };
 
-InfoTab.setVisible(settings.showInfoTab);
+InfoTab.setVisible(getSettings().showInfoTab);

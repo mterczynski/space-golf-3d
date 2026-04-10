@@ -1,8 +1,79 @@
 import * as dat from 'dat.gui';
-import { settings, saveSettings, resetSettings } from './settings';
+import { defaultSettings, type Settings } from './settings';
+import { LocalStorageService } from './services/LocalStorageService';
+import { SkyboxType } from './types/SkyboxType';
+
+function deepClone<T>(obj: T): T {
+	return structuredClone(obj);
+}
+
+function getDefaultSettings(): Settings {
+	return deepClone(defaultSettings);
+}
+
+/**
+ * Returns a normalized clone of the provided settings.
+ *
+ * Keeps dependent skybox fields in sync so persisted/runtime settings stay consistent,
+ * without mutating the input object passed by the caller.
+ */
+function normalizeSettings(currentSettings: Readonly<Settings>): Settings {
+	const normalizedSettings = deepClone(currentSettings);
+
+	if (normalizedSettings.skybox.useSphereSkybox && normalizedSettings.skybox.type !== SkyboxType.SPHERE) {
+		normalizedSettings.skybox.type = SkyboxType.SPHERE;
+	} else if (!normalizedSettings.skybox.useSphereSkybox && normalizedSettings.skybox.type === SkyboxType.SPHERE) {
+		normalizedSettings.skybox.type = defaultSettings.skybox.type;
+	}
+
+	normalizedSettings.skybox.useSphereSkybox = normalizedSettings.skybox.type === SkyboxType.SPHERE;
+	return normalizedSettings;
+}
+
+function mergeSettingsWithDefaults(savedSettings: Partial<Settings>): Settings {
+	const defaults = getDefaultSettings();
+
+	return {
+		...defaults,
+		...savedSettings,
+		ball: {
+			...defaults.ball,
+			...(savedSettings.ball || {}),
+			outline: {
+				...defaults.ball.outline,
+				...(savedSettings.ball?.outline || {}),
+			},
+		},
+		camera: { ...defaults.camera, ...(savedSettings.camera || {}) },
+		planet: { ...defaults.planet, ...(savedSettings.planet || {}) },
+		skybox: { ...defaults.skybox, ...(savedSettings.skybox || {}) },
+	};
+}
+
+function loadSettings(): Settings {
+	const savedSettings = LocalStorageService.get<Partial<Settings>>('settings');
+	return savedSettings ? normalizeSettings(mergeSettingsWithDefaults(savedSettings)) : getDefaultSettings();
+}
+
+let currentSettings: Settings = loadSettings();
+
+export function getSettings(): Readonly<Settings> {
+	return currentSettings;
+}
+
+export function saveSettings(settingsToSave: Readonly<Settings> = currentSettings): void {
+	currentSettings = normalizeSettings(settingsToSave);
+	LocalStorageService.set('settings', currentSettings);
+}
+
+export function resetSettings(): void {
+	currentSettings = getDefaultSettings();
+	saveSettings(currentSettings);
+}
 
 export class SettingsManager {
 	private gui: dat.GUI;
+	private guiSettings: Settings = currentSettings;
 	private restartCallback: (() => void) | null = null;
 	private settingChangeCallback: ((settingKey: string) => void) | null = null;
 
@@ -29,6 +100,8 @@ export class SettingsManager {
 	}
 
 	private setupGUI(): void {
+		this.guiSettings = currentSettings;
+		const settings = this.guiSettings;
 		const ballFolder = this.gui.addFolder('Ball');
 		this.addControl(ballFolder, settings.ball, 'bounciness', 0, 1, 0.01, 'ball.bounciness');
 		this.addControl(ballFolder, settings.ball, 'launchForce', 0, 10, 0.1, 'ball.launchForce');
@@ -72,7 +145,7 @@ export class SettingsManager {
 		this.gui.add({ reset: () => this.handleReset() }, 'reset').name('Reset to Defaults');
 	}
 
-	private addControl<T extends Record<string, any>>(
+	private addControl<T extends object>(
 		folder: dat.GUI,
 		object: T,
 		property: keyof T,
@@ -84,18 +157,18 @@ export class SettingsManager {
 		let controller: dat.GUIController;
 
 		if (typeof object[property] === 'boolean') {
-			controller = folder.add(object, property as string);
+			controller = folder.add(object, property);
 		} else if (min !== null && max !== null) {
-			controller = folder.add(object, property as string, min, max);
+			controller = folder.add(object, property, min, max);
 			if (step !== null) {
 				controller.step(step);
 			}
 		} else {
-			controller = folder.add(object, property as string);
+			controller = folder.add(object, property);
 		}
 
 		controller.onChange(() => {
-			saveSettings();
+			saveSettings(this.guiSettings);
 			this.settingChangeCallback?.(settingKey);
 
 			if (this.restartRequiredSettings.has(settingKey)) {

@@ -1,4 +1,4 @@
-import { LocalStorageService } from './services/LocalStorageService';
+import { deepFreeze } from './utils/deepFreeze';
 import { SkyboxType } from './types/SkyboxType';
 
 const useRandomLevel = true;
@@ -43,7 +43,7 @@ export interface Settings {
 	showInfoTab: boolean;
 }
 
-const defaultSettings: Settings = {
+export const defaultSettings = deepFreeze<Settings>({
 	ball: {
 		bounciness: 0.8,
 		launchForce: useRandomLevel ? 3.6 : 2.4,
@@ -81,60 +81,5 @@ const defaultSettings: Settings = {
 	ticksPerSecond: 128, // game calculations per second, FPS independent
 	showFPSCounter: true,
 	showInfoTab: false,
-};
+});
 
-function deepClone<T>(obj: T): T {
-	return structuredClone(obj);
-}
-
-function syncSkyboxSettings(currentSettings: Settings): Settings {
-	if (currentSettings.skybox.useSphereSkybox && currentSettings.skybox.type !== SkyboxType.SPHERE) {
-		currentSettings.skybox.type = SkyboxType.SPHERE;
-	} else if (!currentSettings.skybox.useSphereSkybox && currentSettings.skybox.type === SkyboxType.SPHERE) {
-		currentSettings.skybox.type = defaultSettings.skybox.type;
-	}
-
-	currentSettings.skybox.useSphereSkybox = currentSettings.skybox.type === SkyboxType.SPHERE;
-	return currentSettings;
-}
-
-function loadSettings(): Settings {
-	const savedSettings = LocalStorageService.get<Partial<Settings>>('settings');
-	if (savedSettings) {
-		const mergedSettings: Settings = {
-			...deepClone(defaultSettings),
-			...savedSettings,
-			ball: {
-				...defaultSettings.ball,
-				...(savedSettings.ball || {}),
-				outline: {
-					...defaultSettings.ball.outline,
-					...(savedSettings.ball?.outline || {}),
-				},
-			},
-			camera: { ...defaultSettings.camera, ...(savedSettings.camera || {}) },
-			planet: { ...defaultSettings.planet, ...(savedSettings.planet || {}) },
-			skybox: { ...defaultSettings.skybox, ...(savedSettings.skybox || {}) },
-		};
-
-		return syncSkyboxSettings(mergedSettings);
-	}
-
-	return deepClone(defaultSettings);
-}
-
-export const settings: Settings = loadSettings();
-
-export function saveSettings(): void {
-	syncSkyboxSettings(settings);
-	LocalStorageService.set('settings', settings);
-}
-
-export function resetSettings(): void {
-	Object.assign(settings, deepClone(defaultSettings));
-	saveSettings();
-}
-
-export function getDefaultSettings(): Settings {
-	return deepClone(defaultSettings);
-}

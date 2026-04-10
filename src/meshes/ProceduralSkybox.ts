@@ -12,7 +12,7 @@ import {
 	PointLight,
 	Group,
 } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 
 export class ProceduralSkybox extends Group {
 	// Skybox radius - using 10^5.8 to match the scale of the game world
@@ -42,7 +42,7 @@ export class ProceduralSkybox extends Group {
 		const skyMaterial = new MeshBasicMaterial({
 			side: BackSide,
 			color: new Color(0, 0, 0.015), // Red background
-			opacity: settings.skybox.opacity,
+			opacity: getSettings().skybox.opacity,
 			transparent: true,
 		});
 

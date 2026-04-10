@@ -1,11 +1,12 @@
 import { PerspectiveCamera, Vector3 } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 import { Ball } from "../meshes/Ball";
 
 export class AimCamera extends PerspectiveCamera {
 	// private readonly controls: PointerLockControls
 
 	constructor(domElement: HTMLElement) {
+		const settings = getSettings();
 		super(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far);
 
 		this.position.set(400, 200, 40);

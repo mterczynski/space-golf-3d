@@ -1,8 +1,10 @@
 import { Group, PerspectiveCamera, Vector3 } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 
-const createCamera = () =>
-	new PerspectiveCamera(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far);
+const createCamera = () => {
+	const settings = getSettings();
+	return new PerspectiveCamera(settings.camera.fov, innerWidth / innerHeight, settings.camera.near, settings.camera.far);
+};
 
 export class DistantCameras extends Group {
 	private readonly cameras = [
@@ -26,7 +28,7 @@ export class DistantCameras extends Group {
 	}
 
 	private initializeCameraPositions() {
-		const cameraOffset = settings.planet.maxOffset + 900;
+		const cameraOffset = getSettings().planet.maxOffset + 900;
 		const n = -cameraOffset;
 		const p = cameraOffset;
 
@@ -61,6 +63,7 @@ export class DistantCameras extends Group {
 	}
 
 	applySettings() {
+		const settings = getSettings();
 		this.initializeCameraPositions();
 		this.cameras.forEach((camera) => {
 			camera.fov = settings.camera.fov;

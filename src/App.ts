@@ -7,14 +7,13 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { ElementGetter } from "./ElementGetter";
 import { InfoTab } from "./InfoTab";
-import { SettingsManager } from "./SettingsManager";
+import { SettingsManager, getSettings } from "./SettingsManager";
 import { AimCamera } from "./cameras/AimCamera";
 import { DistantCameras } from "./cameras/DistantCameras";
 import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
 import { Ball } from "./meshes/Ball";
 import { Planet } from "./meshes/Planet";
 import { SphereSkybox } from "./meshes/SphereSkybox";
-import { settings } from "./settings";
 import { areSpheresColliding, calcGravityForce, calcVelocityAfterRebound as calcVelocityAfterBounce } from "./utils";
 import { adjustBallPositionAfterCollision } from "./utils/adjustBallPositionAfterCollision";
 import { createTestLevel } from "./utils/createTestLevel";
@@ -36,16 +35,16 @@ export class App {
 		aim: new AimCamera(this.renderer.domElement),
 		landedBallTopDown: new LandedBallTopDownCamera(this.renderer.domElement),
 		staticManualOrbit: new PerspectiveCamera(
-			settings.camera.fov,
+			getSettings().camera.fov,
 			innerWidth / innerHeight,
-			settings.camera.near,
-			settings.camera.far
+			getSettings().camera.near,
+			getSettings().camera.far
 		),
 		autoRotatingOrbit: new PerspectiveCamera(
-			settings.camera.fov,
+			getSettings().camera.fov,
 			innerWidth / innerHeight,
-			settings.camera.near,
-			settings.camera.far
+			getSettings().camera.near,
+			getSettings().camera.far
 		),
 		distant: new DistantCameras(),
 	};
@@ -53,7 +52,7 @@ export class App {
 
 	private readonly eGetter = new ElementGetter(this.scene);
 	private readonly clock = new Clock();
-	private readonly level = settings.useRandomLevel ? generateRandomLevel() : createTestLevel();
+	private readonly level = getSettings().useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
 	private accumulatedTime = 0;
 	private skybox: SphereSkybox | Skybox | ProceduralSkybox | null = null;
@@ -117,6 +116,7 @@ export class App {
 			// this.scene.add(this.cameras.aim.getControlsObject())
 		},
 		skybox: () => {
+			const settings = getSettings();
 			if (settings.skybox.type === SkyboxType.SPHERE) {
 				this.skybox = new SphereSkybox();
 			} else if (settings.skybox.type === SkyboxType.BOX) {
@@ -130,6 +130,7 @@ export class App {
 			new OrbitControls(this.cameras.staticManualOrbit, this.renderer.domElement);
 		},
 		outlinePass: () => {
+			const settings = getSettings();
 			if (!settings.ball.outline.enabled) {
 				this.outlinePass = undefined;
 				return;
@@ -151,7 +152,7 @@ export class App {
 			this.composer.addPass(new OutputPass());
 		},
 		listeners: () => {
-			if (!settings.simulationMode) {
+			if (!getSettings().simulationMode) {
 				addEventListener("keypress", (event) => {
 					if (event.key === " ") {
 						const ball = this.getCurrentBall();
@@ -191,6 +192,7 @@ export class App {
 	}
 
 	private updateCameras() {
+		const settings = getSettings();
 		const totalTimeElapsed = Date.now() - this.clock.getElapsedTime();
 		this.activeCamera.aspect = innerWidth / innerHeight;
 		this.activeCamera.updateProjectionMatrix();
@@ -206,6 +208,7 @@ export class App {
 	}
 
 	private updateBalls(timeDelta: number) {
+		const settings = getSettings();
 		const planets = this.eGetter.getPlanets();
 		const fixedTimeDelta = 1 / settings.ticksPerSecond;
 
@@ -226,6 +229,7 @@ export class App {
 	}
 
 	private bounceBallsOffPlanets(planets: Planet[]) {
+		const settings = getSettings();
 		planets.forEach((planet) => {
 			this.balls.forEach((ball) => {
 				if (areSpheresColliding(planet, ball)) {
@@ -273,7 +277,7 @@ export class App {
 
 	private stopBall(ball: Ball, planet: Planet) {
 		ball.landedPlanet = planet;
-		if (!settings.simulationMode) {
+		if (!getSettings().simulationMode) {
 			this.activeCamera = this.cameras.landedBallTopDown;
 			this.cameras.landedBallTopDown.reset(ball);
 			this.cameras.aim.reset(ball);
@@ -292,6 +296,7 @@ export class App {
 	}
 
 	private applyCameraSettings() {
+		const settings = getSettings();
 		[
 			this.cameras.aim,
 			this.cameras.landedBallTopDown,
@@ -308,6 +313,7 @@ export class App {
 	}
 
 	private updateVelocityVectorVisibility() {
+		const settings = getSettings();
 		this.balls.forEach((ball) => ball.setVelocityVectorVisible(settings.ball.showVelocityVector));
 	}
 
@@ -320,7 +326,7 @@ export class App {
 			document.body.appendChild(this.stats.dom);
 		}
 
-		this.stats.dom.style.display = settings.showFPSCounter ? 'block' : 'none';
+		this.stats.dom.style.display = getSettings().showFPSCounter ? 'block' : 'none';
 	}
 
 	private updateSkyboxOpacity(opacity: number) {
@@ -355,7 +361,7 @@ export class App {
 		}
 
 		this.setup.skybox();
-		this.updateSkyboxOpacity(settings.skybox.opacity);
+		this.updateSkyboxOpacity(getSettings().skybox.opacity);
 	}
 
 	private handleSettingChange(settingKey: string) {
@@ -376,13 +382,13 @@ export class App {
 				this.recreateSkybox();
 				break;
 			case 'skybox.opacity':
-				this.updateSkyboxOpacity(settings.skybox.opacity);
+				this.updateSkyboxOpacity(getSettings().skybox.opacity);
 				break;
 			case 'showFPSCounter':
 				this.updateStatsVisibility();
 				break;
 			case 'showInfoTab':
-				InfoTab.setVisible(settings.showInfoTab);
+				InfoTab.setVisible(getSettings().showInfoTab);
 				break;
 		}
 	}
@@ -423,7 +429,7 @@ export class App {
 		this.setup.cameraLock();
 		this.updateVelocityVectorVisibility();
 		this.updateStatsVisibility();
-		InfoTab.setVisible(settings.showInfoTab);
+		InfoTab.setVisible(getSettings().showInfoTab);
 
 		this.settingsManager.setRestartCallback(() => {
 			window.location.reload();

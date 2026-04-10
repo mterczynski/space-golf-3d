@@ -1,5 +1,5 @@
 import { BoxGeometry, TextureLoader, Mesh, MeshBasicMaterial, SphereGeometry, DoubleSide, Color } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 
 export class SphereSkybox extends Mesh {
 	constructor() {
@@ -13,7 +13,7 @@ export class SphereSkybox extends Mesh {
 		const material = new MeshBasicMaterial({
 			side: DoubleSide,
 			map: texture,
-			opacity: settings.skybox.opacity,
+			opacity: getSettings().skybox.opacity,
 			transparent: true,
 			color: new Color(0.15, 0.2, 0.4),
 		});

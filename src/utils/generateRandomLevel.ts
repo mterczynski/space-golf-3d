@@ -1,6 +1,6 @@
 import randomColor from "randomcolor";
 import { Vector3 } from "three";
-import { settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 import _ from "lodash";
 import { getRandomPlanetTexture } from "./getRandomPlanetTexture";
 
@@ -36,6 +36,7 @@ function getRandomInitialBallPosition(planets: Sphere[], ballRadius: number) {
 }
 
 export function generateRandomLevel(): Level {
+	const settings = getSettings();
 	const minimumDistanceBetweenPlanets = 20;
 	const planetCount = 10;
 

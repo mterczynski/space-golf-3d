@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import { Ball } from "../meshes/Ball";
 import { Planet } from "../meshes/Planet";
-import { settings as _settings } from "../settings";
+import { getSettings } from "../SettingsManager";
 import { calcGravityForce } from "./calcGravityForce";
 import { calcVelocityAfterRebound } from "./calcVelocityAfterRebound";
 import { playSound } from "./playSound";
@@ -39,8 +39,8 @@ export function calculateFlight(
 	ball: Ball,
 	planets: Planet[],
 	settings: FlightSettings = {
-		ticksPerSecond: _settings.ticksPerSecond,
-		maxFlightDurationInSeconds: _settings.maxFlightDurationInSeconds ?? 30,
+		ticksPerSecond: getSettings().ticksPerSecond,
+		maxFlightDurationInSeconds: getSettings().maxFlightDurationInSeconds ?? 30,
 	}
 ): Flight {
 	const ticksPerSecond = settings.ticksPerSecond;
