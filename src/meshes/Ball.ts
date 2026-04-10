@@ -75,6 +75,12 @@ export class Ball extends Mesh implements Tickable {
 		this.radius = radius;
 		this.setVelocityVectorVisible(getSettings().ball.showVelocityVector);
 
+		const settings = getSettings();
+		this.camera.near = settings.camera.near;
+		this.camera.far = settings.camera.far;
+		this.camera.aspect = innerWidth / innerHeight;
+		this.camera.updateProjectionMatrix();
+
 		this.add(this.camera);
 		this.add(this.light);
 	}
@@ -157,8 +163,21 @@ export class Ball extends Mesh implements Tickable {
 	}
 
 	private updateCameraPosition() {
-		// todo
-		this.camera.position.setY(400);
-		this.camera.lookAt(this.position);
+		const velocity = this._velocity;
+
+		if (velocity.lengthSq() < 0.0001) {
+			// Ball not moving — park camera slightly above the ball
+			this.camera.position.set(0, this.radius * 2, 0);
+			return;
+		}
+
+		const velocityDir = velocity.clone().normalize();
+
+		// Position camera behind the ball (in ball-local space) so it looks forward
+		this.camera.position.copy(velocityDir).multiplyScalar(-this.radius * 3);
+
+		// Look ahead in the direction of travel (world-space target)
+		const lookTarget = this.position.clone().add(velocityDir.multiplyScalar(1000));
+		this.camera.lookAt(lookTarget);
 	}
 }

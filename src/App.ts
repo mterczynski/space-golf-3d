@@ -163,6 +163,15 @@ export class App {
 							this.activeCamera = this.cameras.autoRotatingOrbit;
 						}
 					}
+
+					if (event.key === "b" || event.key === "B") {
+						const ball = this.getCurrentBall();
+						if (this.activeCamera === ball.camera) {
+							this.activeCamera = this.cameras.autoRotatingOrbit;
+						} else if (!ball.landedPlanet) {
+							this.activeCamera = ball.camera;
+						}
+					}
 				});
 			}
 		},
@@ -205,6 +214,11 @@ export class App {
 			Math.cos(totalTimeElapsed * autoRotatingOrbitCameraSpeed) * autoRotatingOrbitCameraOffset
 		);
 		this.cameras.distant.update(this.getCurrentBall().position);
+
+		// Keep ball first-person camera aspect ratio current
+		const ballCamera = this.getCurrentBall().camera;
+		ballCamera.aspect = innerWidth / innerHeight;
+		ballCamera.updateProjectionMatrix();
 	}
 
 	private updateBalls(timeDelta: number) {
@@ -310,6 +324,13 @@ export class App {
 		});
 
 		this.cameras.distant.applySettings();
+
+		this.balls.forEach((ball) => {
+			ball.camera.fov = settings.camera.fov;
+			ball.camera.near = settings.camera.near;
+			ball.camera.far = settings.camera.far;
+			ball.camera.updateProjectionMatrix();
+		});
 	}
 
 	private updateVelocityVectorVisibility() {
