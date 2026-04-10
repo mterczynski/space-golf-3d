@@ -68,6 +68,8 @@ export function resetSettings(): void {
 	saveSettings(currentSettings);
 }
 
+const MOBILE_BREAKPOINT_WIDTH = 800;
+
 export class SettingsManager {
 	private gui: dat.GUI;
 	private guiSettings: Settings = currentSettings;
@@ -86,6 +88,7 @@ export class SettingsManager {
 	constructor() {
 		this.gui = new dat.GUI({ width: 300 });
 		this.setupGUI();
+		this.collapseOnMobile();
 	}
 
 	setRestartCallback(callback: () => void): void {
@@ -185,7 +188,14 @@ export class SettingsManager {
 		this.gui.destroy();
 		this.gui = new dat.GUI({ width: 300 });
 		this.setupGUI();
+		this.collapseOnMobile();
 		this.autoRestart();
+	}
+
+	private collapseOnMobile(): void {
+		if (window.innerWidth < MOBILE_BREAKPOINT_WIDTH) {
+			this.gui.close();
+		}
 	}
 
 	show(): void {
