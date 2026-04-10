@@ -1,4 +1,4 @@
-import { Mesh, Vector3 } from "three";
+import { Vector3 } from "three";
 import { Ball } from "../../meshes/Ball";
 import { adjustBallPositionAfterCollision } from "../adjustBallPositionAfterCollision";
 
