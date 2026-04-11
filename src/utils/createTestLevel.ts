@@ -70,6 +70,7 @@ export function createTestLevel() {
 			},
 		],
 		initialBallPosition: new Vector3(393.04081542468845, -477.8397276414723, 274.04848270177894),
+		flagPosition: new Vector3(413, -395, 272),
 	};
 
 	return level;
