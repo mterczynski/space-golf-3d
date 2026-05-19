@@ -24,7 +24,7 @@ import { Skybox } from "./meshes/Skybox";
 import { ProceduralSkybox } from "./meshes/ProceduralSkybox";
 import { SkyboxType } from "./types/SkyboxType";
 
-export class App {
+export class LegacyApp {
 	private readonly renderer = new WebGLRenderer({
 		antialias: true,
 		canvas: document.getElementById("mainCanvas") as HTMLCanvasElement,
