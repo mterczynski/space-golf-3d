@@ -1,4 +1,4 @@
-import { App } from "./App";
+import { LegacyApp } from "./App";
 
 // tslint:disable-next-line:no-unused-expression
-new App();
+new LegacyApp();
