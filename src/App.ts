@@ -14,7 +14,12 @@ import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
 import { Ball } from "./meshes/Ball";
 import { Planet } from "./meshes/Planet";
 import { SphereSkybox } from "./meshes/SphereSkybox";
-import { areSpheresColliding, calcGravityForce, calcVelocityAfterRebound as calcVelocityAfterBounce } from "./utils";
+import {
+	areSpheresColliding,
+	calcGravityForce,
+	calcVelocityAfterRebound as calcVelocityAfterBounce,
+	isSphereOccludedFromCamera,
+} from "./utils";
 import { adjustBallPositionAfterCollision } from "./utils/adjustBallPositionAfterCollision";
 import { createTestLevel } from "./utils/createTestLevel";
 import { launchBall } from "./utils/launchBall";
@@ -321,6 +326,29 @@ export class App {
 		this.eGetter.getPlanets().forEach((planet) => planet.refreshBorder());
 	}
 
+	private updateOutlinePassVisibility() {
+		if (!this.outlinePass) {
+			return;
+		}
+
+		const cameraPosition = this.activeCamera.getWorldPosition(new Vector3());
+		const planets = this.eGetter.getPlanets();
+
+		this.outlinePass.enabled = this.balls.some((ball) =>
+			isSphereOccludedFromCamera({
+				cameraPosition,
+				targetSphere: {
+					position: ball.getWorldPosition(new Vector3()),
+					radius: ball.radius,
+				},
+				occludingSpheres: planets.map((planet) => ({
+					position: planet.getWorldPosition(new Vector3()),
+					radius: planet.radius,
+				})),
+			})
+		);
+	}
+
 	private updateStatsVisibility() {
 		if (!document.body.contains(this.stats.dom)) {
 			document.body.appendChild(this.stats.dom);
@@ -399,6 +427,7 @@ export class App {
 		if (this.outlinePass) {
 			this.outlinePass.renderCamera = this.activeCamera;
 		}
+		this.updateOutlinePassVisibility();
 		this.composer.render();
 		this.stats.update();
 		this.adjustRendererSize();
