@@ -12,6 +12,7 @@ import { AimCamera } from "./cameras/AimCamera";
 import { DistantCameras } from "./cameras/DistantCameras";
 import { LandedBallTopDownCamera } from "./cameras/LandedBallTopDownCamera";
 import { Ball } from "./meshes/Ball";
+import { Flag } from "./meshes/Flag";
 import { Planet } from "./meshes/Planet";
 import { SphereSkybox } from "./meshes/SphereSkybox";
 import { areSpheresColliding, calcGravityForce, calcVelocityAfterRebound as calcVelocityAfterBounce } from "./utils";
@@ -54,12 +55,14 @@ export class App {
 	private readonly clock = new Clock();
 	private readonly level = getSettings().useRandomLevel ? generateRandomLevel() : createTestLevel();
 	private balls: Ball[] = [];
+	private flags: Flag[] = [];
 	private accumulatedTime = 0;
 	private skybox: SphereSkybox | Skybox | ProceduralSkybox | null = null;
 
 	private composer!: EffectComposer;
 	private readonly renderPass: RenderPass;
 	private outlinePass?: OutlinePass;
+	private flagOutlinePass?: OutlinePass;
 
 	private stats = new Stats();
 
@@ -92,6 +95,25 @@ export class App {
 					ball.landedPlanet = planet;
 				}
 			});
+
+			// Create and place the flag on its planet surface
+			const flagPos = this.level.flagPosition.clone();
+			let nearestPlanet = planets[0];
+			let nearestDist = Infinity;
+			planets.forEach((planet) => {
+				const dist = planet.position.distanceTo(flagPos);
+				if (dist < nearestDist) {
+					nearestDist = dist;
+					nearestPlanet = planet;
+				}
+			});
+			const surfaceNormal = flagPos.clone().sub(nearestPlanet.position).normalize();
+			const flag = new Flag();
+			const poleHalfHeight = 10; // half of POLE_HEIGHT (20)
+			flag.position.copy(flagPos).addScaledVector(surfaceNormal, poleHalfHeight);
+			flag.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), surfaceNormal);
+			this.flags.push(flag);
+			this.scene.add(flag);
 		},
 		light: () => {
 			const light = new PointLight(0xffffff, 50_000_000);
@@ -142,12 +164,22 @@ export class App {
 			this.outlinePass.visibleEdgeColor.set(settings.ball.outline.color);
 			this.outlinePass.hiddenEdgeColor.set(settings.ball.outline.color);
 			this.outlinePass.selectedObjects = this.balls;
+
+			this.flagOutlinePass = new OutlinePass(new Vector2(innerWidth, innerHeight), this.scene, this.activeCamera);
+			this.flagOutlinePass.edgeStrength = 3;
+			this.flagOutlinePass.edgeGlow = 0;
+			this.flagOutlinePass.visibleEdgeColor.set('#90EE90');
+			this.flagOutlinePass.hiddenEdgeColor.set('#90EE90');
+			this.flagOutlinePass.selectedObjects = this.flags;
 		},
 		composer: () => {
 			this.composer = new EffectComposer(this.renderer);
 			this.composer.addPass(this.renderPass);
 			if (this.outlinePass) {
 				this.composer.addPass(this.outlinePass);
+			}
+			if (this.flagOutlinePass) {
+				this.composer.addPass(this.flagOutlinePass);
 			}
 			this.composer.addPass(new OutputPass());
 		},
@@ -398,6 +430,9 @@ export class App {
 		this.renderPass.camera = this.activeCamera;
 		if (this.outlinePass) {
 			this.outlinePass.renderCamera = this.activeCamera;
+		}
+		if (this.flagOutlinePass) {
+			this.flagOutlinePass.renderCamera = this.activeCamera;
 		}
 		this.composer.render();
 		this.stats.update();

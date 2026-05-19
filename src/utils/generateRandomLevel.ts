@@ -17,8 +17,7 @@ interface Planet extends Sphere {
 interface Level {
 	planets: Planet[];
 	initialBallPosition: Vector3;
-	// TODO
-	// flagPosition:Vector3;
+	flagPosition: Vector3;
 }
 
 function isMinimumDistanceBetweenSpheres(sphere1: Sphere, sphere2: Sphere, minimumDistance: number): boolean {
@@ -33,6 +32,12 @@ function getRandomInitialBallPosition(planets: Sphere[], ballRadius: number) {
 		.addScalar(ballRadius + 0.1);
 
 	return startingPlanet.position.clone().add(randomRadius);
+}
+
+function getRandomFlagPosition(planets: Planet[]): Vector3 {
+	const flagPlanet = _.sample(planets)!;
+	const direction = new Vector3(_.random(-0.5, 0.5), _.random(-0.5, 0.5), _.random(-0.5, 0.5)).normalize();
+	return flagPlanet.position.clone().addScaledVector(direction, flagPlanet.radius);
 }
 
 export function generateRandomLevel(): Level {
@@ -65,6 +70,7 @@ export function generateRandomLevel(): Level {
 	const level = {
 		planets,
 		initialBallPosition: getRandomInitialBallPosition(planets, settings.ball.radius),
+		flagPosition: getRandomFlagPosition(planets),
 	};
 
 	return level;
